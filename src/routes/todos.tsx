@@ -14,7 +14,7 @@ export const Route = createFileRoute('/todos')({
 })
 
 function TodosPage() {
-  const { todos, addTodo, deleteTodo, toggleTodo } = useTodos()
+  const { todos, addTodo, deleteTodo, toggleTodo, updateTodo } = useTodos()
   const [selectedCategory, setSelectedCategory] = useState('All')
 
   const filteredTodos =
@@ -37,6 +37,8 @@ function TodosPage() {
 
     addTodo(newTodo)
   }
+
+  
 
   return (
     <main className="mx-auto mt-10 max-w-xl">
@@ -65,6 +67,7 @@ function TodosPage() {
                 todo={todo}
                 onDelete={deleteTodo}
                 onToggle={toggleTodo}
+                onUpdate={updateTodo}
               />
             ))}
           </div>

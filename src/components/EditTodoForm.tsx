@@ -5,16 +5,15 @@ import { Input } from '@/components/ui/input'
 import { todoFieldValidators } from '@/lib/schemas'
 import { categories } from '@/lib/categories'
 import { Label } from './ui/label'
+import type { Todo } from '@/lib/types'
 
-type TodoFormProps = {
-  onAddTodo: (data: {
-    title: string
-    category: string
-    deadline: string
-  }) => void
+type EditTodoFormProps = {
+  todo: Todo
+  onSave: (updatedTodo: Todo) => void
+  onCancel: () => void
 }
 
-export function TodoForm({ onAddTodo }: TodoFormProps) {
+export function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormProps) {
   const [categoryOptions, setCategoryOptions] = useState([
     ...categories,
   ] as string[])
@@ -24,9 +23,9 @@ export function TodoForm({ onAddTodo }: TodoFormProps) {
 
   const form = useForm({
     defaultValues: {
-      title: '',
-      category: '',
-      deadline: '',
+      title: todo.title,
+      category: todo.category,
+      deadline: todo.deadline,
     },
 
     onSubmit: async ({ value, formApi }) => {
@@ -36,10 +35,12 @@ export function TodoForm({ onAddTodo }: TodoFormProps) {
         setCategoryOptions((prevCategories) => [...prevCategories, category])
       }
 
-      onAddTodo({
+      onSave({
+        id: todo.id,
         title: value.title,
         category,
         deadline: value.deadline,
+        completed: todo.completed,
       })
       formApi.reset()
     },
@@ -67,7 +68,7 @@ export function TodoForm({ onAddTodo }: TodoFormProps) {
             <div className="flex flex-col gap-1">
               <Label>Title</Label>
               <Input
-                placeholder="Add a new todo..."
+                placeholder="Edit todo..."
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
@@ -162,7 +163,19 @@ export function TodoForm({ onAddTodo }: TodoFormProps) {
         </form.Field>
       </div>
 
-      <Button type="submit">Add Todo</Button>
+      <div className="flex gap-2">
+        <Button type="submit" className="flex-1">
+          Save
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="flex-1"
+          onClick={onCancel}
+        >
+          Cancel
+        </Button>
+      </div>
     </form>
   )
 }

@@ -36,10 +36,19 @@ export function useTodos() {
     )
   }
 
+  function updateTodo(updatedTodo: Todo) {
+   setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === updatedTodo.id ? updatedTodo : todo,
+      ),
+    )
+  }
+
   return {
     todos,
     addTodo,
     deleteTodo,
     toggleTodo,
+    updateTodo,
   }
 }
