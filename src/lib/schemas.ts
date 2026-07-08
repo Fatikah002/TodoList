@@ -22,44 +22,21 @@ export const todoSchema = z.object({
 
 export type TodoFormData = z.infer<typeof todoSchema>
 
-export const todoValidators = {
-  onChange: ({ value }: { value: unknown }) => {
-    const result = todoSchema.safeParse(value)
+function createFieldValidator<T>(schema: z.ZodType<T>) {
+  return ({ value }: { value: T }) => {
+    const result = schema.safeParse(value)
 
     if (!result.success) {
-      return result.error.flatten().fieldErrors
+      return result.error.issues[0].message
     }
 
     return undefined
-  },
+  }
 }
 
 export const todoFieldValidators = {
-  title: ({ value }: { value: string }) => {
-    const result = todoSchema.shape.title.safeParse(value)
-
-    if (!result.success) {
-      return result.error.issues[0].message
-    }
-
-    return undefined
-  },
-  category: ({ value }: { value: string }) => {
-    const result = todoSchema.shape.category.safeParse(value)
-
-    if (!result.success) {
-      return result.error.issues[0].message
-    }
-
-    return undefined
-  },
-  deadline: ({ value }: { value: string }) => {
-    const result = todoSchema.shape.deadline.safeParse(value)
-
-    if (!result.success) {
-      return result.error.issues[0].message
-    }
-
-    return undefined
-  },
+  title: createFieldValidator(todoSchema.shape.title),
+  category: createFieldValidator(todoSchema.shape.category),
+  deadline: createFieldValidator(todoSchema.shape.deadline),
 }
+

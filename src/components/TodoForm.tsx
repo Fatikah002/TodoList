@@ -2,7 +2,7 @@ import { useForm } from '@tanstack/react-form'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { todoFieldValidators, todoValidators } from '@/lib/schemas'
+import { todoFieldValidators } from '@/lib/schemas'
 import { categories } from '@/lib/categories'
 import { Label } from './ui/label'
 
@@ -29,9 +29,6 @@ export function TodoForm({ onAddTodo }: TodoFormProps) {
       deadline: '',
     },
 
-    validators: {
-      onChange: todoValidators.onChange,
-    },
 
     onSubmit: async ({ value, formApi }) => {
       const category = value.category.trim()
