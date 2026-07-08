@@ -1,8 +1,19 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { Todo } from '@/lib/types'
 
 export function useTodos() {
-  const [todos, setTodos] = useState<Todo[]>([])
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const storedTodos = localStorage.getItem('todos')
+    if (storedTodos) {
+      return JSON.parse(storedTodos)
+    }
+    return []
+
+  })
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos))
+  }, [todos])
 
   function addTodo(todo: Todo) {
     setTodos((prevTodos) => [...prevTodos, todo])
@@ -17,9 +28,9 @@ export function useTodos() {
       prevTodos.map((todo) =>
         todo.id === id
           ? {
-              ...todo,
-              completed: !todo.completed,
-            }
+            ...todo,
+            completed: !todo.completed,
+          }
           : todo,
       ),
     )
