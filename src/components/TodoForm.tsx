@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/input'
 import { todoFieldValidators } from '@/lib/schemas'
 import { categories } from '@/lib/categories'
 import { Label } from './ui/label'
+import { format } from 'date-fns'
+
 
 type TodoFormProps = {
   onAddTodo: (data: {
@@ -162,7 +164,12 @@ export function TodoForm({ onAddTodo }: TodoFormProps) {
         </form.Field>
       </div>
 
-      <Button type="submit">Add Todo</Button>
+      <Button
+        type="submit"
+        className="text-white bg-green-500 hover:bg-green-600"
+      >
+        Add Todo
+      </Button>
     </form>
   )
 }

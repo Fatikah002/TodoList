@@ -164,7 +164,7 @@ export function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormProps) {
       </div>
 
       <div className="flex gap-2">
-        <Button type="submit" className="flex-1">
+        <Button type="submit" className="flex-1 bg-green-500 hover:bg-green-600 text-white">
           Save
         </Button>
         <Button

@@ -37,13 +37,12 @@ export function TodoItem({
     )
   }
 
-
   return (
     <Card>
       <CardContent className="flex items-center justify-between p-4">
-          <div className="flex items-start gap-3">
-            <Checkbox
-              checked={todo.completed}
+        <div className="flex items-start gap-3">
+          <Checkbox
+            checked={todo.completed}
             onCheckedChange={() => onToggle(todo.id)}
           />
           <div className="flex flex-col">
@@ -94,5 +93,4 @@ export function TodoItem({
       </CardContent>
     </Card>
   )
-
 }

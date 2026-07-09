@@ -4,21 +4,21 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Label } from '@/components/ui/label'
+} from "@/components/ui/select";
 
 type TodoFilterProps = {
-  value: string
-  onChange: (value: string) => void
-  categories: readonly string[]
-}
+  value: string;
+  onChange: (value: string) => void;
+  categories: readonly string[];
+};
 
 export function TodoFilter({ value, onChange, categories }: TodoFilterProps) {
   return (
     <div className="flex items-center gap-2">
-      <Label>Filter :</Label>
-      <Select value={value} onValueChange={(nextValue) => onChange(nextValue ?? 'All')}>
-        <SelectTrigger className="w-[180px]">
+      {/* <Label>Filter :</Label> */}
+      <Select value={value} onValueChange={(nextValue) => onChange(nextValue ?? "All")}>
+        <SelectTrigger className="h-10 w-[65px] rounded-full   bg-green-500 hover:bg-green-600  text-white data-[placeholder]: [&>svg]:text-white">
+          {" "}
           <SelectValue placeholder="Filter category" />
         </SelectTrigger>
         <SelectContent>
@@ -31,5 +31,5 @@ export function TodoFilter({ value, onChange, categories }: TodoFilterProps) {
         </SelectContent>
       </Select>
     </div>
-  )
+  );
 }
