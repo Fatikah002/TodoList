@@ -11,6 +11,7 @@ import { useTodos } from '@/hooks/useTodos'
 import { useState } from 'react'
 import { Plus, X } from 'lucide-react'
 import { formatLocalDate } from '@/lib/date'
+import { TodoDialog } from '@/components/TodoDialog'
 
 export const Route = createFileRoute('/todos')({
   component: TodosPage,
@@ -74,11 +75,12 @@ function TodosPage() {
           />
           <DeadlineReminder todos={todos} />
           {showForm && (
-            <TodoForm
-              onAddTodo={(data) => {
-                handleAddTodo(data)
-                setShowForm(false)
-              }}
+            <TodoDialog
+              isOpen={showForm}
+              onClose={() => setShowForm(false)}
+              title="Add Todo"
+              submitLabel="Add Todo"
+              onSubmit={handleAddTodo}
             />
           )}
 

@@ -4,7 +4,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Edit, Trash2 } from 'lucide-react'
 import type { Todo } from '@/lib/types'
 import { useState } from 'react'
-import { EditTodoForm } from './EditTodoForm'
+import { TodoDialog } from '@/components/TodoDialog'
 
 type TodoItemProps = {
   todo: Todo
@@ -24,13 +24,23 @@ export function TodoItem({
     return (
       <Card>
         <CardContent className="p-4">
-          <EditTodoForm
-            todo={todo}
-            onSave={(updatedTodo) => {
-              onUpdate(updatedTodo)
+          <TodoDialog
+            isOpen={isEditing}
+            onClose={() => setIsEditing(false)}
+            title="Edit Todo"
+            submitLabel="Save"
+            initialData={{
+              title: todo.title,
+              category: todo.category,
+              deadline: todo.deadline,
+            }}
+            onSubmit={(data) => {
+              onUpdate({
+                ...todo,
+                ...data,
+              })
               setIsEditing(false)
             }}
-            onCancel={() => setIsEditing(false)}
           />
         </CardContent>
       </Card>

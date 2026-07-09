@@ -5,18 +5,30 @@ import { Input } from '@/components/ui/input'
 import { todoFieldValidators } from '@/lib/schemas'
 import { categories } from '@/lib/categories'
 import { Label } from './ui/label'
-import { format } from 'date-fns'
-
 
 type TodoFormProps = {
-  onAddTodo: (data: {
+  initialData?: {
+    title: string
+    category: string
+    deadline: string
+  }
+  submitLabel?: string
+  showCancel?: boolean
+  onSubmit: (data: {
     title: string
     category: string
     deadline: string
   }) => void
+  onCancel?: () => void
 }
 
-export function TodoForm({ onAddTodo }: TodoFormProps) {
+export function TodoForm({
+  onSubmit,
+  initialData,
+  submitLabel,
+  showCancel,
+  onCancel,
+}: TodoFormProps) {
   const [categoryOptions, setCategoryOptions] = useState([
     ...categories,
   ] as string[])
@@ -26,9 +38,9 @@ export function TodoForm({ onAddTodo }: TodoFormProps) {
 
   const form = useForm({
     defaultValues: {
-      title: '',
-      category: '',
-      deadline: '',
+      title: initialData?.title ?? '',
+      category: initialData?.category ?? '',
+      deadline: initialData?.deadline ?? '',
     },
 
     onSubmit: async ({ value, formApi }) => {
@@ -38,7 +50,7 @@ export function TodoForm({ onAddTodo }: TodoFormProps) {
         setCategoryOptions((prevCategories) => [...prevCategories, category])
       }
 
-      onAddTodo({
+      onSubmit({
         title: value.title,
         category,
         deadline: value.deadline,
@@ -69,7 +81,11 @@ export function TodoForm({ onAddTodo }: TodoFormProps) {
             <div className="flex flex-col gap-1">
               <Label>Title</Label>
               <Input
-                placeholder="Add a new todo..."
+                placeholder={
+                  submitLabel === 'Save Changes'
+                    ? 'Edit todo...'
+                    : 'Add a new todo...'
+                }
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 onBlur={field.handleBlur}
@@ -164,12 +180,25 @@ export function TodoForm({ onAddTodo }: TodoFormProps) {
         </form.Field>
       </div>
 
-      <Button
-        type="submit"
-        className="text-white bg-green-500 hover:bg-green-600"
-      >
-        Add Todo
-      </Button>
+      <div className="flex gap-2">
+        <Button
+          type="submit"
+          className="flex-1 bg-green-500 text-white hover:bg-green-600"
+        >
+          {submitLabel ?? 'Add Todo'}
+        </Button>
+
+        {showCancel && (
+          <Button
+            type="button"
+            variant="outline"
+            className="flex-1"
+            onClick={onCancel}
+          >
+            Cancel
+          </Button>
+        )}
+      </div>
     </form>
   )
 }

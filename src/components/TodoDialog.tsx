@@ -4,29 +4,49 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { useState } from 'react'
-import { TodoForm } from './TodoForm'
+import { TodoForm } from '@/components/TodoForm'
 
 type TodoDialogProps = {
   isOpen: boolean
   onClose: () => void
-  onAddTodo: (data: {
+
+  title: string
+
+  initialData?: {
+    title: string
+    category: string
+    deadline: string
+  }
+
+  submitLabel: string
+
+  onSubmit: (data: {
     title: string
     category: string
     deadline: string
   }) => void
 }
-function TodoDialog({ isOpen, onClose, onAddTodo }: TodoDialogProps) {
+
+export function TodoDialog({
+  isOpen,
+  onClose,
+  title,
+  initialData,
+  submitLabel,
+  onSubmit,
+}: TodoDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Todo</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
 
         <TodoForm
-          onAddTodo={(data) => {
-            onAddTodo(data)
+          initialData={initialData}
+          submitLabel={submitLabel}
+          onSubmit={(data) => {
+            onSubmit(data)
             onClose()
           }}
         />
