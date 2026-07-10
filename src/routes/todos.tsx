@@ -2,16 +2,16 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Card, CardContent } from '@/components/ui/card'
 import type { Todo } from '@/lib/types'
 import { TodoItem } from '@/components/TodoItem'
-import { TodoForm } from '@/components/TodoForm'
 import { TodoFilter } from '@/components/TodoFilter'
 import { DeadlineReminder } from '@/components/DeadlineReminder'
 import { HorizontalCalendar } from '@/components/HorizontalCalendar'
 import { Button } from '@/components/ui/button'
 import { useTodos } from '@/hooks/useTodos'
 import { useState } from 'react'
-import { Plus, X } from 'lucide-react'
+import { Plus, X, Search } from 'lucide-react'
 import { formatLocalDate } from '@/lib/date'
 import { TodoDialog } from '@/components/TodoDialog'
+import { Input } from '@/components/ui/input'
 
 export const Route = createFileRoute('/todos')({
   component: TodosPage,
@@ -20,6 +20,7 @@ export const Route = createFileRoute('/todos')({
 function TodosPage() {
   const { todos, addTodo, deleteTodo, toggleTodo, updateTodo } = useTodos()
   const [showForm, setShowForm] = useState(false)
+  const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [selectedDate, setSelectedDate] = useState(formatLocalDate(new Date()))
 
@@ -28,18 +29,30 @@ function TodosPage() {
   const filteredTodos = todos.filter((todo) => {
     const matchesCategory =
       selectedCategory === 'All' || todo.category === selectedCategory
-    const matchesDate = todo.deadline === selectedDate
-    return matchesCategory && matchesDate
+
+    const matchesDate =
+      search.trim() === '' ? todo.deadline === selectedDate : true
+
+    const keyword = search.toLowerCase()
+
+    const matchesSearch =
+      todo.title.toLowerCase().includes(keyword) ||
+      todo.detail.toLowerCase().includes(keyword) ||
+      todo.category.toLowerCase().includes(keyword)
+
+    return matchesCategory && matchesDate && matchesSearch
   })
 
   function handleAddTodo(data: {
     title: string
+    detail: string
     category: string
     deadline: string
   }) {
     const newTodo: Todo = {
       id: Date.now(),
       title: data.title,
+      detail: data.detail,
       category: data.category,
       deadline: data.deadline,
       completed: false,
@@ -73,6 +86,27 @@ function TodosPage() {
             selectedDate={selectedDate}
             onDateChange={setSelectedDate}
           />
+
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+
+            <Input
+              placeholder="Search todo..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10 pr-10"
+            />
+
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+              >
+                <X className="h-4 w-4 text-muted-foreground" />
+              </button>
+            )}
+          </div>
+
           <DeadlineReminder todos={todos} />
           {showForm && (
             <TodoDialog

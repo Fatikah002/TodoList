@@ -14,6 +14,7 @@ type TodoDialogProps = {
 
   initialData?: {
     title: string
+    detail: string
     category: string
     deadline: string
   }
@@ -22,6 +23,7 @@ type TodoDialogProps = {
 
   onSubmit: (data: {
     title: string
+    detail: string
     category: string
     deadline: string
   }) => void

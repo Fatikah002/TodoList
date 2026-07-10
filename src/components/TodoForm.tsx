@@ -9,6 +9,7 @@ import { Label } from './ui/label'
 type TodoFormProps = {
   initialData?: {
     title: string
+    detail: string
     category: string
     deadline: string
   }
@@ -16,6 +17,7 @@ type TodoFormProps = {
   showCancel?: boolean
   onSubmit: (data: {
     title: string
+    detail: string
     category: string
     deadline: string
   }) => void
@@ -39,6 +41,7 @@ export function TodoForm({
   const form = useForm({
     defaultValues: {
       title: initialData?.title ?? '',
+      detail: initialData?.detail ?? '',
       category: initialData?.category ?? '',
       deadline: initialData?.deadline ?? '',
     },
@@ -52,6 +55,7 @@ export function TodoForm({
 
       onSubmit({
         title: value.title,
+        detail: value.detail,
         category,
         deadline: value.deadline,
       })
@@ -103,8 +107,36 @@ export function TodoForm({
           )
         }}
       </form.Field>
+       <form.Field
+          name="detail"
+        >
+          {(field) => {
+            const showError =
+              field.state.meta.isTouched && field.state.meta.errors.length > 0
 
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+            return (
+              <div className="flex flex-col gap-1">
+                <Label>Detail</Label>
+                <Input
+                  placeholder="Enter todo detail"
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  onBlur={field.handleBlur}
+                  className={
+                    showError ? 'border-red-500 focus-visible:ring-red-500' : ''
+                  }
+                />
+
+                {showError && (
+                  <p className="text-sm text-red-500">
+                    {field.state.meta.errors[0]}
+                  </p>
+                )}
+              </div>
+            )
+          }}
+        </form.Field>
+
         <form.Field
           name="category"
           validators={{
@@ -178,7 +210,6 @@ export function TodoForm({
             )
           }}
         </form.Field>
-      </div>
 
       <div className="flex gap-2">
         <Button

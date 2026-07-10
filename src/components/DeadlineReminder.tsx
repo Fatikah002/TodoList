@@ -1,20 +1,18 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { TriangleAlert } from 'lucide-react'
+import { TriangleAlert, ChevronDown, ChevronUp } from 'lucide-react'
 import type { Todo } from '@/lib/types'
+import { format } from 'date-fns'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import { useState } from 'react'
 
-type Props = {
-  todos: Todo[]
-}
-
+type Props = { todos: Todo[] }
 type DeadlineStatus = 'late' | 'today' | 'tomorrow' | 'in2days'
 
-const statusOrder: DeadlineStatus[] = [
-  'late',
-  'today',
-  'tomorrow',
-  'in2days',
-]
-
+const statusOrder: DeadlineStatus[] = ['late', 'today', 'tomorrow', 'in2days']
 const statusMeta: Record<
   DeadlineStatus,
   {
@@ -51,6 +49,53 @@ function getDeadlineStatus(daysUntilDeadline: number): DeadlineStatus | null {
   if (daysUntilDeadline === 1) return 'tomorrow'
   if (daysUntilDeadline === 2) return 'in2days'
   return null
+}
+function ReminderGroup({
+  title,
+  className,
+  todos,
+}: {
+  title: string
+  className: string
+  todos: Todo[]
+}) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <Alert className={className}>
+        <CollapsibleTrigger className="w-full">
+          <button className="flex w-full items-center justify-between">
+            <div className="flex items-center gap-2">
+              <TriangleAlert className="h-4 w-4" />
+              <span className="font-semibold">
+                ({todos.length}) {title}
+              </span>
+            </div>
+
+            {open ? (
+              <ChevronUp className="h-4 w-4" />
+            ) : (
+              <ChevronDown className="h-4 w-4" />
+            )}
+          </button>
+        </CollapsibleTrigger>
+
+        <CollapsibleContent>
+          <AlertDescription className="mt-2">
+            <ul className="space-y-1">
+              {todos.map((todo) => (
+                <li className="ml-6" key={todo.id}>
+                  - {todo.title} {' '}
+                  ({format(new Date(todo.deadline), 'dd MMM yyyy')})
+                </li>
+              ))}
+            </ul>
+          </AlertDescription>
+        </CollapsibleContent>
+      </Alert>
+    </Collapsible>
+  )
 }
 
 export function DeadlineReminder({ todos }: Props) {
@@ -94,21 +139,12 @@ export function DeadlineReminder({ todos }: Props) {
         const meta = statusMeta[status]
 
         return (
-          <Alert key={status} className={meta.className}>
-            <TriangleAlert className="h-4 w-4" />
-
-            <AlertTitle>{meta.title}</AlertTitle>
-
-            <AlertDescription>
-              <ul className="list-disc pl-5">
-                {items.map((todo) => (
-                  <li key={todo.id}>
-                    {todo.title} ({todo.deadline})
-                  </li>
-                ))}
-              </ul>
-            </AlertDescription>
-          </Alert>
+          <ReminderGroup
+            key={status}
+            title={meta.title}
+            className={meta.className}
+            todos={items}
+          />
         )
       })}
     </div>
