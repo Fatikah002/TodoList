@@ -12,6 +12,7 @@ import { Plus, X, Search } from 'lucide-react'
 import { formatLocalDate } from '@/lib/date'
 import { TodoDialog } from '@/components/TodoDialog'
 import { Input } from '@/components/ui/input'
+import { DailyProgress } from '@/components/DailyProgress'
 
 export const Route = createFileRoute('/todos')({
   component: TodosPage,
@@ -61,32 +62,47 @@ function TodosPage() {
     addTodo(newTodo)
   }
 
-  return (
-    <main className="flex justify-center px-6 py-10">
-      <Card className="w-full max-w-xl">
-        <CardContent className="space-y-3 p-6">
-          <div className="flex items-center justify-between ">
+return (
+  <main className="mx-auto w-full max-w-7xl px-4 py-6 lg:px-8">
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_340px]">
+      {/* ================= RIGHT (Mobile: Atas, Desktop: Kanan) ================= */}
+      <aside className="order-1 xl:order-2">
+        <div className="xl:sticky xl:top-6">
+          <DailyProgress
+            todos={todos}
+            selectedDate={selectedDate}
+          />
+        </div>
+      </aside>
+
+      {/* ================= LEFT ================= */}
+      <Card className="order-2 w-full rounded-3xl border-0 shadow-md xl:order-1">
+        <CardContent className="space-y-6 p-4 sm:p-6">
+          {/* Header */}
+          <div className="flex items-center justify-between">
             <TodoFilter
               value={selectedCategory}
               onChange={setSelectedCategory}
               categories={categories}
             />
 
-            <h1 className="text-lg font-semibold">Today</h1>
+            <h1 className="text-xl font-bold">Today</h1>
 
             <Button
               onClick={() => setShowForm(!showForm)}
-              className="h-8 w-14 rounded-full text-white bg-green-500 hover:bg-green-600"
+              className="h-10 w-10 rounded-full bg-green-500 hover:bg-green-600"
             >
               {showForm ? <X size={18} /> : <Plus size={18} />}
             </Button>
           </div>
 
+          {/* Calendar */}
           <HorizontalCalendar
             selectedDate={selectedDate}
             onDateChange={setSelectedDate}
           />
 
+          {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 
@@ -94,7 +110,7 @@ function TodosPage() {
               placeholder="Search todo..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-10 pr-10"
+              className="h-11 rounded-xl pl-10 pr-10"
             />
 
             {search && (
@@ -108,6 +124,7 @@ function TodosPage() {
           </div>
 
           <DeadlineReminder todos={todos} />
+
           {showForm && (
             <TodoDialog
               isOpen={showForm}
@@ -118,25 +135,26 @@ function TodosPage() {
             />
           )}
 
-          <div className="space-y-2">
-            {filteredTodos.length === 0 && (
-              <p className="text-center text-muted-foreground py-4">
-                No todos yet. Add one above!
+          <div className="space-y-3">
+            {filteredTodos.length === 0 ? (
+              <p className="py-8 text-center text-muted-foreground">
+                No todos found
               </p>
+            ) : (
+              filteredTodos.map((todo) => (
+                <TodoItem
+                  key={todo.id}
+                  todo={todo}
+                  onDelete={deleteTodo}
+                  onToggle={toggleTodo}
+                  onUpdate={updateTodo}
+                />
+              ))
             )}
-
-            {filteredTodos.map((todo) => (
-              <TodoItem
-                key={todo.id}
-                todo={todo}
-                onDelete={deleteTodo}
-                onToggle={toggleTodo}
-                onUpdate={updateTodo}
-              />
-            ))}
           </div>
         </CardContent>
       </Card>
-    </main>
-  )
+    </div>
+  </main>
+)
 }
