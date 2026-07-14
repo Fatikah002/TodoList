@@ -17,7 +17,7 @@ export function TodoFilter({ value, onChange, categories }: TodoFilterProps) {
     <div className="flex items-center gap-2">
       {/* <Label>Filter :</Label> */}
       <Select value={value} onValueChange={(nextValue) => onChange(nextValue ?? "All")}>
-        <SelectTrigger className="h-10 w-[65px] rounded-full   bg-green-500 hover:bg-green-600  text-white data-[placeholder]: [&>svg]:text-white">
+        <SelectTrigger className="h-15 w-16 rounded-full border-1 border-green-500  hover:bg-green-600  text-green-500 data-[placeholder]: [&>svg]:text-green-500">
           {" "}
           <SelectValue placeholder="Filter category" />
         </SelectTrigger>

@@ -2,24 +2,21 @@ type CircularProgressProps = {
   percentage: number
 }
 
-export function CircularProgress({
-  percentage,
-}: CircularProgressProps) {
-  const radius = 55
+export function CircularProgress({ percentage }: CircularProgressProps) {
+  const radius = 45
   const stroke = 10
 
   const circumference = 2 * Math.PI * radius
 
-  const offset =
-    circumference - (percentage / 100) * circumference
+  const offset = circumference - (percentage / 100) * circumference
 
   return (
     <div className="flex justify-center">
-      <svg width="140" height="140">
+      <svg width="110" height="110">
         {/* Background */}
         <circle
-          cx="70"
-          cy="70"
+          cx="55"
+          cy="55"
           r={radius}
           stroke="#E5E7EB"
           strokeWidth={stroke}
@@ -28,8 +25,8 @@ export function CircularProgress({
 
         {/* Progress */}
         <circle
-          cx="70"
-          cy="70"
+          cx="55"
+          cy="55"
           r={radius}
           stroke="#22C55E"
           strokeWidth={stroke}
@@ -37,7 +34,7 @@ export function CircularProgress({
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
-          transform="rotate(-90 70 70)"
+          transform="rotate(-90 55 55)"
         />
 
         {/* Percentage */}

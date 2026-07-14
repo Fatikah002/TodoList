@@ -18,22 +18,14 @@ export function HorizontalCalendar({
   const previousWeek = () => {
     setCurrentWeek(
       (prev) =>
-        new Date(
-          prev.getFullYear(),
-          prev.getMonth(),
-          prev.getDate() - 7,
-        ),
+        new Date(prev.getFullYear(), prev.getMonth(), prev.getDate() - 7),
     )
   }
 
   const nextWeek = () => {
     setCurrentWeek(
       (prev) =>
-        new Date(
-          prev.getFullYear(),
-          prev.getMonth(),
-          prev.getDate() + 7,
-        ),
+        new Date(prev.getFullYear(), prev.getMonth(), prev.getDate() + 7),
     )
   }
 
@@ -64,8 +56,7 @@ export function HorizontalCalendar({
   }, [currentWeek])
 
   return (
-    <div className="rounded-2xl bg-white">
-
+    <div>
       {/* Header */}
       <div className="mb-5 flex items-center justify-between">
         <button
@@ -91,9 +82,8 @@ export function HorizontalCalendar({
       </div>
 
       {/* Calendar */}
-      <div className="overflow-x-auto">
-        <div className="flex w-max gap-3 px-2 py-2">
-
+      <div className="overflow-x-auto ">
+        <div className="mx-auto grid w-fit grid-cols-[repeat(7,56px)] gap-3 py-2">
           {calendarDays.map((item) => {
             const isSelected = item.fullDate === selectedDate
 
@@ -101,7 +91,7 @@ export function HorizontalCalendar({
               <button
                 key={item.fullDate}
                 onClick={() => onDateChange(item.fullDate)}
-                className={`flex min-w-[58px] flex-shrink-0 flex-col items-center gap-3 rounded-full px-2 py-3 transition-all duration-200 ${
+                className={`flex min-w-[58px] w-5 justify-between flex-col items-center gap-3 rounded-full px-2 py-3 transition-all duration-200 ${
                   isSelected
                     ? 'border border-green-500'
                     : 'border border-transparent'
@@ -129,7 +119,6 @@ export function HorizontalCalendar({
               </button>
             )
           })}
-
         </div>
       </div>
     </div>
