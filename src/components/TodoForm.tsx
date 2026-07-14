@@ -5,20 +5,30 @@ import { Input } from '@/components/ui/input'
 import { todoFieldValidators } from '@/lib/schemas'
 import { categories } from '@/lib/categories'
 import { Label } from './ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 type TodoFormProps = {
   initialData?: {
     title: string
     detail: string
     category: string
+    priority: string
     deadline: string
   }
   submitLabel?: string
   showCancel?: boolean
+  showPriority?: boolean
   onSubmit: (data: {
     title: string
     detail: string
     category: string
+    priority: string
     deadline: string
   }) => void
   onCancel?: () => void
@@ -29,6 +39,7 @@ export function TodoForm({
   initialData,
   submitLabel,
   showCancel,
+  showPriority,
   onCancel,
 }: TodoFormProps) {
   const [categoryOptions, setCategoryOptions] = useState([
@@ -43,6 +54,7 @@ export function TodoForm({
       title: initialData?.title ?? '',
       detail: initialData?.detail ?? '',
       category: initialData?.category ?? '',
+      priority: initialData?.priority ?? 'None',
       deadline: initialData?.deadline ?? '',
     },
 
@@ -57,6 +69,7 @@ export function TodoForm({
         title: value.title,
         detail: value.detail,
         category,
+        priority: value.priority,
         deadline: value.deadline,
       })
       formApi.reset()
@@ -107,109 +120,135 @@ export function TodoForm({
           )
         }}
       </form.Field>
-       <form.Field
-          name="detail"
-        >
-          {(field) => {
-            const showError =
-              field.state.meta.isTouched && field.state.meta.errors.length > 0
+      <form.Field name="detail">
+        {(field) => {
+          const showError =
+            field.state.meta.isTouched && field.state.meta.errors.length > 0
 
-            return (
-              <div className="flex flex-col gap-1">
-                <Label>Detail</Label>
-                <Input
-                  placeholder="Enter todo detail"
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  onBlur={field.handleBlur}
-                  className={
-                    showError ? 'border-red-500 focus-visible:ring-red-500' : ''
-                  }
-                />
+          return (
+            <div className="flex flex-col gap-1">
+              <Label>Detail</Label>
+              <Input
+                placeholder="Enter todo detail"
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+                onBlur={field.handleBlur}
+                className={
+                  showError ? 'border-red-500 focus-visible:ring-red-500' : ''
+                }
+              />
 
-                {showError && (
-                  <p className="text-sm text-red-500">
-                    {field.state.meta.errors[0]}
-                  </p>
-                )}
-              </div>
-            )
-          }}
+              {showError && (
+                <p className="text-sm text-red-500">
+                  {field.state.meta.errors[0]}
+                </p>
+              )}
+            </div>
+          )
+        }}
+      </form.Field>
+
+      {showPriority && (
+        <form.Field name="priority">
+          {(field) => (
+            <div className="flex flex-col gap-1">
+              <Label>Priority</Label>
+
+              <Select
+                value={field.state.value}
+                onValueChange={(value) => {
+                  field.handleChange(value ?? 'None')
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select priority" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectItem value="None">None</SelectItem>
+                  <SelectItem value="High">High</SelectItem>
+                  <SelectItem value="Medium">Medium</SelectItem>
+                  <SelectItem value="Low">Low</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </form.Field>
+      )}
 
-        <form.Field
-          name="category"
-          validators={{
-            onChange: todoFieldValidators.category,
-          }}
-        >
-          {(field) => {
-            const showError =
-              field.state.meta.isTouched && field.state.meta.errors.length > 0
+      <form.Field
+        name="category"
+        validators={{
+          onChange: todoFieldValidators.category,
+        }}
+      >
+        {(field) => {
+          const showError =
+            field.state.meta.isTouched && field.state.meta.errors.length > 0
 
-            return (
-              <div className="flex flex-col gap-1">
-                <Label>Category</Label>
-                <Input
-                  list="category-options"
-                  placeholder="Add or choose category"
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  onBlur={field.handleBlur}
-                  className={
-                    showError ? 'border-red-500 focus-visible:ring-red-500' : ''
-                  }
-                />
+          return (
+            <div className="flex flex-col gap-1">
+              <Label>Category</Label>
+              <Input
+                list="category-options"
+                placeholder="Add or choose category"
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+                onBlur={field.handleBlur}
+                className={
+                  showError ? 'border-red-500 focus-visible:ring-red-500' : ''
+                }
+              />
 
-                <datalist id="category-options">
-                  {categoryOptions.map((category) => (
-                    <option key={category} value={category} />
-                  ))}
-                </datalist>
+              <datalist id="category-options">
+                {categoryOptions.map((category) => (
+                  <option key={category} value={category} />
+                ))}
+              </datalist>
 
-                {showError && (
-                  <p className="text-sm text-red-500">
-                    {field.state.meta.errors[0]}
-                  </p>
-                )}
-              </div>
-            )
-          }}
-        </form.Field>
+              {showError && (
+                <p className="text-sm text-red-500">
+                  {field.state.meta.errors[0]}
+                </p>
+              )}
+            </div>
+          )
+        }}
+      </form.Field>
 
-        <form.Field
-          name="deadline"
-          validators={{
-            onChange: todoFieldValidators.deadline,
-          }}
-        >
-          {(field) => {
-            const showError =
-              field.state.meta.isTouched && field.state.meta.errors.length > 0
+      <form.Field
+        name="deadline"
+        validators={{
+          onChange: todoFieldValidators.deadline,
+        }}
+      >
+        {(field) => {
+          const showError =
+            field.state.meta.isTouched && field.state.meta.errors.length > 0
 
-            return (
-              <div className="flex flex-col gap-1">
-                <Label>Deadline</Label>
-                <Input
-                  type="date"
-                  value={field.state.value}
-                  min={minDeadline}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  onBlur={field.handleBlur}
-                  className={
-                    showError ? 'border-red-500 focus-visible:ring-red-500' : ''
-                  }
-                />
+          return (
+            <div className="flex flex-col gap-1">
+              <Label>Deadline</Label>
+              <Input
+                type="date"
+                value={field.state.value}
+                min={minDeadline}
+                onChange={(e) => field.handleChange(e.target.value)}
+                onBlur={field.handleBlur}
+                className={
+                  showError ? 'border-red-500 focus-visible:ring-red-500' : ''
+                }
+              />
 
-                {showError && (
-                  <p className="text-sm text-red-500">
-                    {field.state.meta.errors[0]}
-                  </p>
-                )}
-              </div>
-            )
-          }}
-        </form.Field>
+              {showError && (
+                <p className="text-sm text-red-500">
+                  {field.state.meta.errors[0]}
+                </p>
+              )}
+            </div>
+          )
+        }}
+      </form.Field>
 
       <div className="flex gap-2">
         <Button

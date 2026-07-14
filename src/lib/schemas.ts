@@ -12,6 +12,7 @@ function getTodayDateString() {
 export const todoSchema = z.object({
   title: z.string().min(1, 'Todo tidak boleh kosong'),
   category: z.string().min(1, 'Kategori wajib diisi'),
+  priority: z.enum(['High', 'Medium', 'Low', 'None']),
   deadline: z
     .string()
     .min(1, 'Deadline wajib diisi')
@@ -39,4 +40,6 @@ export const todoFieldValidators = {
   category: createFieldValidator(todoSchema.shape.category),
   deadline: createFieldValidator(todoSchema.shape.deadline),
 }
+
+
 

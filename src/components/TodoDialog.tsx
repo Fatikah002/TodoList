@@ -12,10 +12,13 @@ type TodoDialogProps = {
 
   title: string
 
+  showPriority?: boolean
+
   initialData?: {
     title: string
     detail: string
     category: string
+    priority: string
     deadline: string
   }
 
@@ -25,6 +28,7 @@ type TodoDialogProps = {
     title: string
     detail: string
     category: string
+    priority: string
     deadline: string
   }) => void
 }
@@ -34,6 +38,7 @@ export function TodoDialog({
   onClose,
   title,
   initialData,
+  showPriority,
   submitLabel,
   onSubmit,
 }: TodoDialogProps) {
@@ -47,6 +52,7 @@ export function TodoDialog({
         <TodoForm
           initialData={initialData}
           submitLabel={submitLabel}
+          showPriority={showPriority}
           onSubmit={(data) => {
             onSubmit(data)
             onClose()

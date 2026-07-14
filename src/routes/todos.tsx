@@ -38,7 +38,8 @@ function TodosPage() {
     const matchesSearch =
       todo.title.toLowerCase().includes(keyword) ||
       todo.detail.toLowerCase().includes(keyword) ||
-      todo.category.toLowerCase().includes(keyword)
+      todo.category.toLowerCase().includes(keyword) ||
+      todo.priority.toLowerCase().includes(keyword)
 
     return matchesCategory && matchesDate && matchesSearch
   })
@@ -54,6 +55,7 @@ function TodosPage() {
       title: data.title,
       detail: data.detail,
       category: data.category,
+      priority: 'None',
       deadline: data.deadline,
       completed: false,
     }
@@ -126,6 +128,7 @@ function TodosPage() {
                 onClose={() => setShowForm(false)}
                 title="Add Todo"
                 submitLabel="Add Todo"
+                showPriority={true}
                 onSubmit={handleAddTodo}
               />
             )}
