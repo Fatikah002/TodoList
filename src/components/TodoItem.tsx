@@ -85,14 +85,18 @@ export function TodoItem({
       >
         <CardContent className="flex items-start justify-between">
           <div className="flex flex-1 gap-3">
-            <Checkbox
-              checked={todo.completed}
-              onCheckedChange={() => onToggle(todo.id)}
-              className="mt-1 h-5 w-5"
+            <div
+              onClick={(e) => e.stopPropagation()}
               onPointerDown={(e) => e.stopPropagation()}
-            />
+            >
+              <Checkbox
+                checked={todo.completed}
+                onCheckedChange={() => onToggle(todo.id)}
+                className="mt-1 h-5 w-5"
+              />
+            </div>
 
-            <div>
+            <div className="flex-1">
               <div className="flex items-start gap-1">
                 <h3
                   className={`text-base font-semibold ${
@@ -132,17 +136,22 @@ export function TodoItem({
           </div>
 
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger >
               <Button
                 variant="ghost"
                 size="icon"
+                onClick={(e) => e.stopPropagation()}
                 onPointerDown={(e) => e.stopPropagation()}
               >
                 <EllipsisVertical className="h-5 w-5 text-slate-600" />
               </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuContent
+              align="end"
+              className="w-44"
+              onClick={(e) => e.stopPropagation()}
+            >
               <DropdownMenuGroup>
                 <DropdownMenuLabel>Priority</DropdownMenuLabel>
 
@@ -180,7 +189,8 @@ export function TodoItem({
               <DropdownMenuSeparator />
 
               <DropdownMenuItem
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation()
                   setShowDetail(false)
                   setIsEditing(true)
                 }}
@@ -190,7 +200,10 @@ export function TodoItem({
               </DropdownMenuItem>
 
               <DropdownMenuItem
-                onClick={() => onDelete(todo.id)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onDelete(todo.id)
+                }}
                 className="text-red-600 focus:text-red-600"
               >
                 <Trash2 className="mr-2 h-4 w-4" />
@@ -207,7 +220,6 @@ export function TodoItem({
         todo={todo}
       />
 
-      {/* Dialog Edit */}
       <TodoDialog
         isOpen={isEditing}
         onClose={() => setIsEditing(false)}
