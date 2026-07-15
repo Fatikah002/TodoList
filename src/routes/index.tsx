@@ -1,12 +1,20 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useAuth } from '@/contexts/AuthContext'
+import { useEffect } from 'react'
 
 export const Route = createFileRoute('/')({ component: Home })
 
 function Home() {
-  return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold">To Do List</h1>
-      <p className="mt-4 text-lg">Add your first todo item!</p>
-    </div>
-  )
+  const { isAuthenticated } = useAuth()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate({ to: '/todos' })
+    } else {
+      navigate({ to: '/login' })
+    }
+  }, [isAuthenticated, navigate])
+
+  return null
 }
