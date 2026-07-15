@@ -89,7 +89,7 @@ export function TodoItem({
               checked={todo.completed}
               onCheckedChange={() => onToggle(todo.id)}
               className="mt-1 h-5 w-5"
-              onClick={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
             />
 
             <div>
@@ -136,7 +136,7 @@ export function TodoItem({
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
               >
                 <EllipsisVertical className="h-5 w-5 text-slate-600" />
               </Button>
