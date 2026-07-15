@@ -202,7 +202,9 @@ export function TodoItem({
               <DropdownMenuItem
                 onClick={(e) => {
                   e.stopPropagation()
-                  onDelete(todo.id)
+                  if (confirm('Yakin ingin menghapus todo ini?')) {
+                    onDelete(todo.id)
+                  }
                 }}
                 className="text-red-600 focus:text-red-600"
               >
