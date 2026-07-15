@@ -12,13 +12,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import type { Todo } from '@/lib/types'
 
 type TodoFormProps = {
   initialData?: {
     title: string
     detail: string
     category: string
-    priority: string
+    priority: Todo['priority']
     deadline: string
   }
   submitLabel?: string
@@ -28,7 +29,7 @@ type TodoFormProps = {
     title: string
     detail: string
     category: string
-    priority: string
+    priority: Todo['priority']
     deadline: string
   }) => void
   onCancel?: () => void

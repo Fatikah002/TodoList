@@ -5,6 +5,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { TodoForm } from '@/components/TodoForm'
+import type { Todo } from '@/lib/types'
 
 type TodoDialogProps = {
   isOpen: boolean
@@ -18,7 +19,7 @@ type TodoDialogProps = {
     title: string
     detail: string
     category: string
-    priority: string
+    priority: Todo['priority']
     deadline: string
   }
 
@@ -28,7 +29,7 @@ type TodoDialogProps = {
     title: string
     detail: string
     category: string
-    priority: string
+    priority: Todo['priority']
     deadline: string
   }) => void
 }
@@ -38,8 +39,8 @@ export function TodoDialog({
   onClose,
   title,
   initialData,
-  showPriority,
   submitLabel,
+  showPriority,
   onSubmit,
 }: TodoDialogProps) {
   return (

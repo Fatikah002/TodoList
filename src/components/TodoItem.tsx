@@ -62,7 +62,6 @@ export function TodoItem({
               onUpdate({
                 ...todo,
                 ...data,
-                priority: data.priority as Todo['priority'],
               })
               setIsEditing(false)
             }}
