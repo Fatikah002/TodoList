@@ -125,7 +125,7 @@ export function TodoItem({
                   </Badge>
                 )}
 
-                {todo.repeat !== 'none' && (
+                {todo.repeat && todo.repeat !== 'none' && (
                   <Badge className="bg-teal-100 text-teal-700">
                     <Repeat className="mr-1 h-4 w-4" />
                     {todo.repeat.charAt(0).toUpperCase() + todo.repeat.slice(1)}

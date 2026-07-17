@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import type { Todo, RepeatType } from '@/lib/types'
 import { TodoItem } from '@/components/TodoItem'
 import { TodoFilter } from '@/components/TodoFilter'
+import type { SortBy, StatusFilter, PriorityFilter } from '@/components/TodoFilter'
 import { HorizontalCalendar } from '@/components/HorizontalCalendar'
 import { Button } from '@/components/ui/button'
 import { useTodos } from '@/hooks/useTodos'
@@ -24,26 +25,49 @@ function TodosPage() {
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [selectedDate, setSelectedDate] = useState(formatLocalDate(new Date()))
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
+  const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('all')
+  const [sortBy, setSortBy] = useState<SortBy>('deadline')
 
   const categories = Array.from(new Set(todos.map((todo) => todo.category)))
 
-  const filteredTodos = todos.filter((todo) => {
-    const matchesCategory =
-      selectedCategory === 'All' || todo.category === selectedCategory
+  const filteredTodos = todos
+    .filter((todo) => {
+      const matchesCategory =
+        selectedCategory === 'All' || todo.category === selectedCategory
 
-    const matchesDate =
-      search.trim() === '' ? todo.deadline === selectedDate : true
+      const matchesDate =
+        search.trim() === '' ? todo.deadline === selectedDate : true
 
-    const keyword = search.toLowerCase()
+      const keyword = search.toLowerCase()
 
-    const matchesSearch =
-      todo.title.toLowerCase().includes(keyword) ||
-      todo.detail.toLowerCase().includes(keyword) ||
-      todo.category.toLowerCase().includes(keyword) ||
-      todo.priority.toLowerCase().includes(keyword)
+      const matchesSearch =
+        todo.title.toLowerCase().includes(keyword) ||
+        todo.detail.toLowerCase().includes(keyword) ||
+        todo.category.toLowerCase().includes(keyword) ||
+        todo.priority.toLowerCase().includes(keyword)
 
-    return matchesCategory && matchesDate && matchesSearch
-  })
+      const matchesStatus =
+        statusFilter === 'all' ||
+        (statusFilter === 'completed' && todo.completed) ||
+        (statusFilter === 'pending' && !todo.completed) ||
+        (statusFilter === 'overdue' && !todo.completed && todo.deadline < selectedDate)
+
+      const matchesPriority =
+        priorityFilter === 'all' || todo.priority === priorityFilter
+
+      return matchesCategory && matchesDate && matchesSearch && matchesStatus && matchesPriority
+    })
+    .sort((a, b) => {
+      if (sortBy === 'deadline') {
+        return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+      }
+      if (sortBy === 'priority') {
+        const order: Record<string, number> = { High: 3, Medium: 2, Low: 1, None: 0 }
+        return (order[b.priority] ?? 0) - (order[a.priority] ?? 0)
+      }
+      return a.title.localeCompare(b.title)
+    })
 
   function handleAddTodo(data: {
     title: string
@@ -72,7 +96,12 @@ function TodosPage() {
         {/* ================= RIGHT (Mobile: Atas, Desktop: Kanan) ================= */}
         <aside className="order-1 xl:order-2">
           <div className="xl:sticky xl:top-6">
-            <DailyProgress todos={todos} selectedDate={selectedDate} />
+            <DailyProgress
+              todos={todos}
+              selectedDate={selectedDate}
+              statusFilter={statusFilter}
+              onStatusClick={setStatusFilter}
+            />
           </div>
         </aside>
 
@@ -84,8 +113,14 @@ function TodosPage() {
               <h1 className="text-xl font-bold">Today</h1>
               <div className="flex items-center gap-2">
                 <TodoFilter
-                  value={selectedCategory}
-                  onChange={setSelectedCategory}
+                  statusFilter={statusFilter}
+                  onStatusChange={setStatusFilter}
+                  priorityFilter={priorityFilter}
+                  onPriorityChange={setPriorityFilter}
+                  sortBy={sortBy}
+                  onSortChange={setSortBy}
+                  selectedCategory={selectedCategory}
+                  onCategoryChange={setSelectedCategory}
                   categories={categories}
                 />
                 <Button

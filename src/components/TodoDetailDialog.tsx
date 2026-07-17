@@ -45,7 +45,7 @@ export function TodoDetailDialog({
               category: todo.category,
               priority: todo.priority,
               deadline: todo.deadline,
-              repeat: todo.repeat,
+              repeat: todo.repeat ?? 'none',
             }}
             submitLabel="Save Changes"
             showPriority={true}
@@ -83,7 +83,7 @@ export function TodoDetailDialog({
               <p>{todo.deadline}</p>
             </div>
 
-            {todo.repeat !== 'none' && (
+            {todo.repeat && todo.repeat !== 'none' && (
               <div>
                 <h4 className="font-medium">Repeat</h4>
                 <p>{todo.repeat.charAt(0).toUpperCase() + todo.repeat.slice(1)}</p>
