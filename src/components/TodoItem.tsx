@@ -2,7 +2,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
-  Edit,
   Trash2,
   CalendarDays,
   TriangleAlert,
@@ -12,7 +11,6 @@ import {
 } from 'lucide-react'
 import type { Todo } from '@/lib/types'
 import { useState } from 'react'
-import { TodoDialog } from '@/components/TodoDialog'
 import { TodoDetailDialog } from '@/components/TodoDetailDialog'
 import { Badge } from '@/components/ui/badge'
 import { format } from 'date-fns'
@@ -42,7 +40,6 @@ export function TodoItem({
   onToggle,
   onUpdate,
 }: TodoItemProps) {
-  const [isEditing, setIsEditing] = useState(false)
   const [showDetail, setShowDetail] = useState(false)
 
   const getBadgeColor = (type: 'category' | 'priority', value: string) => {
@@ -199,17 +196,6 @@ export function TodoItem({
               <DropdownMenuItem
                 onClick={(e) => {
                   e.stopPropagation()
-                  setShowDetail(false)
-                  setIsEditing(true)
-                }}
-              >
-                <Edit className="mr-2 h-4 w-4" />
-                Edit
-              </DropdownMenuItem>
-
-              <DropdownMenuItem
-                onClick={(e) => {
-                  e.stopPropagation()
                   if (confirm('Yakin ingin menghapus todo ini?')) {
                     onDelete(todo.id)
                   }
@@ -228,29 +214,7 @@ export function TodoItem({
         open={showDetail}
         onClose={() => setShowDetail(false)}
         todo={todo}
-      />
-
-      <TodoDialog
-        isOpen={isEditing}
-        onClose={() => setIsEditing(false)}
-        title="Edit Todo"
-        submitLabel="Save"
-        showPriority={false}
-        initialData={{
-          title: todo.title,
-          detail: todo.detail,
-          category: todo.category,
-          priority: todo.priority,
-          deadline: todo.deadline,
-          repeat: todo.repeat,
-        }}
-        onSubmit={(data) => {
-          onUpdate({
-            ...todo,
-            ...data,
-          })
-          setIsEditing(false)
-        }}
+        onUpdate={onUpdate}
       />
     </>
   )
