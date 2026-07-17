@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Card, CardContent } from '@/components/ui/card'
-import type { Todo } from '@/lib/types'
+import type { Todo, RepeatType } from '@/lib/types'
 import { TodoItem } from '@/components/TodoItem'
 import { TodoFilter } from '@/components/TodoFilter'
 import { HorizontalCalendar } from '@/components/HorizontalCalendar'
@@ -50,6 +50,7 @@ function TodosPage() {
     detail: string
     category: string
     deadline: string
+    repeat: RepeatType
   }) {
     const newTodo: Todo = {
       id: Date.now(),
@@ -59,6 +60,7 @@ function TodosPage() {
       priority: 'None',
       deadline: data.deadline,
       completed: false,
+      repeat: data.repeat,
     }
 
     addTodo(newTodo)
@@ -129,6 +131,7 @@ function TodosPage() {
                 title="Add Todo"
                 submitLabel="Add Todo"
                 showPriority={true}
+                showRepeat={true}
                 onSubmit={handleAddTodo}
               />
             )}

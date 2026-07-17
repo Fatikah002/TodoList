@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import type { Todo } from '@/lib/types'
+import { getNextDeadline } from '@/lib/repeat'
 
 export function useTodos() {
   const [todos, setTodos] = useState<Todo[]>(() => {
@@ -24,16 +25,39 @@ export function useTodos() {
   }
 
   function toggleTodo(id: number) {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        todo.id === id
-          ? {
+    const todo = todos.find((t) => t.id === id)
+    if (!todo) return
+
+    const wasCompleted = todo.completed
+    const newCompleted = !wasCompleted
+
+    setTodos((prevTodos) => {
+      const updated = prevTodos.map((t) =>
+        t.id === id ? { ...t, completed: newCompleted } : t,
+      )
+
+      if (!wasCompleted && newCompleted && todo.repeat !== 'none') {
+        const nextDeadline = getNextDeadline(todo.deadline, todo.repeat)
+        const exists = prevTodos.some(
+          (t) =>
+            t.title === todo.title &&
+            t.category === todo.category &&
+            t.deadline === nextDeadline &&
+            !t.completed,
+        )
+        if (!exists) {
+          const newTodo: Todo = {
             ...todo,
-            completed: !todo.completed,
+            id: Date.now(),
+            deadline: nextDeadline,
+            completed: false,
           }
-          : todo,
-      ),
-    )
+          return [...updated, newTodo]
+        }
+      }
+
+      return updated
+    })
   }
 
   function updateTodo(updatedTodo: Todo) {

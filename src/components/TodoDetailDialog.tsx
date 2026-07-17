@@ -46,6 +46,13 @@ export function TodoDetailDialog({
         <h4 className="font-medium">Deadline</h4>
         <p>{todo.deadline}</p>
       </div>
+
+      {todo.repeat !== 'none' && (
+        <div>
+          <h4 className="font-medium">Repeat</h4>
+          <p>{todo.repeat.charAt(0).toUpperCase() + todo.repeat.slice(1)}</p>
+        </div>
+      )}
     </div>
   </DialogContent>
 </Dialog>

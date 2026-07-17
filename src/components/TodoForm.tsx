@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import type { Todo } from '@/lib/types'
+import type { Todo, RepeatType } from '@/lib/types'
 
 type TodoFormProps = {
   initialData?: {
@@ -21,16 +21,19 @@ type TodoFormProps = {
     category: string
     priority: Todo['priority']
     deadline: string
+    repeat: RepeatType
   }
   submitLabel?: string
   showCancel?: boolean
   showPriority?: boolean
+  showRepeat?: boolean
   onSubmit: (data: {
     title: string
     detail: string
     category: string
     priority: Todo['priority']
     deadline: string
+    repeat: RepeatType
   }) => void
   onCancel?: () => void
 }
@@ -41,6 +44,7 @@ export function TodoForm({
   submitLabel,
   showCancel,
   showPriority,
+  showRepeat,
   onCancel,
 }: TodoFormProps) {
   const [categoryOptions, setCategoryOptions] = useState([
@@ -57,6 +61,7 @@ export function TodoForm({
       category: initialData?.category ?? '',
       priority: initialData?.priority ?? 'None',
       deadline: initialData?.deadline ?? '',
+      repeat: initialData?.repeat ?? ('none' as RepeatType),
     },
 
     onSubmit: async ({ value, formApi }) => {
@@ -72,6 +77,7 @@ export function TodoForm({
         category,
         priority: value.priority,
         deadline: value.deadline,
+        repeat: value.repeat,
       })
       formApi.reset()
     },
@@ -250,6 +256,32 @@ export function TodoForm({
           )
         }}
       </form.Field>
+
+      {showRepeat && (
+        <form.Field name="repeat">
+          {(field) => (
+            <div className="flex flex-col gap-1">
+              <Label>Repeat</Label>
+              <Select
+                value={field.state.value}
+                onValueChange={(value) =>
+                  field.handleChange(value as RepeatType)
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select repeat" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">None</SelectItem>
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+        </form.Field>
+      )}
 
       <div className="flex gap-2">
         <Button

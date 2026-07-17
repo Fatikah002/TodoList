@@ -8,6 +8,7 @@ import {
   TriangleAlert,
   EllipsisVertical,
   Flag,
+  Repeat,
 } from 'lucide-react'
 import type { Todo } from '@/lib/types'
 import { useState } from 'react'
@@ -127,6 +128,13 @@ export function TodoItem({
                   </Badge>
                 )}
 
+                {todo.repeat !== 'none' && (
+                  <Badge className="bg-teal-100 text-teal-700">
+                    <Repeat className="mr-1 h-4 w-4" />
+                    {todo.repeat.charAt(0).toUpperCase() + todo.repeat.slice(1)}
+                  </Badge>
+                )}
+
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <CalendarDays className="h-3.5 w-3.5" />
                   <span>{format(new Date(todo.deadline), 'dd MMM yyyy')}</span>
@@ -234,6 +242,7 @@ export function TodoItem({
           category: todo.category,
           priority: todo.priority,
           deadline: todo.deadline,
+          repeat: todo.repeat,
         }}
         onSubmit={(data) => {
           onUpdate({
