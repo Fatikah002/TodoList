@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { Card, CardContent } from '@/components/ui/card'
 import type { Todo } from '@/lib/types'
 import { TodoItem } from '@/components/TodoItem'
@@ -6,13 +6,13 @@ import { TodoFilter } from '@/components/TodoFilter'
 import { HorizontalCalendar } from '@/components/HorizontalCalendar'
 import { Button } from '@/components/ui/button'
 import { useTodos } from '@/hooks/useTodos'
-import { useState, useEffect } from 'react'
-import { Plus, X, Search, LogOut } from 'lucide-react'
+import { useState } from 'react'
+import { Plus, X, Search } from 'lucide-react'
 import { formatLocalDate } from '@/lib/date'
 import { TodoDialog } from '@/components/TodoDialog'
 import { Input } from '@/components/ui/input'
 import { DailyProgress } from '@/components/DailyProgress'
-import { useAuth } from '@/contexts/AuthContext'
+
 
 export const Route = createFileRoute('/todos')({
   component: TodosPage,
@@ -20,25 +20,10 @@ export const Route = createFileRoute('/todos')({
 
 function TodosPage() {
   const { todos, addTodo, deleteTodo, toggleTodo, updateTodo } = useTodos()
-  const { isAuthenticated, logout } = useAuth()
-  const navigate = useNavigate()
   const [showForm, setShowForm] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [selectedDate, setSelectedDate] = useState(formatLocalDate(new Date()))
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate({ to: '/login' })
-    }
-  }, [isAuthenticated, navigate])
-
-  if (!isAuthenticated) return null
-
-  const handleLogout = () => {
-    logout()
-    navigate({ to: '/login' })
-  }
 
   const categories = Array.from(new Set(todos.map((todo) => todo.category)))
 
@@ -106,14 +91,6 @@ function TodosPage() {
                   className="h-9 w-14 rounded-full bg-green-500 hover:bg-green-600"
                 >
                   {showForm ? <X size={18} /> : <Plus size={18} />}
-                </Button>
-                <Button
-                  onClick={handleLogout}
-                  variant="outline"
-                  className="h-9 gap-1.5 rounded-full px-3"
-                >
-                  <LogOut size={16} />
-                  <span className="text-sm">Logout</span>
                 </Button>
               </div>
             </div>
