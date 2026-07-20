@@ -13,6 +13,16 @@ import type { Todo } from '@/lib/types'
 import { useState } from 'react'
 import { TodoDetailDialog } from '@/components/TodoDetailDialog'
 import { Badge } from '@/components/ui/badge'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { format } from 'date-fns'
 import { getDeadlineStatus } from '@/lib/deadline'
 import {
@@ -41,6 +51,7 @@ export function TodoItem({
   onUpdate,
 }: TodoItemProps) {
   const [showDetail, setShowDetail] = useState(false)
+  const [showDelete, setShowDelete] = useState(false)
 
   const getBadgeColor = (type: 'category' | 'priority', value: string) => {
     if (type === 'category') {
@@ -125,7 +136,7 @@ export function TodoItem({
                   </Badge>
                 )}
 
-                {todo.repeat && todo.repeat !== 'none' && (
+                { todo.repeat !== 'none' && (
                   <Badge className="bg-teal-100 text-teal-700">
                     <Repeat className="mr-1 h-4 w-4" />
                     {todo.repeat.charAt(0).toUpperCase() + todo.repeat.slice(1)}
@@ -196,9 +207,7 @@ export function TodoItem({
               <DropdownMenuItem
                 onClick={(e) => {
                   e.stopPropagation()
-                  if (confirm('Yakin ingin menghapus todo ini?')) {
-                    onDelete(todo.id)
-                  }
+                  setShowDelete(true)
                 }}
                 className="text-red-600 focus:text-red-600"
               >
@@ -216,6 +225,29 @@ export function TodoItem({
         todo={todo}
         onUpdate={onUpdate}
       />
+
+      <AlertDialog open={showDelete} onOpenChange={setShowDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus Todo?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Yakin ingin menghapus todo ini? 
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                onDelete(todo.id)
+                setShowDelete(false)
+              }}
+            >
+              Hapus
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   )
 }
