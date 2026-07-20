@@ -61,7 +61,7 @@ export function TodoForm({
       category: initialData?.category ?? '',
       priority: initialData?.priority ?? 'None',
       deadline: initialData?.deadline ?? '',
-      repeat: initialData?.repeat ?? ('none' as RepeatType),
+      repeat: initialData?.repeat ?? ('none' ),
     },
 
     onSubmit: async ({ value, formApi }) => {

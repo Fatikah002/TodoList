@@ -36,7 +36,7 @@ export function useTodos() {
         t.id === id ? { ...t, completed: newCompleted } : t,
       )
 
-      if (!wasCompleted && newCompleted && todo.repeat && todo.repeat !== 'none') {
+      if (!wasCompleted && newCompleted && todo.repeat !== 'none') {
         const nextDeadline = getNextDeadline(todo.deadline, todo.repeat)
         const exists = prevTodos.some(
           (t) =>

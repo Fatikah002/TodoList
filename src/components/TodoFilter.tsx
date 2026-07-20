@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -11,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-export type SortBy = 'deadline' | 'priority' | 'name'
+export type SortBy = 'deadline' | 'priority' | 'name' | 'none'
 export type StatusFilter = 'all' | 'completed' | 'pending' | 'overdue'
 export type PriorityFilter = 'all' | 'High' | 'Medium' | 'Low' | 'None'
 
@@ -41,7 +42,7 @@ export function TodoFilter({
   const hasActiveFilter =
     statusFilter !== 'all' ||
     priorityFilter !== 'all' ||
-    sortBy !== 'deadline' ||
+    sortBy !== 'none' ||
     selectedCategory !== 'All'
 
   return (
@@ -103,17 +104,21 @@ export function TodoFilter({
 
           <DropdownMenuRadioGroup
             value={sortBy}
-            onValueChange={(v) => onSortChange(v as SortBy)}
+            onValueChange={(value) => onSortChange(value as SortBy)}
           >
             <DropdownMenuRadioItem value="deadline">
               Deadline (Nearest)
             </DropdownMenuRadioItem>
+
             <DropdownMenuRadioItem value="priority">
-              Priority (High→Low)
+              Priority (High → Low)
             </DropdownMenuRadioItem>
+
             <DropdownMenuRadioItem value="name">
-              Name (A→Z)
+              Name (A → Z){' '}
             </DropdownMenuRadioItem>
+            
+            <DropdownMenuRadioItem value="none">None</DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>
         </DropdownMenuGroup>
 
@@ -135,6 +140,17 @@ export function TodoFilter({
             ))}
           </DropdownMenuRadioGroup>
         </DropdownMenuGroup>
+
+        <DropdownMenuItem
+          onClick={() => {
+            onStatusChange('all')
+            onPriorityChange('all')
+            onSortChange('none')
+            onCategoryChange('All')
+          }}
+        >
+          Reset Filter
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

@@ -3,17 +3,20 @@ import { Card, CardContent } from '@/components/ui/card'
 import type { Todo, RepeatType } from '@/lib/types'
 import { TodoItem } from '@/components/TodoItem'
 import { TodoFilter } from '@/components/TodoFilter'
-import type { SortBy, StatusFilter, PriorityFilter } from '@/components/TodoFilter'
+import type {
+  SortBy,
+  StatusFilter,
+  PriorityFilter,
+} from '@/components/TodoFilter'
 import { HorizontalCalendar } from '@/components/HorizontalCalendar'
 import { Button } from '@/components/ui/button'
 import { useTodos } from '@/hooks/useTodos'
 import { useState } from 'react'
 import { Plus, X, Search } from 'lucide-react'
-import { formatLocalDate } from '@/lib/date'
+import { formatLocalDate, isSameDay, isOverdue } from '@/lib/date'
 import { TodoDialog } from '@/components/TodoDialog'
 import { Input } from '@/components/ui/input'
 import { DailyProgress } from '@/components/DailyProgress'
-
 
 export const Route = createFileRoute('/todos')({
   component: TodosPage,
@@ -27,52 +30,101 @@ function TodosPage() {
   const [selectedDate, setSelectedDate] = useState(formatLocalDate(new Date()))
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('all')
-  const [sortBy, setSortBy] = useState<SortBy>('deadline')
+  const [sortBy, setSortBy] = useState<SortBy>('none')
 
   const categories = Array.from(new Set(todos.map((todo) => todo.category)))
+  let filteredTodos = [...todos]
 
-  const filteredTodos = todos
-    .filter((todo) => {
-      const matchesCategory =
-        selectedCategory === 'All' || todo.category === selectedCategory
+  const isFilterActive =
+    statusFilter !== 'all' ||
+    priorityFilter !== 'all' ||
+    selectedCategory !== 'All' ||
+    sortBy !== 'none'
 
-      const matchesDate =
-        search.trim() === '' ? todo.deadline === selectedDate : true
+  filteredTodos = [...todos].filter((todo) => {
+    const keyword = search.trim().toLowerCase()
 
-      const keyword = search.toLowerCase()
+    // =====================
+    // SEARCH
+    // =====================
 
-      const matchesSearch =
-        todo.title.toLowerCase().includes(keyword) ||
-        todo.detail.toLowerCase().includes(keyword) ||
-        todo.category.toLowerCase().includes(keyword) ||
-        todo.priority.toLowerCase().includes(keyword)
+    const matchesSearch =
+      keyword === '' ||
+      todo.title.toLowerCase().includes(keyword) ||
+      todo.detail.toLowerCase().includes(keyword) ||
+      todo.category.toLowerCase().includes(keyword) ||
+      todo.priority.toLowerCase().includes(keyword)
 
-      const matchesStatus =
-        statusFilter === 'all' ||
-        (statusFilter === 'completed' && todo.completed) ||
-        (statusFilter === 'pending' && !todo.completed) ||
-        (statusFilter === 'overdue' && !todo.completed && todo.deadline < selectedDate)
+    // =====================
+    // CATEGORY
+    // =====================
 
-      const matchesPriority =
-        priorityFilter === 'all' || todo.priority === priorityFilter
+    const matchesCategory =
+      selectedCategory === 'All' || todo.category === selectedCategory
 
-      return matchesCategory && matchesDate && matchesSearch && matchesStatus && matchesPriority
-    })
-    .sort((a, b) => {
-      if (sortBy === 'deadline') {
-        return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+    // =====================
+    // STATUS
+    // =====================
+
+    const todoIsOverdue = isOverdue(todo.completed, todo.deadline)
+
+    const matchesStatus =
+      statusFilter === 'all' ||
+      (statusFilter === 'completed' && todo.completed) ||
+      (statusFilter === 'pending' && !todo.completed) ||
+      (statusFilter === 'overdue' && todoIsOverdue)
+
+    // =====================
+    // PRIORITY
+    // =====================
+
+    const matchesPriority =
+      priorityFilter === 'all' || todo.priority === priorityFilter
+
+    const matchesDate = isSameDay(todo.deadline, selectedDate)
+
+    // Default (no filter): tampilkan hanya hari terpilih.
+    // Filter aktif: tampilkan semua hari yang cocok dengan filter.
+    return (
+      matchesSearch &&
+      matchesCategory &&
+      matchesStatus &&
+      matchesPriority &&
+      (isFilterActive || matchesDate)
+    )
+  })
+
+  // =====================
+  // SORT
+  // =====================
+  if (sortBy !== 'none') {
+    filteredTodos.sort((a, b) => {
+      switch (sortBy) {
+        case 'deadline':
+          return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+
+        case 'priority': {
+          const priorityOrder = {
+            High: 3,
+            Medium: 2,
+            Low: 1,
+            None: 0,
+          }
+
+          return priorityOrder[b.priority] - priorityOrder[a.priority]
+        }
+
+        case 'name':
+          return a.title.localeCompare(b.title)
       }
-      if (sortBy === 'priority') {
-        const order: Record<string, number> = { High: 3, Medium: 2, Low: 1, None: 0 }
-        return (order[b.priority] ?? 0) - (order[a.priority] ?? 0)
-      }
-      return a.title.localeCompare(b.title)
     })
+  }
 
   function handleAddTodo(data: {
     title: string
     detail: string
     category: string
+    priority: Todo['priority']
     deadline: string
     repeat: RepeatType
   }) {
@@ -81,7 +133,7 @@ function TodosPage() {
       title: data.title,
       detail: data.detail,
       category: data.category,
-      priority: 'None',
+      priority: data.priority,
       deadline: data.deadline,
       completed: false,
       repeat: data.repeat,
@@ -96,12 +148,7 @@ function TodosPage() {
         {/* ================= RIGHT (Mobile: Atas, Desktop: Kanan) ================= */}
         <aside className="order-1 xl:order-2">
           <div className="xl:sticky xl:top-6">
-            <DailyProgress
-              todos={todos}
-              selectedDate={selectedDate}
-              statusFilter={statusFilter}
-              onStatusClick={setStatusFilter}
-            />
+            <DailyProgress todos={todos} selectedDate={selectedDate} />
           </div>
         </aside>
 
