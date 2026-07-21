@@ -117,7 +117,7 @@ export function TodoFilter({
             <DropdownMenuRadioItem value="name">
               Name (A → Z){' '}
             </DropdownMenuRadioItem>
-            
+
             <DropdownMenuRadioItem value="none">None</DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>
         </DropdownMenuGroup>
@@ -140,17 +140,18 @@ export function TodoFilter({
             ))}
           </DropdownMenuRadioGroup>
         </DropdownMenuGroup>
-
-        <DropdownMenuItem
-          onClick={() => {
-            onStatusChange('all')
-            onPriorityChange('all')
-            onSortChange('none')
-            onCategoryChange('All')
-          }}
-        >
-          Reset Filter
-        </DropdownMenuItem>
+        <DropdownMenuSeparator>
+          <DropdownMenuItem
+            onClick={() => {
+              onStatusChange('all')
+              onPriorityChange('all')
+              onSortChange('none')
+              onCategoryChange('All')
+            }}
+          >
+            Reset Filter
+          </DropdownMenuItem>
+        </DropdownMenuSeparator>
       </DropdownMenuContent>
     </DropdownMenu>
   )

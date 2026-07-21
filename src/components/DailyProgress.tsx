@@ -2,6 +2,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import type { Todo } from '@/lib/types'
 import { CircularProgress } from './CircularProgress'
 import { isSameDay, isOverdue } from '@/lib/date'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 type DailyProgressProps = {
   todos: Todo[]
@@ -46,7 +47,7 @@ export function DailyProgress({ todos, selectedDate }: DailyProgressProps) {
   return (
     <Card className="w-full rounded-3xl shadow-md">
       <CardContent className="p-4">
-        <h2 className="mb-4 text-lg font-semibold">Your Progress</h2>
+        <h2 className="mb-4 text-lg font-semibold">Daily Progress</h2>
 
         <div className="flex items-center justify-between gap-4">
           {/* Progress Circle */}
@@ -64,13 +65,42 @@ export function DailyProgress({ todos, selectedDate }: DailyProgressProps) {
                   <p className={`text-lg font-bold ${stat.color}`}>
                     {stat.count}
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    {stat.label}
-                  </p>
+                  <p className="text-xs text-muted-foreground">{stat.label}</p>
                 </div>
               ))}
             </div>
           </div>
+        </div>
+
+        <div className="mt-5">
+          {total === 0 ? (
+            <Alert className="border-slate-200 bg-slate-50">
+              <AlertDescription className="text-slate-600">
+                No tasks scheduled for this day.
+              </AlertDescription>
+            </Alert>
+          ) : overdue > 0 ? (
+            <Alert className="border-red-200 bg-red-50">
+              <AlertDescription className="text-red-700">
+                <span className="font-semibold">{overdue}</span> task
+                {overdue > 1 ? 's are' : ' is'} overdue! Please catch up.
+              </AlertDescription>
+            </Alert>
+          ) : pending > 0 ? (
+            <Alert className="border-amber-200 bg-amber-50">
+              <AlertDescription className="text-amber-700">
+                You have <span className="font-semibold">{pending}</span>{' '}
+                pending task
+                {pending > 1 ? 's' : ''} to complete.
+              </AlertDescription>
+            </Alert>
+          ) : (
+            <Alert className="border-emerald-200 bg-emerald-50">
+              <AlertDescription className="text-emerald-700">
+                All caught up! Great job.
+              </AlertDescription>
+            </Alert>
+          )}
         </div>
       </CardContent>
     </Card>

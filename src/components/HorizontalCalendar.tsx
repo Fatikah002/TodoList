@@ -1,15 +1,21 @@
 import { useMemo, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { formatLocalDate } from '@/lib/date'
+import type { Todo } from '@/lib/types'
+import { useTodos } from '@/hooks/useTodos'
 
 type HorizontalCalendarProps = {
   selectedDate: string
   onDateChange: (date: string) => void
+  todos: Todo[]
+  showAllTasks: boolean
 }
 
 export function HorizontalCalendar({
   selectedDate,
   onDateChange,
+  showAllTasks, 
+  todos
 }: HorizontalCalendarProps) {
   const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
@@ -87,6 +93,7 @@ export function HorizontalCalendar({
           {calendarDays.map((item) => {
             const isSelected = item.fullDate === selectedDate
 
+            const hasTodo = todos.some((todo) => todo.deadline === item.fullDate && (showAllTasks || !todo.completed))
             return (
               <button
                 key={item.fullDate}
@@ -111,7 +118,9 @@ export function HorizontalCalendar({
                   className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold ${
                     isSelected
                       ? 'bg-green-500 text-white'
-                      : 'bg-green-100 text-gray-600'
+                      : hasTodo && showAllTasks
+                        ? 'bg-green-500 text-white'
+                        : 'bg-gray-100 text-gray-400'
                   }`}
                 >
                   {item.date}

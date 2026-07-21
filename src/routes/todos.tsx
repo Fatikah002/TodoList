@@ -171,7 +171,7 @@ function TodosPage() {
           <CardContent className="space-y-6 p-4 sm:p-6">
             {/* Header */}
             <div className="flex items-center justify-between">
-              <h1 className="text-xl font-bold">Today</h1>
+              <h1 className="text-xl font-bold"> {showAllTasks ? 'All Tasks' : 'Today'}</h1>
               <div className="flex items-center gap-2">
                 <TodoFilter
                   statusFilter={statusFilter}
@@ -201,7 +201,7 @@ function TodosPage() {
                   variant={showAllTasks ? 'default' : 'outline'}
                   className="h-9 rounded-full bg-green-500 text-white hover:bg-green-600 hover:text-white"
                 >
-                  {showAllTasks ? 'Today' : 'All Task'}
+                  {showAllTasks ? 'All Tasks' : 'Today'}
                 </Button>
               </div>
             </div>
@@ -210,6 +210,8 @@ function TodosPage() {
             <HorizontalCalendar
               selectedDate={selectedDate}
               onDateChange={setSelectedDate}
+              todos={todos}
+              showAllTasks={showAllTasks}
             />
 
             {/* Search / Select bar */}
