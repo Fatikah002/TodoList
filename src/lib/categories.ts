@@ -1,5 +1,5 @@
 export const categories = [
-    'Pekerjaan', 'Pribadi', 'Belanja', 'Lainnya'
+    'Work', 'Personal', 'Shopping', 'Other'
 ] as const
 
 export type TodoCategory = (typeof categories)[number]

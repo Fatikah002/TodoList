@@ -24,6 +24,12 @@ export function useTodos() {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id))
   }
 
+  function deleteMany(ids: number[]) {
+    setTodos((prevTodos) =>
+      prevTodos.filter((todo) => !ids.includes(todo.id)),
+    )
+  }
+
   function toggleTodo(id: number) {
     const todo = todos.find((t) => t.id === id)
     if (!todo) return
@@ -72,6 +78,7 @@ export function useTodos() {
     todos,
     addTodo,
     deleteTodo,
+    deleteMany,
     toggleTodo,
     updateTodo,
   }

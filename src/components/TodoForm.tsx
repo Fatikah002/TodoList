@@ -74,7 +74,7 @@ export function TodoForm({
       onSubmit({
         title: value.title,
         detail: value.detail,
-        category,
+        category:value.category,
         priority: value.priority,
         deadline: value.deadline,
         repeat: value.repeat,

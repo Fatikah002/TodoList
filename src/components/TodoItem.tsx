@@ -8,6 +8,7 @@ import {
   EllipsisVertical,
   Flag,
   Repeat,
+  CheckCircle2,
 } from 'lucide-react'
 import type { Todo } from '@/lib/types'
 import { useState } from 'react'
@@ -42,6 +43,9 @@ type TodoItemProps = {
   onDelete: (id: number) => void
   onToggle: (id: number) => void
   onUpdate: (updatedTodo: Todo) => void
+  selectMode?: boolean
+  isSelected?: boolean
+  onToggleSelect?: (id: number) => void
 }
 
 export function TodoItem({
@@ -49,6 +53,9 @@ export function TodoItem({
   onDelete,
   onToggle,
   onUpdate,
+  selectMode = false,
+  isSelected = false,
+  onToggleSelect,
 }: TodoItemProps) {
   const [showDetail, setShowDetail] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
@@ -56,11 +63,11 @@ export function TodoItem({
   const getBadgeColor = (type: 'category' | 'priority', value: string) => {
     if (type === 'category') {
       switch (value) {
-        case 'Pekerjaan':
+        case 'Work':
           return 'bg-blue-100 text-blue-700'
-        case 'Pribadi':
+        case 'Personal':
           return 'bg-purple-100 text-purple-700'
-        case 'Belanja':
+        case 'Shopping':
           return 'bg-orange-100 text-orange-700'
         default:
           return 'bg-gray-100 text-gray-700'
@@ -85,13 +92,22 @@ export function TodoItem({
   return (
     <>
       <Card
-        onClick={() => setShowDetail(true)}
-        className={`cursor-pointer transition-all duration-200 ${
+        onClick={() =>
+          selectMode
+            ? onToggleSelect?.(todo.id)
+            : setShowDetail(true)
+        }
+        className={`relative cursor-pointer transition-all duration-200 ${
           todo.completed
             ? 'bg-muted/40 opacity-75'
             : 'hover:border-green-300 hover:shadow-md'
+        } ${
+          isSelected
+            ? 'border-primary bg-primary/10 ring-1 ring-primary/40 shadow-md'
+            : ''
         }`}
       >
+       
         <CardContent className="flex items-start justify-between">
           <div className="flex flex-1 gap-3">
             <div
@@ -101,6 +117,7 @@ export function TodoItem({
               <Checkbox
                 checked={todo.completed}
                 onCheckedChange={() => onToggle(todo.id)}
+                disabled={selectMode}
                 className="mt-1 h-5 w-5"
               />
             </div>
@@ -151,71 +168,73 @@ export function TodoItem({
             </div>
           </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger >
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-              >
-                <EllipsisVertical className="h-5 w-5 text-slate-600" />
-              </Button>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent
-              align="end"
-              className="w-44"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <DropdownMenuGroup>
-                <DropdownMenuLabel>Priority</DropdownMenuLabel>
-
-                <DropdownMenuRadioGroup
-                  value={todo.priority}
-                  onValueChange={(value) =>
-                    onUpdate({
-                      ...todo,
-                      priority: value as Todo['priority'],
-                    })
-                  }
+          {!selectMode && (
+            <DropdownMenu>
+              <DropdownMenuTrigger >
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={(e) => e.stopPropagation()}
+                  onPointerDown={(e) => e.stopPropagation()}
                 >
-                  <DropdownMenuRadioItem value="High">
-                    <Flag className="mr-2 h-4 w-4 text-red-500" />
-                    High
-                  </DropdownMenuRadioItem>
+                  <EllipsisVertical className="h-5 w-5 text-slate-600" />
+                </Button>
+              </DropdownMenuTrigger>
 
-                  <DropdownMenuRadioItem value="Medium">
-                    <Flag className="mr-2 h-4 w-4 text-yellow-500" />
-                    Medium
-                  </DropdownMenuRadioItem>
-
-                  <DropdownMenuRadioItem value="Low">
-                    <Flag className="mr-2 h-4 w-4 text-green-500" />
-                    Low
-                  </DropdownMenuRadioItem>
-
-                  <DropdownMenuRadioItem value="None">
-                    <Flag className="mr-2 h-4 w-4 text-gray-400" />
-                    None
-                  </DropdownMenuRadioItem>
-                </DropdownMenuRadioGroup>
-              </DropdownMenuGroup>
-
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setShowDelete(true)
-                }}
-                className="text-red-600 focus:text-red-600"
+              <DropdownMenuContent
+                align="end"
+                className="w-44"
+                onClick={(e) => e.stopPropagation()}
               >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Priority</DropdownMenuLabel>
+
+                  <DropdownMenuRadioGroup
+                    value={todo.priority}
+                    onValueChange={(value) =>
+                      onUpdate({
+                        ...todo,
+                        priority: value as Todo['priority'],
+                      })
+                    }
+                  >
+                    <DropdownMenuRadioItem value="High">
+                      <Flag className="mr-2 h-4 w-4 text-red-500" />
+                      High
+                    </DropdownMenuRadioItem>
+
+                    <DropdownMenuRadioItem value="Medium">
+                      <Flag className="mr-2 h-4 w-4 text-yellow-500" />
+                      Medium
+                    </DropdownMenuRadioItem>
+
+                    <DropdownMenuRadioItem value="Low">
+                      <Flag className="mr-2 h-4 w-4 text-green-500" />
+                      Low
+                    </DropdownMenuRadioItem>
+
+                    <DropdownMenuRadioItem value="None">
+                      <Flag className="mr-2 h-4 w-4 text-gray-400" />
+                      None
+                    </DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuGroup>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setShowDelete(true)
+                  }}
+                  className="text-red-600 focus:text-red-600"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </CardContent>
       </Card>
 
@@ -229,21 +248,21 @@ export function TodoItem({
       <AlertDialog open={showDelete} onOpenChange={setShowDelete}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Hapus Todo?</AlertDialogTitle>
+            <AlertDialogTitle>Delete Todo</AlertDialogTitle>
             <AlertDialogDescription>
-              Yakin ingin menghapus todo ini? 
+              Are you sure you want to delete this todo?
             </AlertDialogDescription>
           </AlertDialogHeader>
 
           <AlertDialogFooter>
-            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 onDelete(todo.id)
                 setShowDelete(false)
               }}
             >
-              Hapus
+              Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

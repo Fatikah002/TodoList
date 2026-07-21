@@ -12,18 +12,29 @@ import { HorizontalCalendar } from '@/components/HorizontalCalendar'
 import { Button } from '@/components/ui/button'
 import { useTodos } from '@/hooks/useTodos'
 import { useState } from 'react'
-import { Plus, X, Search } from 'lucide-react'
+import { Plus, X, Search, ListChecks } from 'lucide-react'
 import { formatLocalDate, isSameDay, isOverdue } from '@/lib/date'
 import { TodoDialog } from '@/components/TodoDialog'
 import { Input } from '@/components/ui/input'
 import { DailyProgress } from '@/components/DailyProgress'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 
 export const Route = createFileRoute('/todos')({
   component: TodosPage,
 })
 
 function TodosPage() {
-  const { todos, addTodo, deleteTodo, toggleTodo, updateTodo } = useTodos()
+  const { todos, addTodo, deleteTodo, deleteMany, toggleTodo, updateTodo } =
+    useTodos()
   const [showForm, setShowForm] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
@@ -31,6 +42,10 @@ function TodosPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('all')
   const [sortBy, setSortBy] = useState<SortBy>('none')
+  const [selectMode, setSelectMode] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<number[]>([])
+  const [showBulkDelete, setShowBulkDelete] = useState(false)
+  const [showAllTasks, setShowAllTasks] = useState(false)
 
   const categories = Array.from(new Set(todos.map((todo) => todo.category)))
   let filteredTodos = [...todos]
@@ -81,9 +96,8 @@ function TodosPage() {
     const matchesPriority =
       priorityFilter === 'all' || todo.priority === priorityFilter
 
-    const matchesDate = isSameDay(todo.deadline, selectedDate)
+    const matchesDate = showAllTasks || isSameDay(todo.deadline, selectedDate)
 
-    // Default (no filter): tampilkan hanya hari terpilih.
     // Filter aktif: tampilkan semua hari yang cocok dengan filter.
     return (
       matchesSearch &&
@@ -172,9 +186,22 @@ function TodosPage() {
                 />
                 <Button
                   onClick={() => setShowForm(!showForm)}
-                  className="h-9 w-14 rounded-full bg-green-500 hover:bg-green-600"
+                  className="h-9 w-18 rounded-full bg-green-500 hover:bg-green-600"
                 >
-                  {showForm ? <X size={18} /> : <Plus size={18} />}
+                  {showForm ? (
+                    <X size={18} />
+                  ) : (
+                    <>
+                      <Plus size={18} /> <span>Add</span>
+                    </>
+                  )}
+                </Button>
+                <Button
+                  onClick={() => setShowAllTasks((prev) => !prev)}
+                  variant={showAllTasks ? 'default' : 'outline'}
+                  className="h-9 rounded-full bg-green-500 text-white hover:bg-green-600 hover:text-white"
+                >
+                  {showAllTasks ? 'Today' : 'All Task'}
                 </Button>
               </div>
             </div>
@@ -185,26 +212,63 @@ function TodosPage() {
               onDateChange={setSelectedDate}
             />
 
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-
-              <Input
-                placeholder="Search todo..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="h-11 rounded-xl pl-10 pr-10"
-              />
-
-              {search && (
-                <button
-                  onClick={() => setSearch('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
+            {/* Search / Select bar */}
+            {selectMode ? (
+              <div className="flex items-center justify-between gap-3">
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    setSelectMode(false)
+                    setSelectedIds([])
+                  }}
                 >
-                  <X className="h-4 w-4 text-muted-foreground" />
-                </button>
-              )}
-            </div>
+                  Cancel
+                </Button>
+
+                <p className="text-sm font-medium text-muted-foreground">
+                  {selectedIds.length} item dipilih
+                </p>
+
+                <Button
+                  variant="destructive"
+                  disabled={selectedIds.length === 0}
+                  onClick={() => setShowBulkDelete(true)}
+                >
+                  Delete
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+
+                  <Input
+                    placeholder="Search todo..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="h-11 rounded-xl pl-10 pr-10"
+                  />
+
+                  {search && (
+                    <button
+                      onClick={() => setSearch('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2"
+                    >
+                      <X className="h-4 w-4 text-muted-foreground" />
+                    </button>
+                  )}
+                </div>
+
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectMode(true)}
+                  className="h-11 gap-1.5 rounded-xl px-3"
+                >
+                  <ListChecks size={16} />
+                  Select
+                </Button>
+              </div>
+            )}
 
             {showForm && (
               <TodoDialog
@@ -231,10 +295,45 @@ function TodosPage() {
                     onDelete={deleteTodo}
                     onToggle={toggleTodo}
                     onUpdate={updateTodo}
+                    selectMode={selectMode}
+                    isSelected={selectedIds.includes(todo.id)}
+                    onToggleSelect={(id) =>
+                      setSelectedIds((prev) =>
+                        prev.includes(id)
+                          ? prev.filter((x) => x !== id)
+                          : [...prev, id],
+                      )
+                    }
                   />
                 ))
               )}
             </div>
+
+            <AlertDialog open={showBulkDelete} onOpenChange={setShowBulkDelete}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Hapus Todo?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Yakin ingin menghapus {selectedIds.length} item yang
+                    dipilih?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Batal</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      deleteMany(selectedIds)
+                      setSelectedIds([])
+                      setSelectMode(false)
+                      setShowBulkDelete(false)
+                    }}
+                  >
+                    Hapus
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </CardContent>
         </Card>
       </div>

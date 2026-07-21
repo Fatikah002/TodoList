@@ -9,17 +9,17 @@ type DailyProgressProps = {
 }
 
 export function DailyProgress({ todos, selectedDate }: DailyProgressProps) {
-  const scopedTodos = todos.filter((todo) =>
+  const dailyTodos = todos.filter((todo) =>
     isSameDay(todo.deadline, selectedDate),
   )
 
-  const total = scopedTodos.length
+  const total = dailyTodos.length
 
-  const completed = scopedTodos.filter((todo) => todo.completed).length
+  const completed = dailyTodos.filter((todo) => todo.completed).length
 
-  const pending = scopedTodos.filter((todo) => !todo.completed).length
+  const pending = dailyTodos.filter((todo) => !todo.completed).length
 
-  const overdue = scopedTodos.filter((todo) =>
+  const overdue = dailyTodos.filter((todo) =>
     isOverdue(todo.completed, todo.deadline),
   ).length
 
