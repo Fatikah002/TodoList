@@ -19,6 +19,11 @@ export const todoSchema = z.object({
     .refine((value) => value >= getTodayDateString(), {
       message: 'Deadline harus hari ini atau setelahnya',
     }),
+  dueTime: z
+    .string()
+    .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Format waktu HH:MM')
+    .optional()
+    .or(z.literal('')),
 })
 
 export type TodoFormData = z.infer<typeof todoSchema>

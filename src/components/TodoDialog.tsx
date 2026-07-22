@@ -22,6 +22,7 @@ type TodoDialogProps = {
     category: string
     priority: Todo['priority']
     deadline: string
+    dueTime: string
     repeat: RepeatType
   }
 
@@ -33,6 +34,7 @@ type TodoDialogProps = {
     category: string
     priority: Todo['priority']
     deadline: string
+    dueTime: string
     repeat: RepeatType
   }) => void
 }

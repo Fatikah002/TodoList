@@ -81,7 +81,7 @@ function TodosPage() {
     // STATUS
     // =====================
 
-    const todoIsOverdue = isOverdue(todo.completed, todo.deadline)
+    const todoIsOverdue = isOverdue(todo.completed, todo.deadline, todo.dueTime)
 
     const matchesStatus =
       statusFilter === 'all' ||
@@ -140,6 +140,7 @@ function TodosPage() {
     category: string
     priority: Todo['priority']
     deadline: string
+    dueTime: string
     repeat: RepeatType
   }) {
     const newTodo: Todo = {
@@ -149,6 +150,7 @@ function TodosPage() {
       category: data.category,
       priority: data.priority,
       deadline: data.deadline,
+      dueTime: data.dueTime,
       completed: false,
       repeat: data.repeat,
     }

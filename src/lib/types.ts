@@ -8,6 +8,7 @@ export type Todo = {
   category: string
   priority: priority
   deadline: string
+  dueTime: string
   completed: boolean
   repeat: RepeatType
 }

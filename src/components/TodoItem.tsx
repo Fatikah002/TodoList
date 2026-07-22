@@ -87,7 +87,7 @@ export function TodoItem({
   }
 
   const status =
-    !todo.completed && todo.deadline ? getDeadlineStatus(todo.deadline) : null
+    !todo.completed && todo.deadline ? getDeadlineStatus(todo.deadline, todo.dueTime) : null
 
   return (
     <>
@@ -162,7 +162,10 @@ export function TodoItem({
 
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <CalendarDays className="h-3.5 w-3.5" />
-                  <span>{format(new Date(todo.deadline), 'dd MMM yyyy')}</span>
+                  <span>
+                    {format(new Date(todo.deadline), 'dd MMM yyyy')}
+                    {todo.dueTime && ` ${todo.dueTime}`}
+                  </span>
                 </div>
               </div>
             </div>

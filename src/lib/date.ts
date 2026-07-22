@@ -10,8 +10,10 @@ export function isSameDay(deadline: string, selectedDate: string) {
   return formatLocalDate(new Date(deadline)) === selectedDate;
 }
 
-export function isOverdue(completed: boolean, deadline: string) {
+export function isOverdue(completed: boolean, deadline: string, dueTime?: string) {
   if (completed) return false;
-  const today = formatLocalDate(new Date());
-  return formatLocalDate(new Date(deadline)) < today;
+  const deadlineDate = dueTime
+    ? new Date(`${deadline}T${dueTime}:00`)
+    : new Date(`${deadline}T23:59:59`)
+  return deadlineDate < new Date()
 }

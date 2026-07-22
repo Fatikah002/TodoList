@@ -12,6 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { DatePicker } from '@/components/ui/date-picker'
+import { TimePicker } from '@/components/ui/time-picker'
 import type { Todo, RepeatType } from '@/lib/types'
 
 type TodoFormProps = {
@@ -21,6 +23,7 @@ type TodoFormProps = {
     category: string
     priority: Todo['priority']
     deadline: string
+    dueTime: string
     repeat: RepeatType
   }
   submitLabel?: string
@@ -33,6 +36,7 @@ type TodoFormProps = {
     category: string
     priority: Todo['priority']
     deadline: string
+    dueTime: string
     repeat: RepeatType
   }) => void
   onCancel?: () => void
@@ -51,9 +55,6 @@ export function TodoForm({
     ...categories,
   ] as string[])
 
-  const today = new Date()
-  const minDeadline = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
-
   const form = useForm({
     defaultValues: {
       title: initialData?.title ?? '',
@@ -61,6 +62,7 @@ export function TodoForm({
       category: initialData?.category ?? '',
       priority: initialData?.priority ?? 'None',
       deadline: initialData?.deadline ?? '',
+      dueTime: initialData?.dueTime ?? '',
       repeat: initialData?.repeat ?? ('none' ),
     },
 
@@ -77,6 +79,7 @@ export function TodoForm({
         category: category,
         priority: value.priority,
         deadline: value.deadline,
+        dueTime: value.dueTime,
         repeat: value.repeat,
       })
       formApi.reset()
@@ -236,15 +239,9 @@ export function TodoForm({
           return (
             <div className="flex flex-col gap-1">
               <Label>Deadline</Label>
-              <Input
-                type="date"
+              <DatePicker
                 value={field.state.value}
-                min={minDeadline}
-                onChange={(e) => field.handleChange(e.target.value)}
-                onBlur={field.handleBlur}
-                className={
-                  showError ? 'border-red-500 focus-visible:ring-red-500' : ''
-                }
+                onChange={(val) => field.handleChange(val)}
               />
 
               {showError && (
@@ -255,6 +252,18 @@ export function TodoForm({
             </div>
           )
         }}
+      </form.Field>
+
+      <form.Field name="dueTime">
+        {(field) => (
+          <div className="flex flex-col gap-1">
+            <Label>Due Time (optional)</Label>
+            <TimePicker
+              value={field.state.value}
+              onChange={(val) => field.handleChange(val)}
+            />
+          </div>
+        )}
       </form.Field>
 
       {showRepeat && (
