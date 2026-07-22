@@ -1,4 +1,4 @@
-import { Filter } from 'lucide-react'
+import { SlidersHorizontal } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -50,12 +50,12 @@ export function TodoFilter({
       <DropdownMenuTrigger>
         <Button
           variant="outline"
-          className={`h-9 gap-1.5 rounded-full px-3 ${
+          className={`h-11 gap-1.5 rounded-xl px-3 ${
             hasActiveFilter ? 'border-green-500 bg-green-50 text-green-700' : ''
           }`}
         >
-          <Filter size={16} />
-          <span className="text-sm">Filter</span>
+          <SlidersHorizontal size={16} />
+          {/* <span className="text-sm">Filter</span> */}
         </Button>
       </DropdownMenuTrigger>
 

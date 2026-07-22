@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Card, CardContent } from '@/components/ui/card'
 import type { Todo, RepeatType } from '@/lib/types'
 import { TodoItem } from '@/components/TodoItem'
@@ -12,11 +12,17 @@ import { HorizontalCalendar } from '@/components/HorizontalCalendar'
 import { Button } from '@/components/ui/button'
 import { useTodos } from '@/hooks/useTodos'
 import { useState } from 'react'
-import { Plus, X, Search, ListChecks } from 'lucide-react'
+import { Plus, X, Search, Archive, ChevronDown, Check, SquareCheckBig } from 'lucide-react'
 import { formatLocalDate, isSameDay, isOverdue } from '@/lib/date'
 import { TodoDialog } from '@/components/TodoDialog'
 import { Input } from '@/components/ui/input'
 import { DailyProgress } from '@/components/DailyProgress'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,8 +39,16 @@ export const Route = createFileRoute('/todos')({
 })
 
 function TodosPage() {
-  const { todos, addTodo, deleteTodo, deleteMany, toggleTodo, updateTodo } =
-    useTodos()
+  const navigate = useNavigate()
+  const {
+    todos,
+    addTodo,
+    deleteTodo,
+    deleteMany,
+    toggleTodo,
+    updateTodo,
+    archiveTodo,
+  } = useTodos()
   const [showForm, setShowForm] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
@@ -47,8 +61,12 @@ function TodosPage() {
   const [showBulkDelete, setShowBulkDelete] = useState(false)
   const [showAllTasks, setShowAllTasks] = useState(false)
 
-  const categories = Array.from(new Set(todos.map((todo) => todo.category)))
-  let filteredTodos = [...todos]
+  const activeTodos = todos.filter((todo) => !todo.archived)
+  const archivedTodos = todos.filter((todo) => todo.archived)
+  const categories = Array.from(
+    new Set(activeTodos.map((todo) => todo.category)),
+  )
+  let filteredTodos = [...activeTodos]
 
   const isFilterActive =
     statusFilter !== 'all' ||
@@ -56,7 +74,7 @@ function TodosPage() {
     selectedCategory !== 'All' ||
     sortBy !== 'none'
 
-  filteredTodos = [...todos].filter((todo) => {
+  filteredTodos = [...activeTodos].filter((todo) => {
     const keyword = search.trim().toLowerCase()
 
     // =====================
@@ -153,6 +171,7 @@ function TodosPage() {
       dueTime: data.dueTime,
       completed: false,
       repeat: data.repeat,
+      archived: false,
     }
 
     addTodo(newTodo)
@@ -177,21 +196,38 @@ function TodosPage() {
           <CardContent className="space-y-6 p-4 sm:p-6">
             {/* Header */}
             <div className="flex items-center justify-between">
-              <h1 className="text-xl font-bold">
-                {showAllTasks ? 'All Tasks' : 'Today'}
-              </h1>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="focus:outline-none">
+                  <div className="flex items-center gap-1.5 cursor-pointer text-xl font-bold text-gray-900 transition-colors">
+                    <span>{showAllTasks ? 'All Tasks' : 'Today'}</span>
+                    <ChevronDown className="h-5 w-5 text-black mt-1 " />
+                  </div>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent align="start" className="w-40 rounded-2xl p-1.5 shadow-md">
+                  <DropdownMenuItem
+                    onClick={() => setShowAllTasks(false)}
+                    className={`flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium cursor-pointer ${
+                      !showAllTasks ? 'bg-green-50 text-green-700 font-semibold' : ''
+                    }`}
+                  >
+                    <span>Today</span>
+                    {!showAllTasks && <Check className="h-4 w-4 text-green-300" />}
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() => setShowAllTasks(true)}
+                    className={`flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium cursor-pointer ${
+                      showAllTasks ? 'bg-green-50 text-green-700 font-semibold' : ''
+                    }`}
+                  >
+                    <span>All Tasks</span>
+                    {showAllTasks && <Check className="h-4 w-4 text-green-300" />}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               <div className="flex items-center gap-2">
-                <TodoFilter
-                  statusFilter={statusFilter}
-                  onStatusChange={setStatusFilter}
-                  priorityFilter={priorityFilter}
-                  onPriorityChange={setPriorityFilter}
-                  sortBy={sortBy}
-                  onSortChange={setSortBy}
-                  selectedCategory={selectedCategory}
-                  onCategoryChange={setSelectedCategory}
-                  categories={categories}
-                />
                 <Button
                   onClick={() => setShowForm(!showForm)}
                   className="h-9 w-18 rounded-full bg-green-500 hover:bg-green-600"
@@ -205,11 +241,18 @@ function TodosPage() {
                   )}
                 </Button>
                 <Button
-                  onClick={() => setShowAllTasks((prev) => !prev)}
-                  variant={showAllTasks ? 'default' : 'outline'}
-                  className="h-9 rounded-full bg-green-500 text-white hover:bg-green-600 hover:text-white"
+                  onClick={() => navigate({ to: '/archived' })}
+                  variant="outline"
+                  className="h-9 gap-1.5 rounded-full px-2.5 sm:px-3 text-xs sm:text-sm font-medium text-gray-700 border-gray-200"
+                  title="Archived Todos"
                 >
-                  {showAllTasks ? 'All Tasks' : 'Today'}
+                  <Archive size={15} />
+                  <span className="hidden sm:inline">Archived</span>
+                  {archivedTodos.length > 0 && (
+                    <span className="rounded-full bg-gray-200 px-1.5 py-0.2 text-[11px] sm:text-xs font-bold text-gray-600">
+                      {archivedTodos.length}
+                    </span>
+                  )}
                 </Button>
               </div>
             </div>
@@ -236,7 +279,7 @@ function TodosPage() {
                 </Button>
 
                 <p className="text-sm font-medium text-muted-foreground">
-                  {selectedIds.length} item dipilih
+                  {selectedIds.length} item selected
                 </p>
 
                 <Button
@@ -269,13 +312,25 @@ function TodosPage() {
                   )}
                 </div>
 
+                <TodoFilter
+                  statusFilter={statusFilter}
+                  onStatusChange={setStatusFilter}
+                  priorityFilter={priorityFilter}
+                  onPriorityChange={setPriorityFilter}
+                  sortBy={sortBy}
+                  onSortChange={setSortBy}
+                  selectedCategory={selectedCategory}
+                  onCategoryChange={setSelectedCategory}
+                  categories={categories}
+                />
+
                 <Button
                   variant="outline"
                   onClick={() => setSelectMode(true)}
                   className="h-11 gap-1.5 rounded-xl px-3"
                 >
-                  <ListChecks size={16} />
-                  Select
+                  <SquareCheckBig size={16} />
+                  {/* <span>Select</span> */}
                 </Button>
               </div>
             )}
@@ -305,6 +360,7 @@ function TodosPage() {
                     onDelete={deleteTodo}
                     onToggle={toggleTodo}
                     onUpdate={updateTodo}
+                    onArchive={archiveTodo}
                     selectMode={selectMode}
                     isSelected={selectedIds.includes(todo.id)}
                     onToggleSelect={(id) =>
@@ -322,15 +378,14 @@ function TodosPage() {
             <AlertDialog open={showBulkDelete} onOpenChange={setShowBulkDelete}>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Hapus Todo?</AlertDialogTitle>
+                  <AlertDialogTitle>Delete Todo</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Yakin ingin menghapus {selectedIds.length} item yang
-                    dipilih?
+                   Are you sure you want to delete {selectedIds.length} selected item(s)?
                   </AlertDialogDescription>
                 </AlertDialogHeader>
 
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Batal</AlertDialogCancel>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={() => {
                       deleteMany(selectedIds)
@@ -339,7 +394,7 @@ function TodosPage() {
                       setShowBulkDelete(false)
                     }}
                   >
-                    Hapus
+                    Delete
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>

@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { formatLocalDate } from '@/lib/date'
 import type { Todo } from '@/lib/types'
-import { useTodos } from '@/hooks/useTodos'
 
 type HorizontalCalendarProps = {
   selectedDate: string

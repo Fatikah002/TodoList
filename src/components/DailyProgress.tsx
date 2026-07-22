@@ -15,10 +15,11 @@ export function DailyProgress({
   selectedDate,
   showAllTasks,
 }: DailyProgressProps) {
-  // Todo yang dihitung
+  const activeTodos = todos.filter((todo) => !todo.archived)
+
   const scopedTodos = showAllTasks
-    ? todos
-    : todos.filter((todo) => isSameDay(todo.deadline, selectedDate))
+    ? activeTodos
+    : activeTodos.filter((todo) => isSameDay(todo.deadline, selectedDate))
 
   const total = scopedTodos.length
 

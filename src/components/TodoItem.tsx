@@ -8,7 +8,9 @@ import {
   EllipsisVertical,
   Flag,
   Repeat,
-  CheckCircle2,
+  Archive,
+  RotateCcw,
+  Trash,
 } from 'lucide-react'
 import type { Todo } from '@/lib/types'
 import { useState } from 'react'
@@ -43,9 +45,13 @@ type TodoItemProps = {
   onDelete: (id: number) => void
   onToggle: (id: number) => void
   onUpdate: (updatedTodo: Todo) => void
+  onArchive?: (id: number) => void
+  onRestore?: (id: number) => void
+  onDeletePermanent?: (id: number) => void
   selectMode?: boolean
   isSelected?: boolean
   onToggleSelect?: (id: number) => void
+  archivedView?: boolean
 }
 
 export function TodoItem({
@@ -53,9 +59,13 @@ export function TodoItem({
   onDelete,
   onToggle,
   onUpdate,
+  onArchive,
+  onRestore,
+  onDeletePermanent,
   selectMode = false,
   isSelected = false,
   onToggleSelect,
+  archivedView = false,
 }: TodoItemProps) {
   const [showDetail, setShowDetail] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
@@ -107,7 +117,6 @@ export function TodoItem({
             : ''
         }`}
       >
-       
         <CardContent className="flex items-start justify-between">
           <div className="flex flex-1 gap-3">
             <div
@@ -117,7 +126,7 @@ export function TodoItem({
               <Checkbox
                 checked={todo.completed}
                 onCheckedChange={() => onToggle(todo.id)}
-                disabled={selectMode}
+                disabled={selectMode || archivedView}
                 className="mt-1 h-5 w-5"
               />
             </div>
@@ -153,7 +162,14 @@ export function TodoItem({
                   </Badge>
                 )}
 
-                { todo.repeat !== 'none' && (
+                {archivedView && (
+                  <Badge className="bg-gray-200 text-gray-600">
+                    <Archive className="mr-1 h-4 w-4" />
+                    Archived
+                  </Badge>
+                )}
+
+                {todo.repeat !== 'none' && (
                   <Badge className="bg-teal-100 text-teal-700">
                     <Repeat className="mr-1 h-4 w-4" />
                     {todo.repeat.charAt(0).toUpperCase() + todo.repeat.slice(1)}
@@ -173,7 +189,7 @@ export function TodoItem({
 
           {!selectMode && (
             <DropdownMenu>
-              <DropdownMenuTrigger >
+              <DropdownMenuTrigger>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -189,52 +205,91 @@ export function TodoItem({
                 className="w-44"
                 onClick={(e) => e.stopPropagation()}
               >
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel>Priority</DropdownMenuLabel>
+                {archivedView ? (
+                  <>
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onRestore?.(todo.id)
+                      }}
+                    >
+                      <RotateCcw className="mr-2 h-4 w-4 text-blue-500" />
+                      Restore
+                    </DropdownMenuItem>
 
-                  <DropdownMenuRadioGroup
-                    value={todo.priority}
-                    onValueChange={(value) =>
-                      onUpdate({
-                        ...todo,
-                        priority: value as Todo['priority'],
-                      })
-                    }
-                  >
-                    <DropdownMenuRadioItem value="High">
-                      <Flag className="mr-2 h-4 w-4 text-red-500" />
-                      High
-                    </DropdownMenuRadioItem>
+                    <DropdownMenuSeparator />
 
-                    <DropdownMenuRadioItem value="Medium">
-                      <Flag className="mr-2 h-4 w-4 text-yellow-500" />
-                      Medium
-                    </DropdownMenuRadioItem>
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setShowDelete(true)
+                      }}
+                      className="text-red-600 focus:text-red-600"
+                    >
+                      <Trash className="mr-2 h-4 w-4" />
+                      Delete Permanently
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuGroup>
+                      <DropdownMenuLabel>Priority</DropdownMenuLabel>
 
-                    <DropdownMenuRadioItem value="Low">
-                      <Flag className="mr-2 h-4 w-4 text-green-500" />
-                      Low
-                    </DropdownMenuRadioItem>
+                      <DropdownMenuRadioGroup
+                        value={todo.priority}
+                        onValueChange={(value) =>
+                          onUpdate({
+                            ...todo,
+                            priority: value as Todo['priority'],
+                          })
+                        }
+                      >
+                        <DropdownMenuRadioItem value="High">
+                          <Flag className="mr-2 h-4 w-4 text-red-500" />
+                          High
+                        </DropdownMenuRadioItem>
 
-                    <DropdownMenuRadioItem value="None">
-                      <Flag className="mr-2 h-4 w-4 text-gray-400" />
-                      None
-                    </DropdownMenuRadioItem>
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuGroup>
+                        <DropdownMenuRadioItem value="Medium">
+                          <Flag className="mr-2 h-4 w-4 text-yellow-500" />
+                          Medium
+                        </DropdownMenuRadioItem>
 
-                <DropdownMenuSeparator />
+                        <DropdownMenuRadioItem value="Low">
+                          <Flag className="mr-2 h-4 w-4 text-green-500" />
+                          Low
+                        </DropdownMenuRadioItem>
 
-                <DropdownMenuItem
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setShowDelete(true)
-                  }}
-                  className="text-red-600 focus:text-red-600"
-                >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Delete
-                </DropdownMenuItem>
+                        <DropdownMenuRadioItem value="None">
+                          <Flag className="mr-2 h-4 w-4 text-gray-400" />
+                          None
+                        </DropdownMenuRadioItem>
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuGroup>
+
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onArchive?.(todo.id)
+                      }}
+                    >
+                      <Archive className="mr-2 h-4 w-4 text-slate-500" />
+                      Archive
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setShowDelete(true)
+                      }}
+                      className="text-red-600 focus:text-red-600"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Delete
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           )}
@@ -251,9 +306,13 @@ export function TodoItem({
       <AlertDialog open={showDelete} onOpenChange={setShowDelete}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Todo</AlertDialogTitle>
+            <AlertDialogTitle>
+              {archivedView ? 'Delete Permanently' : 'Delete Todo'}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this todo?
+              {archivedView
+                ? 'This will permanently delete this todo. This action cannot be undone.'
+                : 'Are you sure you want to delete this todo?'}
             </AlertDialogDescription>
           </AlertDialogHeader>
 
@@ -261,11 +320,15 @@ export function TodoItem({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                onDelete(todo.id)
+                if (archivedView) {
+                  onDeletePermanent?.(todo.id)
+                } else {
+                  onDelete(todo.id)
+                }
                 setShowDelete(false)
               }}
             >
-              Delete
+              {archivedView ? 'Delete Permanently' : 'Delete'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

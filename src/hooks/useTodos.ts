@@ -4,13 +4,9 @@ import { getNextDeadline } from '@/lib/repeat'
 
 export function useTodos() {
   const [todos, setTodos] = useState<Todo[]>(() => {
-    const storedTodos = localStorage.getItem('todos')
-    if (storedTodos) {
-      return JSON.parse(storedTodos)
-    }
-    return []
-
-  })
+    const storedTodos = localStorage.getItem('todos');
+    return storedTodos ? JSON.parse(storedTodos) : [];
+  });
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos))
@@ -74,6 +70,40 @@ export function useTodos() {
     )
   }
 
+  function archiveTodo(id: number) {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === id ? { ...todo, archived: true } : todo,
+      ),
+    )
+  }
+
+  function archiveMany(ids: number[]) {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        ids.includes(todo.id) ? { ...todo, archived: true } : todo,
+      ),
+    )
+  }
+
+  function restoreTodo(id: number) {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === id ? { ...todo, archived: false, completed: false } : todo,
+      ),
+    )
+  }
+
+  function deletePermanently(id: number) {
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id))
+  }
+
+  function deleteManyArchived(ids: number[]) {
+    setTodos((prevTodos) =>
+      prevTodos.filter((todo) => !ids.includes(todo.id)),
+    )
+  }
+
   return {
     todos,
     addTodo,
@@ -81,5 +111,10 @@ export function useTodos() {
     deleteMany,
     toggleTodo,
     updateTodo,
+    archiveTodo,
+    archiveMany,
+    restoreTodo,
+    deletePermanently,
+    deleteManyArchived,
   }
 }
