@@ -162,7 +162,11 @@ function TodosPage() {
         {/* ================= RIGHT (Mobile: Atas, Desktop: Kanan) ================= */}
         <aside className="order-1 xl:order-2">
           <div className="xl:sticky xl:top-6">
-            <DailyProgress todos={todos} selectedDate={selectedDate} />
+            <DailyProgress
+              todos={todos}
+              selectedDate={selectedDate}
+              showAllTasks={showAllTasks}
+            />
           </div>
         </aside>
 
@@ -171,7 +175,9 @@ function TodosPage() {
           <CardContent className="space-y-6 p-4 sm:p-6">
             {/* Header */}
             <div className="flex items-center justify-between">
-              <h1 className="text-xl font-bold"> {showAllTasks ? 'All Tasks' : 'Today'}</h1>
+              <h1 className="text-xl font-bold">
+                {showAllTasks ? 'All Tasks' : 'Today'}
+              </h1>
               <div className="flex items-center gap-2">
                 <TodoFilter
                   statusFilter={statusFilter}
