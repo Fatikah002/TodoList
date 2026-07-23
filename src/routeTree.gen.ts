@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TodosRouteImport } from './routes/todos'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ArchivedRouteImport } from './routes/archived'
+import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TodosRoute = TodosRouteImport.update({
@@ -18,9 +20,19 @@ const TodosRoute = TodosRouteImport.update({
   path: '/todos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ArchivedRoute = ArchivedRouteImport.update({
   id: '/archived',
   path: '/archived',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -31,31 +43,39 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/archived': typeof ArchivedRoute
+  '/dashboard': typeof DashboardRoute
   '/todos': typeof TodosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/archived': typeof ArchivedRoute
+  '/dashboard': typeof DashboardRoute
   '/todos': typeof TodosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/archived': typeof ArchivedRoute
+  '/dashboard': typeof DashboardRoute
   '/todos': typeof TodosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/archived' | '/todos'
+  fullPaths: '/' | '/account' | '/archived' | '/dashboard' | '/todos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/archived' | '/todos'
-  id: '__root__' | '/' | '/archived' | '/todos'
+  to: '/' | '/account' | '/archived' | '/dashboard' | '/todos'
+  id: '__root__' | '/' | '/account' | '/archived' | '/dashboard' | '/todos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountRoute: typeof AccountRoute
   ArchivedRoute: typeof ArchivedRoute
+  DashboardRoute: typeof DashboardRoute
   TodosRoute: typeof TodosRoute
 }
 
@@ -68,11 +88,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TodosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/archived': {
       id: '/archived'
       path: '/archived'
       fullPath: '/archived'
       preLoaderRoute: typeof ArchivedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -87,7 +121,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountRoute: AccountRoute,
   ArchivedRoute: ArchivedRoute,
+  DashboardRoute: DashboardRoute,
   TodosRoute: TodosRoute,
 }
 export const routeTree = rootRouteImport

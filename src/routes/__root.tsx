@@ -1,7 +1,12 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
+import { AppSidebar } from '@/components/AppSidebar'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import appCss from '../styles.css?url'
+import { MobileNavbar } from '@/components/MobileNavbar'
+import { AppHeader } from '@/components/AppHeader'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -14,7 +19,7 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'TodoSpace',
       },
     ],
     links: [
@@ -34,8 +39,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
-        <TanStackDevtools
+        <TooltipProvider>
+          <SidebarProvider>
+            <AppSidebar />
+
+            <SidebarInset className="flex min-h-screen flex-col">
+              <AppHeader />
+              <main className="flex-1 pb-24 md:pb-0">{children}</main>
+              <MobileNavbar />
+            </SidebarInset>
+          </SidebarProvider>
+        </TooltipProvider>
+        {/* <TanStackDevtools
           config={{
             position: 'bottom-right',
           }}
@@ -45,7 +60,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               render: <TanStackRouterDevtoolsPanel />,
             },
           ]}
-        />
+        /> */}
         <Scripts />
       </body>
     </html>

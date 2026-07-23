@@ -5,6 +5,6 @@ export const Route = createFileRoute('/')({ component: Home })
 
 function Home() {
   const navigate = useNavigate()
-  useEffect(() => { navigate({ to: '/todos' }) }, [navigate])
+  useEffect(() => { navigate({ to: '/todos', search: { view: 'today' } }) }, [navigate])
   return null
 }
