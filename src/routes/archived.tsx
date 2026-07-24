@@ -21,7 +21,6 @@ export const Route = createFileRoute('/archived')({
 })
 
 function ArchivedPage() {
-  const navigate = useNavigate()
   const { todos, restoreTodo, deletePermanently, deleteManyArchived } =
     useTodos()
   const archivedTodos = todos.filter((todo) => todo.archived)
@@ -36,14 +35,7 @@ function ArchivedPage() {
           <CardContent className="space-y-6 p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <h1 className="text-xl font-bold">Archived</h1>
-              <Button
-                onClick={() => navigate({ to: '/todos', search: { view: 'today' } })}
-                variant="outline"
-                className="h-9 gap-1.5 rounded-full px-3"
-              >
-                <ArrowLeft size={16} />
-                Back
-              </Button>
+             
             </div>
 
             {selectMode ? (

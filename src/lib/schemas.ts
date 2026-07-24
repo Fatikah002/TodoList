@@ -46,5 +46,8 @@ export const todoFieldValidators = {
   deadline: createFieldValidator(todoSchema.shape.deadline),
 }
 
+export const todosSearchSchema = z.object({
+  view: z.enum(['today', 'all']).optional().default('today'),
+})
 
 

@@ -37,8 +37,7 @@ export function AppSidebar() {
 
   const view = searchParams.get('view')
 
-  const isDashboardPage =
-    pathname === '/dashboard' && view === 'dashboard'
+  const isDashboardPage = pathname === '/dashboard' && view === 'dashboard'
 
   const isTasksPage = pathname === '/todos'
 
@@ -65,7 +64,7 @@ export function AppSidebar() {
         navigate({
           to: '/todos',
           search: {
-            view: 'all',
+            view: 'today',
           },
         }),
     },
@@ -92,14 +91,21 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="offcanvas">
       {/* ================= Header ================= */}
-    <SidebarHeader className="flex h-14 items-center border-b px-5">
+      <SidebarHeader className="flex h-16 items-center border-b px-5">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500 text-white shadow-sm">
-            <Check className="h-5 w-5 stroke-[3]" />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500 text-white shadow-sm">
+              <img
+                src="/logo.png"
+                alt="TodoSpace"
+                className="h-full w-full object-cover"
+              />
+            </div>
           </div>
-          <span className="text-lg font-bold text-slate-900">
-            TodoSpace
-          </span>
+          <div>
+            <span className="text-lg font-bold text-green-600">Todo</span>
+            <span className="text-lg font-bold text-slate-900">Space</span>
+          </div>
         </div>
       </SidebarHeader>
 
@@ -147,9 +153,7 @@ export function AppSidebar() {
             </div>
 
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold">
-                Fatikah
-              </p>
+              <p className="truncate text-sm font-semibold">Fatikah</p>
               <p className="truncate text-xs text-slate-500">
                 fatikah@email.com
               </p>

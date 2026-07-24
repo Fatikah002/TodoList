@@ -69,6 +69,7 @@ export function TodoItem({
 }: TodoItemProps) {
   const [showDetail, setShowDetail] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
+  const [showArchive, setShowArchive] = useState(false)
 
   const getBadgeColor = (type: 'category' | 'priority', value: string) => {
     if (type === 'category') {
@@ -271,7 +272,7 @@ export function TodoItem({
                     <DropdownMenuItem
                       onClick={(e) => {
                         e.stopPropagation()
-                        onArchive?.(todo.id)
+                        setShowArchive(true)
                       }}
                     >
                       <Archive className="mr-2 h-4 w-4 text-slate-500" />
@@ -329,6 +330,29 @@ export function TodoItem({
               }}
             >
               {archivedView ? 'Delete Permanently' : 'Delete'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={showArchive} onOpenChange={setShowArchive}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Archive Todo</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to archive this todo? You can restore it later from the archived section.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                onArchive?.(todo.id)
+                setShowArchive(false)
+              }}
+            >
+              Archive
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

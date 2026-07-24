@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { z } from 'zod'
+import { todosSearchSchema } from '@/lib/schemas'
 import { Card, CardContent } from '@/components/ui/card'
 import type { Todo, RepeatType } from '@/lib/types'
 import { TodoItem } from '@/components/TodoItem'
@@ -17,7 +17,6 @@ import {
   Plus,
   X,
   Search,
-  Archive,
   ChevronDown,
   Check,
   SquareCheckBig,
@@ -43,9 +42,6 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 
-const todosSearchSchema = z.object({
-  view: z.enum(['today', 'all']).optional().default('today'),
-})
 
 export const Route = createFileRoute('/todos')({
   component: TodosPage,
@@ -77,7 +73,6 @@ function TodosPage() {
   const [showBulkDelete, setShowBulkDelete] = useState(false)
 
   const activeTodos = todos.filter((todo) => !todo.archived)
-  const archivedTodos = todos.filter((todo) => todo.archived)
   const categories = Array.from(
     new Set(activeTodos.map((todo) => todo.category)),
   )
@@ -269,20 +264,6 @@ function TodosPage() {
                       <>
                         <Plus size={18} /> <span>Add</span>
                       </>
-                    )}
-                  </Button>
-                  <Button
-                    onClick={() => navigate({ to: '/archived' })}
-                    variant="outline"
-                    className="h-9 gap-1.5 rounded-full px-2.5 sm:px-3 text-xs sm:text-sm font-medium text-gray-700 border-gray-200"
-                    title="Archived Todos"
-                  >
-                    <Archive size={15} />
-                    <span className="hidden sm:inline">Archived</span>
-                    {archivedTodos.length > 0 && (
-                      <span className="rounded-full bg-gray-200 px-1.5 py-0.2 text-[11px] sm:text-xs font-bold text-gray-600">
-                        {archivedTodos.length}
-                      </span>
                     )}
                   </Button>
                 </div>
