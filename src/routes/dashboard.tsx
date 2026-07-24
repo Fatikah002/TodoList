@@ -134,13 +134,13 @@ function DashboardPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-6 lg:px-8">
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+    <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6 lg:px-8">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-lg font-bold text-gray-900 sm:text-2xl">
             {getGreeting()}, Fatikah! {getGreetingEmoji()}
           </h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-xs text-gray-500 sm:text-sm">
             You have {todayPending} tasks today.{' '}
             {todayUrgent > 0 && (
               <span className="text-red-500">
@@ -154,13 +154,13 @@ function DashboardPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <CalendarDays className="text-gray-400" />
+        <div className="flex items-center gap-1.5 text-xs text-gray-500 sm:text-sm">
+          <CalendarDays className="h-4 w-4 text-gray-400" />
           <span>{format(today, 'dd MMMM yyyy')}</span>
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:mt-6 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
         {stats.map((stat) => {
           const Icon = stat.icon
           return (
@@ -168,16 +168,16 @@ function DashboardPage() {
               key={stat.label}
               className="rounded-2xl border-0 shadow-sm"
             >
-              <CardContent className="flex items-center gap-4 p-4">
+              <CardContent className="flex items-center gap-3 p-3 sm:gap-4 sm:p-4">
                 <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-xl ${stat.iconBg}`}
+                  className={`flex h-9 w-9 items-center justify-center rounded-xl sm:h-12 sm:w-12 ${stat.iconBg}`}
                 >
-                  <Icon className={`h-6 w-6 ${stat.iconColor}`} />
+                  <Icon className={`h-5 w-5 sm:h-6 sm:w-6 ${stat.iconColor}`} />
                 </div>
 
                 <div className="flex-1">
-                  <p className="text-sm text-gray-500">{stat.label}</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-[10px] text-gray-500 sm:text-sm">{stat.label}</p>
+                  <p className="text-lg font-bold text-gray-900 sm:text-2xl">
                     {stat.value}
                   </p>
                 </div>
@@ -187,25 +187,24 @@ function DashboardPage() {
         })}
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:mt-4 lg:grid-cols-3">
         {/* Weekly Progress */}
         <Card className="rounded-2xl border-0 shadow-sm">
-          <CardContent className="p-4">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-gray-900">Weekly Progress</h2>
+          <CardContent className="p-3 sm:p-4">
+            <div className="mb-2 flex items-center justify-between sm:mb-3">
+              <h2 className="text-xs font-semibold text-gray-900 sm:text-sm">Weekly Progress</h2>
             </div>
 
-            <div className="flex items-center gap-4">
-              <CircularProgress percentage={weeklyPct} />
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="scale-75 sm:scale-100">
+                <CircularProgress percentage={weeklyPct} />
+              </div>
 
               <div>
-                <p className="text-xl font-bold text-gray-900">
+                <p className="text-base font-bold text-gray-900 sm:text-xl">
                   {weeklyCompleted} / {weeklyTotal}
                 </p>
-                <p className="text-xs text-gray-500">Tasks Finished</p>
-                <p className="mt-0.5 text-[10px] text-green-600 font-medium">
-                  Keep it up!
-                </p>
+                <p className="text-[10px] text-gray-500 sm:text-xs">Tasks Finished</p>
               </div>
             </div>
           </CardContent>
@@ -213,21 +212,21 @@ function DashboardPage() {
 
         {/* Today's Tasks */}
         <Card className="rounded-2xl border-0 shadow-sm">
-          <CardContent className="p-4">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-gray-900">Today's Tasks</h2>
+          <CardContent className="p-3 sm:p-4">
+            <div className="mb-2 flex items-center justify-between sm:mb-3">
+              <h2 className="text-xs font-semibold text-gray-900 sm:text-sm">Today's Tasks</h2>
               <Link
                 to="/todos"
                 search={{ view: 'today' }}
-                className="text-xs font-medium text-blue-600 hover:text-blue-700"
+                className="text-[10px] font-medium text-blue-600 hover:text-blue-700 sm:text-xs"
               >
                 View All Tasks
               </Link>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               {todayTodos.length === 0 && (
-                <p className="py-3 text-center text-xs text-gray-400">
+                <p className="py-2 text-center text-[10px] text-gray-400 sm:py-3 sm:text-xs">
                   No tasks scheduled for today
                 </p>
               )}
@@ -239,14 +238,14 @@ function DashboardPage() {
                   key={todo.id}
                   className="flex items-center justify-between"
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
                     <Checkbox
                       checked={todo.completed}
                       onCheckedChange={() => toggleTodo(todo.id)}
-                      className="h-3.5 w-3.5"
+                      className="h-3 w-3 sm:h-3.5 sm:w-3.5"
                     />
                     <span
-                      className={`text-xs font-medium ${
+                      className={`text-[10px] font-medium sm:text-xs ${
                         todo.completed
                           ? 'line-through text-gray-400'
                           : 'text-gray-700'
@@ -255,7 +254,7 @@ function DashboardPage() {
                       {todo.title}
                     </span>
                   </div>
-                  <span className="text-[10px] text-gray-400 whitespace-nowrap">
+                  <span className="text-[9px] text-gray-400 whitespace-nowrap sm:text-[10px]">
                     {todo.dueTime || '--:--'}
                   </span>
                 </div>
@@ -266,21 +265,21 @@ function DashboardPage() {
 
         {/* Upcoming Tasks */}
         <Card className="rounded-2xl border-0 shadow-sm">
-          <CardContent className="p-4">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-gray-900">Upcoming Tasks</h2>
+          <CardContent className="p-3 sm:p-4">
+            <div className="mb-2 flex items-center justify-between sm:mb-3">
+              <h2 className="text-xs font-semibold text-gray-900 sm:text-sm">Upcoming Tasks</h2>
               <Link
                 to="/todos"
                 search={{ view: 'all' }}
-                className="text-xs font-medium text-blue-600 hover:text-blue-700"
+                className="text-[10px] font-medium text-blue-600 hover:text-blue-700 sm:text-xs"
               >
                 View All
               </Link>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               {upcomingTodos.length === 0 && (
-                <p className="py-3 text-center text-xs text-gray-400">
+                <p className="py-2 text-center text-[10px] text-gray-400 sm:py-3 sm:text-xs">
                   No upcoming tasks
                 </p>
               )}
@@ -289,17 +288,17 @@ function DashboardPage() {
                 return (
                   <div
                     key={todo.id}
-                    className="flex items-center justify-between gap-2"
+                    className="flex items-center justify-between gap-1.5 sm:gap-2"
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 sm:gap-2">
                       <div className="flex flex-col items-center leading-none">
-                        <span className="text-[10px] font-semibold uppercase text-gray-400">
+                        <span className="text-[8px] font-semibold uppercase text-gray-400 sm:text-[10px]">
                           {format(d, 'd-M')}
                         </span>
                       </div>
-                      <span className="text-xs text-gray-700">{todo.title}</span>
+                      <span className="text-[10px] text-gray-700 sm:text-xs">{todo.title}</span>
                     </div>
-                    <Badge className={`text-[9px] px-1.5 py-0 ${getBadgeColor(todo.category)}`}>
+                    <Badge className={`text-[8px] px-1 py-0 sm:text-[9px] sm:px-1.5 ${getBadgeColor(todo.category)}`}>
                       {todo.category}
                     </Badge>
                   </div>

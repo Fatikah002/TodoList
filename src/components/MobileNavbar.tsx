@@ -1,12 +1,11 @@
 import { useLocation, useNavigate } from '@tanstack/react-router'
-import { LayoutDashboard, Settings, ListTodo, Archive, User, UserRound, CircleUserRound } from 'lucide-react'
+import { LayoutDashboard, ListTodo, Archive, UserRound } from 'lucide-react'
 
 export function MobileNavbar() {
   const navigate = useNavigate()
   const location = useLocation()
 
   const pathname = location.pathname
-  const view = new URLSearchParams(location.search).get('view')
 
   const menus = [
     {
@@ -22,11 +21,11 @@ export function MobileNavbar() {
     {
       label: 'Tasks',
       icon: ListTodo,
-      active: pathname === '/todos' && view === 'all',
+      active: pathname === '/todos',
       onClick: () =>
         navigate({
           to: '/todos',
-          search: { view: 'all' },
+          search: { view: 'today' },
         }),
     },
     {
