@@ -58,7 +58,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <AppSidebar />
 
             <SidebarInset className="flex min-h-screen flex-col">
-              <AppHeader title={pageTitle} />
+              <AppHeader title={pageTitle} className="hidden md:flex" />
               <main className="flex-1 pb-24 md:pb-0">{children}</main>
               <MobileNavbar />
             </SidebarInset>

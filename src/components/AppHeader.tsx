@@ -9,11 +9,12 @@ import { Button } from '@/components/ui/button'
 
 type AppHeaderProps = {
   title?: string
+  className?: string
 }
 
-export function AppHeader({ title }: AppHeaderProps) {
+export function AppHeader({ title, className }: AppHeaderProps) {
   return (
-    <header className="flex h-16 items-center justify-between border-b bg-background px-6">
+    <header className={`hidden md:flex h-14 items-center justify-between border-b bg-background px-4 md:h-16 md:px-6 ${className ?? ''}`}>
       {/* Left */}
       <div className="flex items-center gap-3">
         <SidebarTrigger className="hidden md:flex" />

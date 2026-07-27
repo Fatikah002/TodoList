@@ -9,7 +9,7 @@ export function MobileNavbar() {
 
   const menus = [
     {
-      label: 'Dashboard',
+      label: 'Home',
       icon: LayoutDashboard,
       active: pathname === '/dashboard',
       onClick: () =>

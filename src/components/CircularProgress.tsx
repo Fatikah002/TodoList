@@ -1,8 +1,9 @@
 type CircularProgressProps = {
   percentage: number
+  className?: string
 }
 
-export function CircularProgress({ percentage }: CircularProgressProps) {
+export function CircularProgress({ percentage, className = 'h-[110px] w-[110px]' }: CircularProgressProps) {
   const radius = 45
   const stroke = 10
 
@@ -11,8 +12,8 @@ export function CircularProgress({ percentage }: CircularProgressProps) {
   const offset = circumference - (percentage / 100) * circumference
 
   return (
-    <div className="flex justify-center">
-      <svg width="110" height="110">
+    <div className={`flex items-center justify-center ${className}`}>
+      <svg viewBox="0 0 110 110" className="h-full w-full">
         {/* Background */}
         <circle
           cx="55"
