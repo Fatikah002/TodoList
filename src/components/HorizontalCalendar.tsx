@@ -87,8 +87,8 @@ export function HorizontalCalendar({
       </div>
 
       {/* Calendar */}
-      <div className="overflow-x-auto ">
-        <div className="mx-auto grid w-fit grid-cols-[repeat(7,56px)] gap-3 py-2">
+      <div className="overflow-x-hidden">
+        <div className="mx-auto grid w-full grid-cols-7 gap-1 py-2 sm:gap-3">
           {calendarDays.map((item) => {
             const isSelected = item.fullDate === selectedDate
 
@@ -97,14 +97,14 @@ export function HorizontalCalendar({
               <button
                 key={item.fullDate}
                 onClick={() => onDateChange(item.fullDate)}
-                className={`flex min-w-[58px] w-5 justify-between flex-col items-center gap-3 rounded-full px-2 py-3 transition-all duration-200 ${
+                className={`flex w-fit justify-self-center  flex-col items-center gap-1 rounded-full px-1 py-2 transition-all duration-200 sm:gap-3 sm:px-2 sm:py-3 ${
                   isSelected
-                    ? 'border border-green-500'
+                    ? 'outline outline-1 outline-green-400'
                     : 'border border-transparent'
                 }`}
               >
                 <span
-                  className={`text-sm ${
+                  className={`text-xs sm:text-sm ${
                     isSelected
                       ? 'font-semibold text-slate-900'
                       : 'text-gray-400'
@@ -114,7 +114,7 @@ export function HorizontalCalendar({
                 </span>
 
                 <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold ${
+                  className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold sm:h-10 sm:w-10 sm:text-sm ${
                     isSelected
                       ? 'bg-green-500 text-white'
                       : hasTodo && showAllTasks
