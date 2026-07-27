@@ -1,6 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { todosSearchSchema } from '@/lib/schemas'
-import { Card, CardContent } from '@/components/ui/card'
 import type { Todo, RepeatType } from '@/lib/types'
 import { TodoItem } from '@/components/TodoItem'
 import { TodoFilter } from '@/components/TodoFilter'
@@ -203,9 +202,8 @@ function TodosPage() {
           </aside>
 
           {/* ================= LEFT ================= */}
-          <Card className="order-2 w-full rounded-3xl border-0 shadow-md xl:order-1">
-            <CardContent className="space-y-6 p-4 sm:p-6">
-              {/* Header */}
+          <div className="order-2 w-full space-y-4 p-3 sm:space-y-4 sm:p-4 lg:space-y-6 lg:p-6 xl:order-1">
+            {/* Header */}
               <div className="flex items-center justify-between">
                 <DropdownMenu>
                   <DropdownMenuTrigger className="focus:outline-none">
@@ -415,8 +413,7 @@ function TodosPage() {
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-            </CardContent>
-          </Card>
+          </div>
         </div>
       </main>
     </div>
