@@ -255,7 +255,7 @@ function DashboardPage() {
                     </span>
                   </div>
                   <span className="text-[9px] text-gray-400 whitespace-nowrap sm:text-[10px]">
-                    {todo.dueTime || '--:--'}
+                    {todo.dueTime || 'No due time'}
                   </span>
                 </div>
               ))}
