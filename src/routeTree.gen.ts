@@ -12,8 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TodosRouteImport } from './routes/todos'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ArchivedRouteImport } from './routes/archived'
-import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AccountIndexRouteImport } from './routes/account/index'
+import { Route as AccountEditAccountRouteImport } from './routes/account/editAccount'
 
 const TodosRoute = TodosRouteImport.update({
   id: '/todos',
@@ -30,53 +31,81 @@ const ArchivedRoute = ArchivedRouteImport.update({
   path: '/archived',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AccountRoute = AccountRouteImport.update({
-  id: '/account',
-  path: '/account',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountIndexRoute = AccountIndexRouteImport.update({
+  id: '/account/',
+  path: '/account/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountEditAccountRoute = AccountEditAccountRouteImport.update({
+  id: '/account/editAccount',
+  path: '/account/editAccount',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/account': typeof AccountRoute
   '/archived': typeof ArchivedRoute
   '/dashboard': typeof DashboardRoute
   '/todos': typeof TodosRoute
+  '/account/editAccount': typeof AccountEditAccountRoute
+  '/account/': typeof AccountIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/account': typeof AccountRoute
   '/archived': typeof ArchivedRoute
   '/dashboard': typeof DashboardRoute
   '/todos': typeof TodosRoute
+  '/account/editAccount': typeof AccountEditAccountRoute
+  '/account': typeof AccountIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/account': typeof AccountRoute
   '/archived': typeof ArchivedRoute
   '/dashboard': typeof DashboardRoute
   '/todos': typeof TodosRoute
+  '/account/editAccount': typeof AccountEditAccountRoute
+  '/account/': typeof AccountIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/account' | '/archived' | '/dashboard' | '/todos'
+  fullPaths:
+    | '/'
+    | '/archived'
+    | '/dashboard'
+    | '/todos'
+    | '/account/editAccount'
+    | '/account/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/account' | '/archived' | '/dashboard' | '/todos'
-  id: '__root__' | '/' | '/account' | '/archived' | '/dashboard' | '/todos'
+  to:
+    | '/'
+    | '/archived'
+    | '/dashboard'
+    | '/todos'
+    | '/account/editAccount'
+    | '/account'
+  id:
+    | '__root__'
+    | '/'
+    | '/archived'
+    | '/dashboard'
+    | '/todos'
+    | '/account/editAccount'
+    | '/account/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AccountRoute: typeof AccountRoute
   ArchivedRoute: typeof ArchivedRoute
   DashboardRoute: typeof DashboardRoute
   TodosRoute: typeof TodosRoute
+  AccountEditAccountRoute: typeof AccountEditAccountRoute
+  AccountIndexRoute: typeof AccountIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -102,13 +131,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArchivedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/account': {
-      id: '/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AccountRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -116,15 +138,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/': {
+      id: '/account/'
+      path: '/account'
+      fullPath: '/account/'
+      preLoaderRoute: typeof AccountIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/editAccount': {
+      id: '/account/editAccount'
+      path: '/account/editAccount'
+      fullPath: '/account/editAccount'
+      preLoaderRoute: typeof AccountEditAccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AccountRoute: AccountRoute,
   ArchivedRoute: ArchivedRoute,
   DashboardRoute: DashboardRoute,
   TodosRoute: TodosRoute,
+  AccountEditAccountRoute: AccountEditAccountRoute,
+  AccountIndexRoute: AccountIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
