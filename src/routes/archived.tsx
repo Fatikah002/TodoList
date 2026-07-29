@@ -1,10 +1,9 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { Card, CardContent } from '@/components/ui/card'
+import { createFileRoute } from '@tanstack/react-router'
 import { TodoItem } from '@/components/TodoItem'
 import { Button } from '@/components/ui/button'
 import { useTodos } from '@/hooks/useTodos'
 import { useState } from 'react'
-import { ArrowLeft, ListChecks, Trash } from 'lucide-react'
+import { SquareCheckBig, Trash } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,109 +27,130 @@ function ArchivedPage() {
   const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [showBulkDelete, setShowBulkDelete] = useState(false)
 
-  return (
-    <div className="flex flex-1 flex-col">
-      <main className="mx-auto w-full max-w-7xl px-4 py-6 lg:px-8">
-        <Card className="w-full rounded-3xl border-0 shadow-md">
-          <CardContent className="space-y-6 p-4 sm:p-6">
-            <div className="flex items-center justify-between">
-              <h1 className="text-xl font-bold">Archived</h1>
-             
-            </div>
 
-            {selectMode ? (
-              <div className="flex items-center justify-between gap-3">
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    setSelectMode(false)
-                    setSelectedIds([])
-                  }}
-                >
-                  Cancel
-                </Button>
-                <p className="text-sm font-medium text-muted-foreground">
-                  {selectedIds.length} item selected
-                </p>
-                <Button
-                  variant="destructive"
-                  disabled={selectedIds.length === 0}
-                  onClick={() => setShowBulkDelete(true)}
-                >
-                  <Trash size={16} className="mr-1" />
-                  Delete Permanently
-                </Button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setSelectMode(true)}
-                  className="h-11 gap-1.5 rounded-xl px-3"
-                >
-                  <ListChecks size={16} />
-                  Select
-                </Button>
-              </div>
-            )}
+ return (
+  <div className="mx-auto w-full max-w-5xl px-4 py-6">
 
-            <div className="space-y-3">
-              {archivedTodos.length === 0 ? (
-                <p className="py-8 text-center text-muted-foreground">
-                  No archived todos
-                </p>
-              ) : (
-                archivedTodos.map((todo) => (
-                  <TodoItem
-                    key={todo.id}
-                    todo={todo}
-                    onDelete={() => {}}
-                    onToggle={() => {}}
-                    onUpdate={() => {}}
-                    onRestore={restoreTodo}
-                    onDeletePermanent={deletePermanently}
-                    selectMode={selectMode}
-                    isSelected={selectedIds.includes(todo.id)}
-                    onToggleSelect={(id) =>
-                      setSelectedIds((prev) =>
-                        prev.includes(id)
-                          ? prev.filter((x) => x !== id)
-                          : [...prev, id],
-                      )
-                    }
-                    archivedView={true}
-                  />
-                ))
-              )}
-            </div>
+    {/* Toolbar */}
+    <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
 
-            <AlertDialog open={showBulkDelete} onOpenChange={setShowBulkDelete}>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete Permanent</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to delete permanently{' '}
-                    {selectedIds.length} item? This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => {
-                      deleteManyArchived(selectedIds)
-                      setSelectedIds([])
-                      setSelectMode(false)
-                      setShowBulkDelete(false)
-                    }}
-                  >
-                    Delete Permanently
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </CardContent>
-        </Card>
-      </main>
+      {selectMode ? (
+        <>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              setSelectMode(false)
+              setSelectedIds([])
+            }}
+          >
+            Cancel
+          </Button>
+
+          <span className="text-sm font-medium text-slate-600">
+            {selectedIds.length} selected
+          </span>
+
+          <Button
+            variant="destructive"
+            disabled={selectedIds.length === 0}
+            onClick={() => setShowBulkDelete(true)}
+          >
+            <Trash className="mr-2 h-4 w-4" />
+            Delete Permanently
+          </Button>
+        </>
+      ) : (
+        <Button
+          variant="outline"
+          onClick={() => setSelectMode(true)}
+          className="rounded-xl"
+        >
+          <SquareCheckBig className="mr-2 h-4 w-4" />
+          Select
+        </Button>
+      )}
+
     </div>
-  )
+
+    {/* List */}
+    {archivedTodos.length === 0 ? (
+      <div className="flex flex-col items-center justify-center rounded-2xl  py-20">
+
+        <Trash className="mb-4 h-12 w-12 text-slate-300" />
+
+        <h2 className="text-lg font-semibold text-slate-700">
+          No Archived Tasks
+        </h2>
+
+        <p className="mt-2 text-center text-sm text-slate-500">
+          Tasks you archive will appear here.
+        </p>
+
+      </div>
+    ) : (
+      <div className="space-y-3">
+        {archivedTodos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            onDelete={() => {}}
+            onToggle={() => {}}
+            onUpdate={() => {}}
+            onRestore={restoreTodo}
+            onDeletePermanent={deletePermanently}
+            selectMode={selectMode}
+            isSelected={selectedIds.includes(todo.id)}
+            onToggleSelect={(id) =>
+              setSelectedIds((prev) =>
+                prev.includes(id)
+                  ? prev.filter((x) => x !== id)
+                  : [...prev, id],
+              )
+            }
+            archivedView
+          />
+        ))}
+      </div>
+    )}
+
+    {/* Dialog */}
+    <AlertDialog
+      open={showBulkDelete}
+      onOpenChange={setShowBulkDelete}
+    >
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            Delete Permanently
+          </AlertDialogTitle>
+
+          <AlertDialogDescription>
+            Are you sure you want to permanently delete{" "}
+            {selectedIds.length} selected task
+            {selectedIds.length > 1 && "s"}?
+            This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel>
+            Cancel
+          </AlertDialogCancel>
+
+          <AlertDialogAction
+            onClick={() => {
+              deleteManyArchived(selectedIds)
+              setSelectedIds([])
+              setSelectMode(false)
+              setShowBulkDelete(false)
+            }}
+          >
+            Delete Permanently
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+
+  </div>
+)
 }
