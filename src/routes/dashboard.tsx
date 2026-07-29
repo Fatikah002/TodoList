@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import { CircularProgress } from '@/components/CircularProgress'
 import { startOfWeek, endOfWeek, isWithinInterval, format } from 'date-fns'
+import { Checkbox } from '@/components/ui/checkbox'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardPage,
@@ -31,7 +32,7 @@ function getGreetingEmoji() {
 }
 
 function DashboardPage() {
-  const { todos } = useTodos()
+  const { todos, toggleTodo } = useTodos()
   const activeTodos = todos.filter((todo) => !todo.archived)
   const today = formatLocalDate(new Date())
 
@@ -148,7 +149,7 @@ function DashboardPage() {
                 className="flex min-h-[115px] flex-col items-center justify-center rounded-2xl bg-white p-3 shadow-sm transition-shadow hover:shadow-md sm:p-4"
               >
                 <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-full sm:h-12 sm:w-12 ${stat.iconBg}`}
+                  className={`flex h-10 w-10 items-center justify-center rounded-full sm:h-12 sm:w-12 `}
                 >
                   <Icon className={`h-5 w-5 sm:h-6 sm:w-6 ${stat.iconColor}`} />
                 </div>
@@ -167,9 +168,10 @@ function DashboardPage() {
       </section>
 
       {/* Sections */}
-      <div className="mt-6 space-y-6 pb-24 sm:pb-0">
+      <div className="mt-6 grid grid-cols-1 gap-3 pb-24 sm:grid-cols-3 sm:pb-0">
         {/* Today's Tasks */}
-        <section className="overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
+        <section className=" overflow-hidden rounded-2xl bg-white p-4 shadow-sm flex h-[200px] flex-col">
+          {' '}
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-gray-900 sm:text-base">
               Today's Tasks
@@ -184,7 +186,6 @@ function DashboardPage() {
               <ChevronRight className="h-3 w-3" />
             </Link>
           </div>
-
           <div className="space-y-2.5">
             {todayTodos.length === 0 ? (
               <p className="py-4 text-center text-xs text-gray-400">
@@ -201,9 +202,18 @@ function DashboardPage() {
                     key={todo.id}
                     className="flex items-center justify-between gap-4"
                   >
-                    <p className="flex-1 truncate text-sm font-medium text-gray-900">
-                      {todo.title}
-                    </p>
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <Checkbox
+                        checked={todo.completed}
+                        onCheckedChange={() => toggleTodo(todo.id)}
+                        className="h-4 w-4"
+                      />
+                      <p
+                        className={`flex-1 truncate text-sm font-medium ${todo.completed ? 'line-through text-gray-400' : 'text-gray-900'}`}
+                      >
+                        {todo.title}
+                      </p>
+                    </div>
 
                     <p className="shrink-0 whitespace-nowrap text-xs text-gray-400">
                       {todo.dueTime || 'No due time'}
@@ -215,20 +225,20 @@ function DashboardPage() {
         </section>
 
         {/* Weekly Progress */}
-        <section className="overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
+        <section className="overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md ">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-gray-900 sm:text-base">
               Weekly Progress
             </h2>
 
-            <Link
+            {/* <Link
               to="/todos"
               search={{ view: 'all' }}
               className="flex items-center gap-1 text-xs font-medium text-green-600 transition-colors hover:text-green-700"
             >
               View Weekly
               <ChevronRight className="h-3 w-3" />
-            </Link>
+            </Link> */}
           </div>
 
           <div className="flex items-center gap-5">
@@ -255,7 +265,7 @@ function DashboardPage() {
         </section>
 
         {/* Upcoming Tasks */}
-        <section className="overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
+        <section className="overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md flex h-[200px] flex-col">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-gray-900 sm:text-base">
               Upcoming Tasks
@@ -286,15 +296,10 @@ function DashboardPage() {
                     className="flex items-center justify-between gap-4"
                   >
                     <div className="flex min-w-0 flex-1 items-center gap-3">
-                      <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-green-50">
-                        <span className="text-sm font-bold text-green-700">
-                          {format(d, 'd')}
-                        </span>
-
-                        <span className="text-[10px] text-green-600">
-                          {format(d, 'MMM')}
-                        </span>
-                      </div>
+                      {/* <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-green-50"> */}
+                      <span className="text-sm font-bold ">
+                        {format(d, 'd MMM')}
+                      </span>
 
                       <p className="flex-1 truncate text-sm font-medium text-gray-900">
                         {todo.title}
