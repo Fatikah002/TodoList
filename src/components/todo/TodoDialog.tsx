@@ -4,7 +4,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { TodoForm } from '@/components/TodoForm'
+import { TodoForm } from '@/components/todo/TodoForm'
 import type { Todo, RepeatType } from '@/lib/types'
 
 type TodoDialogProps = {

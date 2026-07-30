@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { todoFieldValidators } from '@/lib/schemas'
 import { categories } from '@/lib/categories'
-import { Label } from './ui/label'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,

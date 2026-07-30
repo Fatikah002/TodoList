@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import type { Todo } from '@/lib/types'
 import { useState } from 'react'
-import { TodoDetailDialog } from '@/components/TodoDetailDialog'
+import { TodoDetailDialog } from '#/components/todo/TodoDetailDialog'
 import { Badge } from '@/components/ui/badge'
 import {
   AlertDialog,

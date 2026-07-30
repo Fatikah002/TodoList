@@ -7,11 +7,11 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
-import { AppSidebar } from '@/components/AppSidebar'
+import { AppSidebar } from '#/components/layout/AppSidebar'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import appCss from '../styles.css?url'
-import { MobileNavbar } from '@/components/MobileNavbar'
-import { AppHeader } from '@/components/AppHeader'
+import { MobileNavbar } from '#/components/layout/MobileNavbar'
+import { AppHeader } from '#/components/layout/AppHeader'
 
 export const Route = createRootRoute({
   head: () => ({

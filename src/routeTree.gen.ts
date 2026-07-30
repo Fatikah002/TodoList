@@ -14,6 +14,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ArchivedRouteImport } from './routes/archived'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountIndexRouteImport } from './routes/account/index'
+import { Route as AccountSettingsRouteImport } from './routes/account/settings'
 import { Route as AccountEditAccountRouteImport } from './routes/account/editAccount'
 
 const TodosRoute = TodosRouteImport.update({
@@ -41,6 +42,11 @@ const AccountIndexRoute = AccountIndexRouteImport.update({
   path: '/account/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountSettingsRoute = AccountSettingsRouteImport.update({
+  id: '/account/settings',
+  path: '/account/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountEditAccountRoute = AccountEditAccountRouteImport.update({
   id: '/account/editAccount',
   path: '/account/editAccount',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/todos': typeof TodosRoute
   '/account/editAccount': typeof AccountEditAccountRoute
+  '/account/settings': typeof AccountSettingsRoute
   '/account/': typeof AccountIndexRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/todos': typeof TodosRoute
   '/account/editAccount': typeof AccountEditAccountRoute
+  '/account/settings': typeof AccountSettingsRoute
   '/account': typeof AccountIndexRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/todos': typeof TodosRoute
   '/account/editAccount': typeof AccountEditAccountRoute
+  '/account/settings': typeof AccountSettingsRoute
   '/account/': typeof AccountIndexRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/todos'
     | '/account/editAccount'
+    | '/account/settings'
     | '/account/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/todos'
     | '/account/editAccount'
+    | '/account/settings'
     | '/account'
   id:
     | '__root__'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/todos'
     | '/account/editAccount'
+    | '/account/settings'
     | '/account/'
   fileRoutesById: FileRoutesById
 }
@@ -105,6 +117,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   TodosRoute: typeof TodosRoute
   AccountEditAccountRoute: typeof AccountEditAccountRoute
+  AccountSettingsRoute: typeof AccountSettingsRoute
   AccountIndexRoute: typeof AccountIndexRoute
 }
 
@@ -145,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/settings': {
+      id: '/account/settings'
+      path: '/account/settings'
+      fullPath: '/account/settings'
+      preLoaderRoute: typeof AccountSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account/editAccount': {
       id: '/account/editAccount'
       path: '/account/editAccount'
@@ -161,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   TodosRoute: TodosRoute,
   AccountEditAccountRoute: AccountEditAccountRoute,
+  AccountSettingsRoute: AccountSettingsRoute,
   AccountIndexRoute: AccountIndexRoute,
 }
 export const routeTree = rootRouteImport

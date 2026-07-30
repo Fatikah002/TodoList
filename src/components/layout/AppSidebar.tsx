@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from '@tanstack/react-router'
 
-import { SidebarNavItem } from '@/components/SidebarNavItem'
+import { SidebarNavItem } from '#/components/layout/SidebarNavItem'
 import {
   Sidebar,
   SidebarContent,
@@ -66,7 +66,8 @@ export function AppSidebar() {
                   onClick={() =>
                     navigate({
                       to: item.to,
-                      ...(item.search ? { search: item.search } : {}),
+                      ...(item.search ? 
+                        { search: item.search } : {}),
                     })
                   }
                 />

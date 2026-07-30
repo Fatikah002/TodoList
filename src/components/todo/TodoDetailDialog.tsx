@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Edit } from 'lucide-react'
 import type { Todo } from '@/lib/types'
 import { useState } from 'react'
-import { TodoForm } from '@/components/TodoForm'
+import { TodoForm } from '@/components/todo/TodoForm'
 
 type TodoDetailDialogProps = {
   open: boolean

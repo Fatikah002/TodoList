@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { TodoItem } from '@/components/TodoItem'
+import { TodoItem } from '#/components/todo/TodoItem'
 import { Button } from '@/components/ui/button'
 import { useTodos } from '@/hooks/useTodos'
 import { useState } from 'react'
