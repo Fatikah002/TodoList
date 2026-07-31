@@ -35,58 +35,57 @@ function RouteComponent() {
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-4 md:p-6">
       {/* Profile Header */}
-      <div className="flex flex-col items-center gap-4 rounded-2xl bg-white p-6 shadow-md  outline-3 outline-gray-200">
-          <Avatar size="lg" className="size-20">
-            <AvatarImage
-            src={profile.avatar}
-            alt={profile.name}
-            />
+      <div className="flex flex-col items-center gap-4 rounded-2xl border border-[var(--line)]  p-6 shadow-lg shadow-emerald-950/5 backdrop-blur">
+        <Avatar size="lg" className="size-20 border-2 border-white shadow-md">
+          <AvatarImage src={profile.avatar} alt={profile.name} />
           <AvatarFallback>{profile.name.charAt(0).toUpperCase() || 'F'}</AvatarFallback>
-          </Avatar>
-          <div className="text-center">
-          <h1 className="text-xl font-bold text-slate-900">{profile.name}</h1>
-          <p className="text-sm text-slate-500">{profile.email}</p>
+        </Avatar>
+        <div className="text-center">
+          <h1 className="text-xl font-bold text-slate-900">
+            {profile.name}
+          </h1>
+          <p className="text-sm text-gray-500">
+            {profile.email}
+          </p>
         </div>
       </div>
 
       {/* Menu Items */}
-      <Card className="overflow-hidden ">
-        <CardContent className="divide-y p-0">
+      <Card className="overflow-hidden border-[var(--line)] bg-white/70 shadow-lg shadow-emerald-950/5 backdrop-blur">
+        <CardContent className="divide-y divide-[var(--line)] p-0">
           <button
             onClick={() => navigate({ to: '/account/editAccount' })}
-            className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-50"
+            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-[var(--sand)]/60"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100">
-              <User className="h-4 w-4 text-slate-600" />
+            <div className="flex h-9 w-9 items-center justify-center">
+              <User className="h-5 w-5 text-[var(--palm)]" />
             </div>
-
-            <span className="flex-1 text-sm font-medium text-slate-900">
+            <span className="flex-1 text-sm font-medium ">
               Edit Profile
             </span>
-
-            <ChevronRight className="h-4 w-4 text-slate-400" />
+            <ChevronRight className="h-4 w-4 text-[var(--palm)]" />
           </button>
 
-          <button className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-50">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100">
-              <Settings className="h-4 w-4 text-slate-600" />
+          <button className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-[var(--sand)]/60">
+            <div className="flex h-9 w-9 items-center justify-center">
+              <Settings className="h-5 w-5 text-[var(--palm)]" />
             </div>
-            <span className="flex-1 text-sm font-medium text-slate-900">
+            <span className="flex-1 text-sm font-medium">
               Settings
             </span>
-            <ChevronRight className="h-4 w-4 text-slate-400" />
+            <ChevronRight className="h-4 w-4 " />
           </button>
         </CardContent>
       </Card>
 
       {/* Logout */}
-      <Card>
+      <Card className="border-[var(--line)] bg-white/70 shadow-lg shadow-emerald-950/5 backdrop-blur">
         <CardContent className="p-0">
-          <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-red-600 transition-colors hover:bg-red-50">
+          <button className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-red-50/80">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-100">
               <LogOut className="h-4 w-4 text-red-600" />
             </div>
-            <span className="text-sm font-medium">Logout</span>
+            <span className="text-sm font-medium text-red-600">Logout</span>
           </button>
         </CardContent>
       </Card>
