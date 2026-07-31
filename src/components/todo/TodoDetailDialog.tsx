@@ -93,7 +93,7 @@ export function TodoDetailDialog({
 
             <Button
               onClick={() => setIsEditing(true)}
-              className="w-full gap-2 bg-green-500 text-white hover:bg-green-600"
+              className="w-full gap-2 bg-green-600 text-white hover:bg-green-700"
             >
               <Edit className="h-4 w-4" />
               Edit

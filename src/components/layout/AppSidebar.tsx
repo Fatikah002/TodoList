@@ -47,7 +47,7 @@ export function AppSidebar() {
           </div>
           <div>
             <span className="text-lg font-bold text-green-600">Todo</span>
-            <span className="text-lg font-bold text-slate-900">Space</span>
+            <span className="text-lg font-bold text-gray-900">Space</span>
           </div>
         </div>
       </SidebarHeader>

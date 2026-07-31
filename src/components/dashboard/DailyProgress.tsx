@@ -39,7 +39,7 @@ export function DailyProgress({
     {
       label: 'Completed',
       count: completed,
-      color: 'text-green-500',
+      color: 'text-green-600',
     },
     {
       label: 'Pending',
@@ -64,12 +64,12 @@ export function DailyProgress({
           <CircularProgress percentage={percentage} />
 
           <div className="flex-1">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-gray-500">
               {completed} of {total} tasks completed
             </p>
 
             {showAllTasks && (
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-1 text-xs text-gray-500">
                 Total Tasks: <span className="font-semibold">{total}</span>
               </p>
             )}
@@ -80,7 +80,7 @@ export function DailyProgress({
                   <p className={`text-lg font-bold ${stat.color}`}>
                     {stat.count}
                   </p>
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
+                  <p className="text-xs text-gray-500">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -89,8 +89,8 @@ export function DailyProgress({
 
         <div className="mt-5 space-y-2">
           {total === 0 && (
-            <Alert className="border-slate-200 bg-slate-50">
-              <AlertDescription className="text-slate-600">
+            <Alert className="border-gray-200 bg-gray-100">
+              <AlertDescription className="text-gray-500">
                 {showAllTasks
                   ? 'No tasks available.'
                   : 'No tasks scheduled for this day.'}
@@ -117,8 +117,8 @@ export function DailyProgress({
           )}
 
           {total > 0 && overdue === 0 && pending === 0 && (
-            <Alert className="border-emerald-200 bg-emerald-50">
-              <AlertDescription className="text-emerald-700">
+            <Alert className="border-green-200 bg-green-50">
+              <AlertDescription className="text-green-600">
                 All caught up! Great job.
               </AlertDescription>
             </Alert>
