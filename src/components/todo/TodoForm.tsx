@@ -295,7 +295,7 @@ export function TodoForm({
       <div className="flex gap-2">
         <Button
           type="submit"
-          className="flex-1 bg-green-500 text-white hover:bg-green-600"
+          className="flex-1 bg-green-600 text-white hover:bg-green-700"
         >
           {submitLabel ?? 'Add Todo'}
         </Button>

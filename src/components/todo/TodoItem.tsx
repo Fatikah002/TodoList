@@ -81,7 +81,7 @@ export function TodoItem({
         case 'Shopping':
           return 'bg-orange-100 text-orange-700'
         default:
-          return 'bg-gray-100 text-gray-700'
+          return 'bg-gray-100 text-gray-900'
       }
     }
 
@@ -91,9 +91,9 @@ export function TodoItem({
       case 'Medium':
         return 'bg-yellow-100 text-yellow-700'
       case 'Low':
-        return 'bg-green-100 text-green-700'
+        return 'bg-green-50 text-green-600'
       default:
-        return 'bg-gray-100 text-gray-700'
+        return 'bg-gray-100 text-gray-900'
     }
   }
 
@@ -137,8 +137,8 @@ export function TodoItem({
                 <h3
                   className={`text-base font-semibold ${
                     todo.completed
-                      ? 'line-through text-muted-foreground'
-                      : 'text-foreground'
+                      ? 'line-through text-gray-500'
+                      : 'text-gray-900'
                   }`}
                 >
                   {todo.title}
@@ -164,7 +164,7 @@ export function TodoItem({
                 )}
 
                 {archivedView && (
-                  <Badge className="bg-gray-200 text-gray-600">
+                  <Badge className="bg-gray-100 text-gray-500">
                     <Archive className="mr-1 h-4 w-4" />
                     Archived
                   </Badge>
@@ -190,7 +190,7 @@ export function TodoItem({
                     onClick={(e) => e.stopPropagation()}
                     onPointerDown={(e) => e.stopPropagation()}
                   >
-                    <EllipsisVertical className="h-5 w-5 text-slate-600" />
+                    <EllipsisVertical className="h-5 w-5 text-gray-500" />
                   </Button>
                 </DropdownMenuTrigger>
 
@@ -268,7 +268,7 @@ export function TodoItem({
                           setShowArchive(true)
                         }}
                       >
-                        <Archive className="mr-2 h-4 w-4 text-slate-500" />
+                        <Archive className="mr-2 h-4 w-4 text-gray-500" />
                         Archive
                       </DropdownMenuItem>
 
@@ -286,7 +286,7 @@ export function TodoItem({
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1 text-xs text-gray-500">
                 <CalendarDays className="h-3.5 w-3.5" />
                 <span>
                   {format(new Date(todo.deadline), 'dd MMM yyyy')}
@@ -349,7 +349,7 @@ export function TodoItem({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-gray-600 text-white hover:bg-gray-500 focus:ring-gray-500"
+              className="bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500"
               onClick={() => {
                 onArchive?.(todo.id)
                 setShowArchive(false)

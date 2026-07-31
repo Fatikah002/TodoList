@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { formatLocalDate } from '@/lib/date'
 import type { Todo } from '@/lib/types'
+import { useSettings } from '@/hooks/useSettings'
 
 type HorizontalCalendarProps = {
   selectedDate: string
@@ -16,7 +17,11 @@ export function HorizontalCalendar({
   showAllTasks, 
   todos
 }: HorizontalCalendarProps) {
-  const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+  const { settings } = useSettings()
+  const isMondayStart = settings.startOfWeek === 'monday'
+  const daysOfWeek = isMondayStart
+    ? ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
+    : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
   const [currentWeek, setCurrentWeek] = useState(new Date())
 
@@ -36,20 +41,20 @@ export function HorizontalCalendar({
 
   const calendarDays = useMemo(() => {
     const currentDay = currentWeek.getDay()
+    const weekStartDay = isMondayStart ? 1 : 0
+    const dayOffset = (weekStartDay - currentDay + 7) % 7
 
-    const mondayDiff = currentDay === 0 ? -6 : 1 - currentDay
-
-    const startOfWeek = new Date(
+    const startOfWeekDate = new Date(
       currentWeek.getFullYear(),
       currentWeek.getMonth(),
-      currentWeek.getDate() + mondayDiff,
+      currentWeek.getDate() - dayOffset,
     )
 
     return Array.from({ length: 7 }, (_, index) => {
       const date = new Date(
-        startOfWeek.getFullYear(),
-        startOfWeek.getMonth(),
-        startOfWeek.getDate() + index,
+        startOfWeekDate.getFullYear(),
+        startOfWeekDate.getMonth(),
+        startOfWeekDate.getDate() + index,
       )
 
       return {
@@ -58,7 +63,7 @@ export function HorizontalCalendar({
         fullDate: formatLocalDate(date),
       }
     })
-  }, [currentWeek])
+  }, [currentWeek, isMondayStart])
 
   return (
     <div>
@@ -99,15 +104,15 @@ export function HorizontalCalendar({
                 onClick={() => onDateChange(item.fullDate)}
                 className={`flex w-fit justify-self-center  flex-col items-center gap-1 rounded-full px-1 py-2 transition-all duration-200 sm:gap-3 sm:px-2 sm:py-3 ${
                   isSelected
-                    ? 'outline outline-1 outline-green-400'
+                    ? 'outline outline-1 outline-green-600/40'
                     : 'border border-transparent'
                 }`}
               >
                 <span
                   className={`text-xs sm:text-sm ${
                     isSelected
-                      ? 'font-semibold text-slate-900'
-                      : 'text-gray-400'
+                      ? 'font-semibold text-gray-900'
+                      : 'text-gray-500'
                   }`}
                 >
                   {item.day}
@@ -116,10 +121,10 @@ export function HorizontalCalendar({
                 <div
                   className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold sm:h-10 sm:w-10 sm:text-sm ${
                     isSelected
-                      ? 'bg-green-500 text-white'
+                      ? 'bg-green-600 text-white'
                       : hasTodo && showAllTasks
-                        ? 'bg-green-500 text-white'
-                        : 'bg-gray-100 text-gray-400'
+                        ? 'bg-green-600 text-white'
+                        : 'bg-gray-100 text-gray-500'
                   }`}
                 >
                   {item.date}

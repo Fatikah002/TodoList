@@ -195,7 +195,7 @@ function TodosPage() {
                 <DropdownMenuTrigger className="focus:outline-none">
                   <div className="flex items-center gap-1.5 cursor-pointer text-lg font-bold text-gray-900 transition-colors">
                     <h2>{showAllTasks ? 'All Tasks' : 'Today'}</h2>
-                    <ChevronDown className="h-5 w-5 text-black mt-1 " />
+                    <ChevronDown className="h-5 w-5 text-gray-900 mt-1 " />
                   </div>
                 </DropdownMenuTrigger>
 
@@ -240,7 +240,7 @@ function TodosPage() {
               <div className="flex items-center gap-2">
                 <Button
                   onClick={() => setShowForm(!showForm)}
-                  className="h-9 w-18 rounded-full bg-green-500 hover:bg-green-600"
+                  className="h-9 w-18 rounded-full bg-green-600 hover:bg-green-700"
                 >
                   {showForm ? (
                     <X size={18} />
