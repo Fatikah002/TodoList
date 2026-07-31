@@ -4,8 +4,6 @@ import {
   createRootRoute,
   useRouterState,
 } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
 import { AppSidebar } from '#/components/layout/AppSidebar'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -56,7 +54,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <TooltipProvider>
           <SidebarProvider>
             <AppSidebar />
-
             <SidebarInset className="flex min-h-screen flex-col">
               <AppHeader title={pageTitle} className="hidden md:flex" />
               <main className="flex-1 pb-24 md:pb-0">{children}</main>

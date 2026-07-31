@@ -3,10 +3,13 @@ import type { Todo } from '@/lib/types'
 import { getNextDeadline } from '@/lib/repeat'
 
 export function useTodos() {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    const storedTodos = localStorage.getItem('todos');
-    return storedTodos ? JSON.parse(storedTodos) : [];
-  });
+  const [todos, setTodos] =
+    useState<Todo[]>(() => {
+      const storedTodos =
+        localStorage.getItem('todos');
+      return storedTodos ?
+        JSON.parse(storedTodos) : [];
+    });
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos))
@@ -63,7 +66,7 @@ export function useTodos() {
   }
 
   function updateTodo(updatedTodo: Todo) {
-   setTodos((prevTodos) =>
+    setTodos((prevTodos) =>
       prevTodos.map((todo) =>
         todo.id === updatedTodo.id ? updatedTodo : todo,
       ),
