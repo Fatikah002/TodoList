@@ -32,7 +32,7 @@ function ArchivedPage() {
   <div className="mx-auto w-full max-w-5xl px-4 py-6">
 
     {/* Toolbar */}
-    <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
+    <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 pb-4">
 
       {selectMode ? (
         <>
@@ -46,7 +46,7 @@ function ArchivedPage() {
             Cancel
           </Button>
 
-          <span className="text-sm font-medium text-slate-600">
+          <span className="text-sm font-medium text-gray-500">
             {selectedIds.length} selected
           </span>
 
@@ -76,13 +76,13 @@ function ArchivedPage() {
     {archivedTodos.length === 0 ? (
       <div className="flex flex-col items-center justify-center rounded-2xl  py-20">
 
-        <Trash className="mb-4 h-12 w-12 text-slate-300" />
+        <Trash className="mb-4 h-12 w-12 text-gray-500/50" />
 
-        <h2 className="text-lg font-semibold text-slate-700">
+        <h2 className="text-lg font-semibold text-gray-900">
           No Archived Tasks
         </h2>
 
-        <p className="mt-2 text-center text-sm text-slate-500">
+        <p className="mt-2 text-center text-sm text-gray-500">
           Tasks you archive will appear here.
         </p>
 

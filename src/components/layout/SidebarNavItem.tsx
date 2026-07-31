@@ -38,8 +38,8 @@ export function SidebarNavItem({
 
           ${
             active
-              ? 'bg-gradient-to-r from-green-100 to-emerald-50 text-green-700 shadow-sm'
-              : 'text-slate-500 hover:bg-slate-100 hover:text-green-600'
+              ? 'bg-green-50 text-green-600 shadow-sm'
+              : 'text-gray-500 hover:bg-gray-100 hover:text-green-600'
           }
         `}
       >

@@ -35,13 +35,13 @@ function RouteComponent() {
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-4 md:p-6">
       {/* Profile Header */}
-      <div className="flex flex-col items-center gap-4 rounded-2xl border border-[var(--line)]  p-6 shadow-lg shadow-emerald-950/5 backdrop-blur">
+      <div className="flex flex-col items-center gap-4 rounded-2xl border border-gray-200  p-6 shadow-md backdrop-blur">
         <Avatar size="lg" className="size-20 border-2 border-white shadow-md">
           <AvatarImage src={profile.avatar} alt={profile.name} />
           <AvatarFallback>{profile.name.charAt(0).toUpperCase() || 'F'}</AvatarFallback>
         </Avatar>
         <div className="text-center">
-          <h1 className="text-xl font-bold text-slate-900">
+          <h1 className="text-xl font-bold text-gray-900">
             {profile.name}
           </h1>
           <p className="text-sm text-gray-500">
@@ -51,24 +51,24 @@ function RouteComponent() {
       </div>
 
       {/* Menu Items */}
-      <Card className="overflow-hidden border-[var(--line)] bg-white/70 shadow-lg shadow-emerald-950/5 backdrop-blur">
-        <CardContent className="divide-y divide-[var(--line)] p-0">
+      <Card className="overflow-hidden border-gray-200 bg-white shadow-md backdrop-blur">
+        <CardContent className="divide-y divide-gray-200 p-0">
           <button
             onClick={() => navigate({ to: '/account/editAccount' })}
-            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-[var(--sand)]/60"
+            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-gray-100"
           >
             <div className="flex h-9 w-9 items-center justify-center">
-              <User className="h-5 w-5 text-[var(--palm)]" />
+              <User className="h-5 w-5 text-green-600" />
             </div>
             <span className="flex-1 text-sm font-medium ">
               Edit Profile
             </span>
-            <ChevronRight className="h-4 w-4 text-[var(--palm)]" />
+            <ChevronRight className="h-4 w-4 text-green-600" />
           </button>
 
-          <button className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-[var(--sand)]/60">
+          <button className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-gray-100">
             <div className="flex h-9 w-9 items-center justify-center">
-              <Settings className="h-5 w-5 text-[var(--palm)]" />
+              <Settings className="h-5 w-5 text-green-600" />
             </div>
             <span className="flex-1 text-sm font-medium">
               Settings
@@ -79,7 +79,7 @@ function RouteComponent() {
       </Card>
 
       {/* Logout */}
-      <Card className="border-[var(--line)] bg-white/70 shadow-lg shadow-emerald-950/5 backdrop-blur">
+      <Card className="border-gray-200 bg-white shadow-md backdrop-blur">
         <CardContent className="p-0">
           <button className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-red-50/80">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-100">

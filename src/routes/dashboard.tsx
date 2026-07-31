@@ -92,7 +92,7 @@ function DashboardPage() {
       label: 'Completed',
       value: completed,
       icon: CheckCircle2,
-      iconBg: 'bg-green-100',
+      iconBg: 'bg-green-50',
       iconColor: 'text-green-600',
     },
     {
@@ -126,7 +126,7 @@ function DashboardPage() {
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5 text-xs text-gray-500 sm:text-sm">
-          <CalendarDays className="h-4 w-4 text-gray-400" />
+          <CalendarDays className="h-4 w-4 text-gray-500" />
           <span className="whitespace-nowrap">
             {format(now, 'dd MMMM yyyy')}
           </span>
@@ -146,7 +146,7 @@ function DashboardPage() {
             return (
               <div
                 key={stat.label}
-                className="flex min-h-[115px] flex-col items-center justify-center rounded-2xl bg-white p-3 shadow-sm transition-shadow hover:shadow-md sm:p-4"
+                className="flex min-h-[115px] flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white p-3 shadow-sm transition-shadow hover:shadow-md sm:p-4"
               >
                 <div
                   className={`flex h-10 w-10 items-center justify-center rounded-full sm:h-12 sm:w-12 `}
@@ -170,7 +170,7 @@ function DashboardPage() {
       {/* Sections */}
       <div className="mt-6 grid grid-cols-1 gap-3 pb-24 sm:grid-cols-3 sm:pb-0">
         {/* Today's Tasks */}
-        <section className=" overflow-hidden rounded-2xl bg-white p-4 shadow-sm flex h-[200px] flex-col">
+        <section className=" overflow-hidden rounded-2xl border border-gray-200 bg-white p-4 shadow-sm flex h-[200px] flex-col">
           {' '}
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-gray-900 sm:text-base">
@@ -180,7 +180,7 @@ function DashboardPage() {
             <Link
               to="/todos"
               search={{ view: 'today' }}
-              className="flex items-center gap-1 text-xs font-medium text-green-600 transition-colors hover:text-green-700"
+              className="flex items-center gap-1 text-xs font-medium text-green-600 transition-colors hover:text-green-600"
             >
               View All
               <ChevronRight className="h-3 w-3" />
@@ -188,7 +188,7 @@ function DashboardPage() {
           </div>
           <div className="space-y-2.5">
             {todayTodos.length === 0 ? (
-              <p className="py-4 text-center text-xs text-gray-400">
+              <p className="py-4 text-center text-xs text-gray-500">
                 No tasks scheduled for today
               </p>
             ) : (
@@ -209,13 +209,13 @@ function DashboardPage() {
                         className="h-4 w-4"
                       />
                       <p
-                        className={`flex-1 truncate text-sm font-medium ${todo.completed ? 'line-through text-gray-400' : 'text-gray-900'}`}
+                        className={`flex-1 truncate text-sm font-medium ${todo.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}
                       >
                         {todo.title}
                       </p>
                     </div>
 
-                    <p className="shrink-0 whitespace-nowrap text-xs text-gray-400">
+                    <p className="shrink-0 whitespace-nowrap text-xs text-gray-500">
                       {todo.dueTime || 'No due time'}
                     </p>
                   </div>
@@ -225,7 +225,7 @@ function DashboardPage() {
         </section>
 
         {/* Weekly Progress */}
-        <section className="overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md ">
+        <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md ">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-gray-900 sm:text-base">
               Weekly Progress
@@ -254,9 +254,9 @@ function DashboardPage() {
 
               <p className="mt-1 text-xs text-gray-500">Tasks Completed</p>
 
-              <div className="mt-4 h-2 rounded-full bg-gray-200">
+              <div className="mt-4 h-2 rounded-full bg-gray-100">
                 <div
-                  className="h-2 rounded-full bg-green-500 transition-all duration-500"
+                  className="h-2 rounded-full bg-green-600 transition-all duration-500"
                   style={{ width: `${weeklyPct}%` }}
                 />
               </div>
@@ -265,7 +265,7 @@ function DashboardPage() {
         </section>
 
         {/* Upcoming Tasks */}
-        <section className="overflow-hidden rounded-2xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md flex h-[200px] flex-col">
+        <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md flex h-[200px] flex-col">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-gray-900 sm:text-base">
               Upcoming Tasks
@@ -274,7 +274,7 @@ function DashboardPage() {
             <Link
               to="/todos"
               search={{ view: 'all' }}
-              className="flex items-center gap-1 text-xs font-medium text-green-600 transition-colors hover:text-green-700"
+              className="flex items-center gap-1 text-xs font-medium text-green-600 transition-colors hover:text-green-600"
             >
               View All
               <ChevronRight className="h-3 w-3" />
@@ -283,7 +283,7 @@ function DashboardPage() {
 
           <div className="space-y-2.5">
             {upcomingTodos.length === 0 ? (
-              <p className="py-4 text-center text-xs text-gray-400">
+              <p className="py-4 text-center text-xs text-gray-500">
                 No upcoming tasks
               </p>
             ) : (
@@ -306,7 +306,7 @@ function DashboardPage() {
                       </p>
                     </div>
 
-                    <p className="shrink-0 whitespace-nowrap text-xs text-gray-400">
+                    <p className="shrink-0 whitespace-nowrap text-xs text-gray-500">
                       {todo.dueTime || 'No due time'}
                     </p>
                   </div>

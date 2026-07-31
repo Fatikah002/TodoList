@@ -29,7 +29,7 @@ export function CircularProgress({ percentage, className = 'h-[110px] w-[110px]'
           cx="55"
           cy="55"
           r={radius}
-          stroke="#22C55E"
+          stroke="#16A34A"
           strokeWidth={stroke}
           fill="none"
           strokeDasharray={circumference}
@@ -44,7 +44,7 @@ export function CircularProgress({ percentage, className = 'h-[110px] w-[110px]'
           y="50%"
           dominantBaseline="middle"
           textAnchor="middle"
-          className="fill-black text-xl font-bold"
+          className="fill-gray-900 text-xl font-bold"
         >
           {percentage}%
         </text>
