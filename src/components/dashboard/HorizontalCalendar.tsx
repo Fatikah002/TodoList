@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { formatLocalDate } from '@/lib/date'
 import type { Todo } from '@/lib/types'
-import { useSettings } from '@/hooks/useSettings'
 
 type HorizontalCalendarProps = {
   selectedDate: string
@@ -17,11 +16,7 @@ export function HorizontalCalendar({
   showAllTasks, 
   todos
 }: HorizontalCalendarProps) {
-  const { settings } = useSettings()
-  const isMondayStart = settings.startOfWeek === 'monday'
-  const daysOfWeek = isMondayStart
-    ? ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
-    : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+  const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
   const [currentWeek, setCurrentWeek] = useState(new Date())
 
@@ -41,20 +36,20 @@ export function HorizontalCalendar({
 
   const calendarDays = useMemo(() => {
     const currentDay = currentWeek.getDay()
-    const weekStartDay = isMondayStart ? 1 : 0
-    const dayOffset = (weekStartDay - currentDay + 7) % 7
 
-    const startOfWeekDate = new Date(
+    const mondayDiff = currentDay === 0 ? -6 : 1 - currentDay
+
+    const startOfWeek = new Date(
       currentWeek.getFullYear(),
       currentWeek.getMonth(),
-      currentWeek.getDate() - dayOffset,
+      currentWeek.getDate() + mondayDiff,
     )
 
     return Array.from({ length: 7 }, (_, index) => {
       const date = new Date(
-        startOfWeekDate.getFullYear(),
-        startOfWeekDate.getMonth(),
-        startOfWeekDate.getDate() + index,
+        startOfWeek.getFullYear(),
+        startOfWeek.getMonth(),
+        startOfWeek.getDate() + index,
       )
 
       return {
@@ -63,7 +58,7 @@ export function HorizontalCalendar({
         fullDate: formatLocalDate(date),
       }
     })
-  }, [currentWeek, isMondayStart])
+  }, [currentWeek])
 
   return (
     <div>
