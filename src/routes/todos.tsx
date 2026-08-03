@@ -358,6 +358,7 @@ function TodosPage() {
                     onToggle={toggleTodo}
                     onUpdate={updateTodo}
                     onArchive={archiveTodo}
+                    onUndoArchive={updateTodo}
                     selectMode={selectMode}
                     isSelected={selectedIds.includes(todo.id)}
                     onToggleSelect={(id) =>
@@ -387,6 +388,13 @@ function TodosPage() {
                   <AlertDialogAction
                     onClick={() => {
                       deleteMany(selectedIds)
+                      toast.success(`${selectedIds.length} todo(s) deleted`, {
+                        style: {
+                          background: '#fee2e2',
+                          border: '1px solid #ef4444',
+                          color: '#b91c1c',
+                        },
+                      })
                       setSelectedIds([])
                       setSelectMode(false)
                       setShowBulkDelete(false)

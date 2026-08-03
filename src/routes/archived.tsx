@@ -3,6 +3,7 @@ import { TodoItem } from '#/components/todo/TodoItem'
 import { Button } from '@/components/ui/button'
 import { useTodos } from '@/hooks/useTodos'
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { SquareCheckBig, Trash } from 'lucide-react'
 import {
   AlertDialog,
@@ -140,6 +141,13 @@ function ArchivedPage() {
           <AlertDialogAction
             onClick={() => {
               deleteManyArchived(selectedIds)
+              toast.success(`${selectedIds.length} todo(s) deleted permanently`, {
+                style: {
+                  background: '#fee2e2',
+                  border: '1px solid #ef4444',
+                  color: '#b91c1c',
+                },
+              })
               setSelectedIds([])
               setSelectMode(false)
               setShowBulkDelete(false)

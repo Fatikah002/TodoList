@@ -47,6 +47,7 @@ type TodoItemProps = {
   onToggle: (id: number) => void
   onUpdate: (updatedTodo: Todo) => void
   onArchive?: (id: number) => void
+  onUndoArchive?: (todo: Todo) => void
   onRestore?: (id: number) => void
   onDeletePermanent?: (id: number) => void
   selectMode?: boolean
@@ -61,6 +62,7 @@ export function TodoItem({
   onToggle,
   onUpdate,
   onArchive,
+  onUndoArchive,
   onRestore,
   onDeletePermanent,
   selectMode = false,
@@ -326,8 +328,22 @@ export function TodoItem({
               onClick={() => {
                 if (archivedView) {
                   onDeletePermanent?.(todo.id)
+                  toast.success('Todo deleted permanently', {
+                    style: {
+                      background: '#fee2e2',
+                      border: '1px solid #ef4444',
+                      color: '#b91c1c',
+                    },
+                  })
                 } else {
                   onDelete(todo.id)
+                  toast.success('Todo deleted', {
+                    style: {
+                      background: '#fee2e2',
+                      border: '1px solid #ef4444',
+                      color: '#b91c1c',
+                    },
+                  })
                 }
                 setShowDelete(false)
               }}
@@ -354,6 +370,22 @@ export function TodoItem({
               className="bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500"
               onClick={() => {
                 onArchive?.(todo.id)
+                toast.success('Todo archived', {
+                  style: {
+                    background: '#f3f4f6',
+                    border: '1px solid #9ca3af',
+                    color: '#4b5563',
+                  },
+                  actionButtonStyle: {
+                    background: 'transparent',
+                    border: '1px solid #9ca3af',
+                    color: '#4b5563',
+                  },
+                  action: {
+                    label: 'Undo',
+                    onClick: () => onUndoArchive?.({ ...todo, archived: false }),
+                  },
+                })
                 setShowArchive(false)
               }}
             >
