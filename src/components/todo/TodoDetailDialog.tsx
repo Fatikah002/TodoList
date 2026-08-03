@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Edit } from 'lucide-react'
 import type { Todo } from '@/lib/types'
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { TodoForm } from '@/components/todo/TodoForm'
 
 type TodoDetailDialogProps = {
@@ -58,6 +59,7 @@ export function TodoDetailDialog({
                 ...todo,
                 ...data,
               })
+              toast.success('Todo updated successfully!')
               setIsEditing(false)
               onClose()
             }}

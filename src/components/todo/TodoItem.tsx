@@ -1,6 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { toast } from 'sonner'
 import {
   Trash2,
   CalendarDays,
@@ -231,12 +232,13 @@ export function TodoItem({
 
                         <DropdownMenuRadioGroup
                           value={todo.priority}
-                          onValueChange={(value) =>
+                          onValueChange={(value) => {
                             onUpdate({
                               ...todo,
                               priority: value as Todo['priority'],
                             })
-                          }
+                            toast.success('Priority updated!')
+                          }}
                         >
                           <DropdownMenuRadioItem value="High">
                             <Flag className="mr-2 h-4 w-4 text-red-500" />

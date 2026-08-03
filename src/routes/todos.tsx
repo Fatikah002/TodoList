@@ -12,6 +12,7 @@ import { HorizontalCalendar } from '#/components/dashboard/HorizontalCalendar'
 import { Button } from '@/components/ui/button'
 import { useTodos } from '@/hooks/useTodos'
 import { useState } from 'react'
+import { toast } from 'sonner'
 import {
   Plus,
   X,
@@ -182,6 +183,7 @@ function TodosPage() {
     }
 
     addTodo(newTodo)
+    toast.success('Todo added successfully!')
   }
 
   return (
