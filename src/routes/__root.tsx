@@ -10,6 +10,8 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import appCss from '../styles.css?url'
 import { MobileNavbar } from '#/components/layout/MobileNavbar'
 import { AppHeader } from '#/components/layout/AppHeader'
+import { TodosProvider } from '@/hooks/useTodos'
+import { Toaster } from '@/components/ui/sonner'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -51,16 +53,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <TooltipProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset className="flex min-h-screen flex-col">
-              <AppHeader title={pageTitle} className="hidden md:flex" />
-              <main className="flex-1 pb-24 md:pb-0">{children}</main>
-              <MobileNavbar />
-            </SidebarInset>
-          </SidebarProvider>
-        </TooltipProvider>
+        <TodosProvider>
+          <TooltipProvider>
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarInset className="flex min-h-screen flex-col">
+                <AppHeader title={pageTitle} className="hidden md:flex" />
+                <main className="flex-1 pb-24 md:pb-0">{children}</main>
+                <MobileNavbar />
+              </SidebarInset>
+            </SidebarProvider>
+          </TooltipProvider>
+        </TodosProvider>
         {/* <TanStackDevtools
           config={{
             position: 'bottom-right',
@@ -72,6 +76,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             },
           ]}
         /> */}
+        <Toaster richColors position="top-center" />
         <Scripts />
       </body>
     </html>

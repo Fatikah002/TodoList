@@ -23,7 +23,6 @@ import {
 import { formatLocalDate, isSameDay, isOverdue } from '@/lib/date'
 import { TodoDialog } from '#/components/todo/TodoDialog'
 import { Input } from '@/components/ui/input'
-import { DailyProgress } from '@/components/dashboard/DailyProgress'
 import {
   DropdownMenu,
   DropdownMenuContent,

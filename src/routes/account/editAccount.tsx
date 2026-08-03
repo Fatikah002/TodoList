@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, Camera, Eye, EyeOff, Trash2, X } from 'lucide-react'
+import { toast } from 'sonner'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -86,34 +87,44 @@ function EditProfilePage() {
 
     if (showPasswordForm) {
       if (!newPassword) {
-        alert('Please enter a new password')
+        toast.error('Please enter a new password')
         return
       }
 
       if (newPassword !== confirmPassword) {
-        alert('Password confirmation does not match')
+        toast.error('Password confirmation does not match')
         return
       }
 
       if (storedPassword && currentPassword !== storedPassword) {
-        alert('Current password is incorrect')
+        toast.error('Current password is incorrect')
         return
       }
 
       finalPassword = newPassword
     }
 
-    localStorage.setItem(
-      'profile',
-      JSON.stringify({
-        name,
-        email,
-        password: finalPassword,
-        avatar,
-      }),
-    )
+    const promise = new Promise<void>((resolve) => {
+      localStorage.setItem(
+        'profile',
+        JSON.stringify({
+          name,
+          email,
+          password: finalPassword,
+          avatar,
+        }),
+      )
+      setTimeout(resolve, 300)
+    })
 
-    navigate({ to: '/account/editAccount' })
+    toast.promise(promise, {
+      loading: 'Saving profile...',
+      success: () => {
+        navigate({ to: '/account' })
+        return 'Profile updated successfully!'
+      },
+      error: 'Failed to save profile',
+    })
   }
 
   return (

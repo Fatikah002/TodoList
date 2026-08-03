@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 import { useTodos } from '@/hooks/useTodos'
 import { isSameDay, isOverdue, formatLocalDate } from '@/lib/date'
 import {
@@ -33,8 +34,21 @@ function getGreetingEmoji() {
 
 function DashboardPage() {
   const { todos, toggleTodo } = useTodos()
+  const [userName, setUserName] = useState('Fatikah')
   const activeTodos = todos.filter((todo) => !todo.archived)
   const today = formatLocalDate(new Date())
+
+  useEffect(() => {
+    const stored = localStorage.getItem('profile')
+    if (stored) {
+      try {
+        const profile = JSON.parse(stored)
+        if (profile.name) setUserName(profile.name)
+      } catch {
+        // ignore
+      }
+    }
+  }, [])
 
   const todayTodos = activeTodos.filter(
     (todo) => isSameDay(todo.deadline, today) && !todo.completed,
@@ -117,7 +131,7 @@ function DashboardPage() {
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
           <h1 className="text-lg font-bold leading-tight text-gray-900 sm:text-2xl">
-            {getGreeting()}, Fatikah! {getGreetingEmoji()}
+            {getGreeting()}, {userName}! {getGreetingEmoji()}
           </h1>
 
           <p className="mt-1 text-xs text-gray-500 sm:text-sm">
