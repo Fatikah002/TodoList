@@ -2,7 +2,7 @@ export type priority = 'High' | 'Medium' | 'Low' | 'None'
 export type RepeatType = 'none' | 'daily' | 'weekly' | 'monthly'
 
 export type Todo = {
-  id: number
+  id: string
   title: string
   detail: string
   category: string

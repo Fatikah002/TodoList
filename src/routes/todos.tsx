@@ -67,7 +67,7 @@ function TodosPage() {
   const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('all')
   const [sortBy, setSortBy] = useState<SortBy>('none')
   const [selectMode, setSelectMode] = useState(false)
-  const [selectedIds, setSelectedIds] = useState<number[]>([])
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [showBulkDelete, setShowBulkDelete] = useState(false)
 
   const activeTodos = todos.filter((todo) => !todo.archived)
@@ -170,7 +170,7 @@ function TodosPage() {
     repeat: RepeatType
   }) {
     const newTodo: Todo = {
-      id: Date.now(),
+      id: crypto.randomUUID(),
       title: data.title,
       detail: data.detail,
       category: data.category,

@@ -25,7 +25,7 @@ function ArchivedPage() {
     useTodos()
   const archivedTodos = todos.filter((todo) => todo.archived)
   const [selectMode, setSelectMode] = useState(false)
-  const [selectedIds, setSelectedIds] = useState<number[]>([])
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [showBulkDelete, setShowBulkDelete] = useState(false)
 
 

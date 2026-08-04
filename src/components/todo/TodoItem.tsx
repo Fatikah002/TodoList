@@ -43,16 +43,16 @@ import {
 
 type TodoItemProps = {
   todo: Todo
-  onDelete: (id: number) => void
-  onToggle: (id: number) => void
+  onDelete: (id: string) => void
+  onToggle: (id: string) => void
   onUpdate: (updatedTodo: Todo) => void
-  onArchive?: (id: number) => void
+  onArchive?: (id: string) => void
   onUndoArchive?: (todo: Todo) => void
-  onRestore?: (id: number) => void
-  onDeletePermanent?: (id: number) => void
+  onRestore?: (id: string) => void
+  onDeletePermanent?: (id: string) => void
   selectMode?: boolean
   isSelected?: boolean
-  onToggleSelect?: (id: number) => void
+  onToggleSelect?: (id: string) => void
   archivedView?: boolean
 }
 

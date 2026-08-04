@@ -6,15 +6,15 @@ import { getNextDeadline } from '@/lib/repeat'
 type TodosContextType = {
   todos: Todo[]
   addTodo: (todo: Todo) => void
-  deleteTodo: (id: number) => void
-  deleteMany: (ids: number[]) => void
-  toggleTodo: (id: number) => void
+  deleteTodo: (id: string) => void
+  deleteMany: (ids: string[]) => void
+  toggleTodo: (id: string) => void
   updateTodo: (updatedTodo: Todo) => void
-  archiveTodo: (id: number) => void
-  archiveMany: (ids: number[]) => void
-  restoreTodo: (id: number) => void
-  deletePermanently: (id: number) => void
-  deleteManyArchived: (ids: number[]) => void
+  archiveTodo: (id: string) => void
+  archiveMany: (ids: string[]) => void
+  restoreTodo: (id: string) => void
+  deletePermanently: (id: string) => void
+  deleteManyArchived: (ids: string[]) => void
 }
 
 const TodosContext = createContext<TodosContextType | null>(null)
@@ -34,15 +34,15 @@ export function TodosProvider({ children }: { children: ReactNode }) {
     setTodos((prev) => [...prev, todo])
   }
 
-  function deleteTodo(id: number) {
+  function deleteTodo(id: string) {
     setTodos((prev) => prev.filter((todo) => todo.id !== id))
   }
 
-  function deleteMany(ids: number[]) {
+  function deleteMany(ids: string[]) {
     setTodos((prev) => prev.filter((todo) => !ids.includes(todo.id)))
   }
 
-  function toggleTodo(id: number) {
+  function toggleTodo(id: string) {
     const todo = todos.find((t) => t.id === id)
     if (!todo) return
 
@@ -66,7 +66,7 @@ export function TodosProvider({ children }: { children: ReactNode }) {
         if (!exists) {
           const newTodo: Todo = {
             ...todo,
-            id: Date.now(),
+            id: crypto.randomUUID(),
             deadline: nextDeadline,
             completed: false,
           }
@@ -84,13 +84,13 @@ export function TodosProvider({ children }: { children: ReactNode }) {
     )
   }
 
-  function archiveTodo(id: number) {
+  function archiveTodo(id: string) {
     setTodos((prev) =>
       prev.map((todo) => (todo.id === id ? { ...todo, archived: true } : todo)),
     )
   }
 
-  function archiveMany(ids: number[]) {
+  function archiveMany(ids: string[]) {
     setTodos((prev) =>
       prev.map((todo) =>
         ids.includes(todo.id) ? { ...todo, archived: true } : todo,
@@ -98,7 +98,7 @@ export function TodosProvider({ children }: { children: ReactNode }) {
     )
   }
 
-  function restoreTodo(id: number) {
+  function restoreTodo(id: string) {
     setTodos((prev) =>
       prev.map((todo) =>
         todo.id === id ? { ...todo, archived: false, completed: false } : todo,
@@ -106,11 +106,11 @@ export function TodosProvider({ children }: { children: ReactNode }) {
     )
   }
 
-  function deletePermanently(id: number) {
+  function deletePermanently(id: string) {
     setTodos((prev) => prev.filter((todo) => todo.id !== id))
   }
 
-  function deleteManyArchived(ids: number[]) {
+  function deleteManyArchived(ids: string[]) {
     setTodos((prev) => prev.filter((todo) => !ids.includes(todo.id)))
   }
 
