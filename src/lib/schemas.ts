@@ -10,19 +10,19 @@ function getTodayDateString() {
 }
 
 export const todoSchema = z.object({
-  title: z.string().min(1, 'Todo tidak boleh kosong'),
+  title: z.string().min(1, 'Todo must not be empty'),
   detail: z.string(),
-  category: z.string().min(1, 'Kategori wajib diisi'),
+  category: z.string().min(1, 'Category is required'),
   priority: z.enum(['High', 'Medium', 'Low', 'None']),
   deadline: z
     .string()
-    .min(1, 'Deadline wajib diisi')
+    .min(1, 'Deadline is required')
     .refine((value) => value >= getTodayDateString(), {
-      message: 'Deadline harus hari ini atau setelahnya',
+      message: 'Deadline must be today or later',
     }),
   dueTime: z
     .string()
-    .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Format waktu HH:MM')
+    .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Time format HH:MM')
     .optional()
     .or(z.literal('')),
   repeat: z.enum(['none', 'daily', 'weekly', 'monthly']) 

@@ -12,7 +12,7 @@ export function getDeadlineStatus(
 
   if (Number.isNaN(deadlineDate.getTime())) return null;
 
-  // Sudah melewati deadline
+  // Already past deadline
   if (deadlineDate < now) {
     return "late";
   }

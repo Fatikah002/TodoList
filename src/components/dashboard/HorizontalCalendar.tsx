@@ -72,7 +72,7 @@ export function HorizontalCalendar({
         </button>
 
         <h2 className="text-lg font-semibold">
-          {currentWeek.toLocaleDateString('id-ID', {
+          {currentWeek.toLocaleDateString('en-US', {
             month: 'long',
             year: 'numeric',
           })}
