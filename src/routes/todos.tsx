@@ -12,7 +12,7 @@ import type {
 import { HorizontalCalendar } from '@/components/dashboard/HorizontalCalendar'
 import { Button } from '@/components/ui/button'
 import { useTodos } from '@/hooks/useTodos'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { toast } from 'sonner'
 import {
   Plus,
@@ -75,7 +75,6 @@ function TodosPage() {
   const categories = Array.from(
     new Set(activeTodos.map((todo) => todo.category)),
   )
-  let filteredTodos = [...activeTodos]
 
   const isFilterActive =
     statusFilter !== 'all' ||
@@ -83,68 +82,67 @@ function TodosPage() {
     selectedCategory !== 'All' ||
     sortBy !== 'none'
 
-  filteredTodos = [...activeTodos].filter((todo) => {
-    const keyword = search.trim().toLowerCase()
+  const filteredTodos = useMemo(() => {
+      const result = [...activeTodos].filter((todo) => {
+      const keyword = search.trim().toLowerCase()
 
-    // Search
-    const matchesSearch =
-      keyword === '' ||
-      todo.title.toLowerCase().includes(keyword) ||
-      todo.detail.toLowerCase().includes(keyword) ||
-      todo.category.toLowerCase().includes(keyword) ||
-      todo.priority.toLowerCase().includes(keyword)
+      const matchesSearch =
+        keyword === '' ||
+        todo.title.toLowerCase().includes(keyword) ||
+        todo.detail.toLowerCase().includes(keyword) ||
+        todo.category.toLowerCase().includes(keyword) ||
+        todo.priority.toLowerCase().includes(keyword)
 
-    // Category
-    const matchesCategory =
-      selectedCategory === 'All' || todo.category === selectedCategory
+      const matchesCategory =
+        selectedCategory === 'All' || todo.category === selectedCategory
 
-    // Status
-    const todoIsOverdue = isOverdue(todo.completed, todo.deadline, todo.dueTime)
+      const todoIsOverdue = isOverdue(todo.completed, todo.deadline, todo.dueTime)
 
-    const matchesStatus =
-      statusFilter === 'all' ||
-      (statusFilter === 'completed' && todo.completed) ||
-      (statusFilter === 'pending' && !todo.completed) ||
-      (statusFilter === 'overdue' && todoIsOverdue)
+      const matchesStatus =
+        statusFilter === 'all' ||
+        (statusFilter === 'completed' && todo.completed) ||
+        (statusFilter === 'pending' && !todo.completed) ||
+        (statusFilter === 'overdue' && todoIsOverdue)
 
-    // Priority
-    const matchesPriority =
-      priorityFilter === 'all' || todo.priority === priorityFilter
+      const matchesPriority =
+        priorityFilter === 'all' || todo.priority === priorityFilter
 
-    const matchesDate = showAllTasks || isSameDay(todo.deadline, selectedDate)
+      const matchesDate = showAllTasks || isSameDay(todo.deadline, selectedDate)
 
-    return (
-      matchesSearch &&
-      matchesCategory &&
-      matchesStatus &&
-      matchesPriority &&
-      (isFilterActive || matchesDate)
-    )
-  })
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesStatus &&
+        matchesPriority &&
+        (isFilterActive || matchesDate)
+      )
+    })
 
-  // Sort
-  if (sortBy !== 'none') {
-    filteredTodos.sort((a, b) => {
-      switch (sortBy) {
-        case 'deadline':
-          return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+    if (sortBy !== 'none') {
+      result.sort((a, b) => {
+        switch (sortBy) {
+          case 'deadline':
+            return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
 
-        case 'priority': {
-          const priorityOrder = {
-            High: 3,
-            Medium: 2,
-            Low: 1,
-            None: 0,
+          case 'priority': {
+            const priorityOrder = {
+              High: 3,
+              Medium: 2,
+              Low: 1,
+              None: 0,
+            }
+
+            return priorityOrder[b.priority] - priorityOrder[a.priority]
           }
 
-          return priorityOrder[b.priority] - priorityOrder[a.priority]
+          case 'name':
+            return a.title.localeCompare(b.title)
         }
+      })
+    }
 
-        case 'name':
-          return a.title.localeCompare(b.title)
-      }
-    })
-  }
+    return result
+  }, [activeTodos, search, selectedCategory, statusFilter, priorityFilter, sortBy, showAllTasks, selectedDate, isFilterActive])
 
   function handleAddTodo(data: TodoFormData) {
     const newTodo: Todo = {
