@@ -5,11 +5,11 @@ import {
   useRouterState,
 } from '@tanstack/react-router'
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
-import { AppSidebar } from '#/components/layout/AppSidebar'
+import { AppSidebar } from '@/components/layout/AppSidebar'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import appCss from '../styles.css?url'
-import { MobileNavbar } from '#/components/layout/MobileNavbar'
-import { AppHeader } from '#/components/layout/AppHeader'
+import { MobileNavbar } from '@/components/layout/MobileNavbar'
+import { AppHeader } from '@/components/layout/AppHeader'
 import { TodosProvider } from '@/hooks/useTodos'
 import { Toaster } from '@/components/ui/sonner'
 

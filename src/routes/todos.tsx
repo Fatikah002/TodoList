@@ -1,14 +1,14 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { todosSearchSchema } from '@/lib/schemas'
 import type { Todo, RepeatType } from '@/lib/types'
-import { TodoItem } from '#/components/todo/TodoItem'
-import { TodoFilter } from '#/components/todo/TodoFilter'
+import { TodoItem } from '@/components/todo/TodoItem'
+import { TodoFilter } from '@/components/todo/TodoFilter'
 import type {
   SortBy,
   StatusFilter,
   PriorityFilter,
-} from '#/components/todo/TodoFilter'
-import { HorizontalCalendar } from '#/components/dashboard/HorizontalCalendar'
+} from '@/components/todo/TodoFilter'
+import { HorizontalCalendar } from '@/components/dashboard/HorizontalCalendar'
 import { Button } from '@/components/ui/button'
 import { useTodos } from '@/hooks/useTodos'
 import { useState } from 'react'
@@ -22,7 +22,7 @@ import {
   SquareCheckBig,
 } from 'lucide-react'
 import { formatLocalDate, isSameDay, isOverdue } from '@/lib/date'
-import { TodoDialog } from '#/components/todo/TodoDialog'
+import { TodoDialog } from '@/components/todo/TodoDialog'
 import { Input } from '@/components/ui/input'
 import {
   DropdownMenu,

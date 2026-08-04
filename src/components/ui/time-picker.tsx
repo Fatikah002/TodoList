@@ -4,9 +4,9 @@ import {
   Popover,
   PopoverTrigger,
   PopoverPopup,
-} from '#/components/ui/popover.tsx'
-import { Button } from '#/components/ui/button.tsx'
-import { cn } from '#/lib/utils.ts'
+} from '@/components/ui/popover.tsx'
+import { Button } from '@/components/ui/button.tsx'
+import { cn } from '@/lib/utils.ts'
 
 type TimePickerProps = {
   value: string

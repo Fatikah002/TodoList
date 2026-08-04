@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from '@tanstack/react-router'
 
-import { SidebarNavItem } from '#/components/layout/SidebarNavItem'
+import { SidebarNavItem } from '@/components/layout/SidebarNavItem'
 import {
   Sidebar,
   SidebarContent,

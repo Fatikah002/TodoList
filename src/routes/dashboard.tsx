@@ -10,7 +10,7 @@ import {
   CalendarDays,
   ChevronRight,
 } from 'lucide-react'
-import { CircularProgress } from '#/components/dashboard/CircularProgress'
+import { CircularProgress } from '@/components/dashboard/CircularProgress'
 import { startOfWeek, endOfWeek, isWithinInterval, format } from 'date-fns'
 import { Checkbox } from '@/components/ui/checkbox'
 
