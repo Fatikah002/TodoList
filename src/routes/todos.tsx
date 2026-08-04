@@ -85,10 +85,7 @@ function TodosPage() {
   filteredTodos = [...activeTodos].filter((todo) => {
     const keyword = search.trim().toLowerCase()
 
-    // =====================
-    // SEARCH
-    // =====================
-
+    // Search
     const matchesSearch =
       keyword === '' ||
       todo.title.toLowerCase().includes(keyword) ||
@@ -96,17 +93,11 @@ function TodosPage() {
       todo.category.toLowerCase().includes(keyword) ||
       todo.priority.toLowerCase().includes(keyword)
 
-    // =====================
-    // CATEGORY
-    // =====================
-
+    // Category
     const matchesCategory =
       selectedCategory === 'All' || todo.category === selectedCategory
 
-    // =====================
-    // STATUS
-    // =====================
-
+    // Status
     const todoIsOverdue = isOverdue(todo.completed, todo.deadline, todo.dueTime)
 
     const matchesStatus =
@@ -115,16 +106,12 @@ function TodosPage() {
       (statusFilter === 'pending' && !todo.completed) ||
       (statusFilter === 'overdue' && todoIsOverdue)
 
-    // =====================
-    // PRIORITY
-    // =====================
-
+    // Priority
     const matchesPriority =
       priorityFilter === 'all' || todo.priority === priorityFilter
 
     const matchesDate = showAllTasks || isSameDay(todo.deadline, selectedDate)
 
-    // Filter aktif: tampilkan semua hari yang cocok dengan filter.
     return (
       matchesSearch &&
       matchesCategory &&
@@ -134,9 +121,7 @@ function TodosPage() {
     )
   })
 
-  // =====================
-  // SORT
-  // =====================
+  // Sort
   if (sortBy !== 'none') {
     filteredTodos.sort((a, b) => {
       switch (sortBy) {
@@ -327,7 +312,6 @@ function TodosPage() {
                   className="h-11 gap-1.5 rounded-xl px-3"
                 >
                   <SquareCheckBig size={16} />
-                  {/* <span>Select</span> */}
                 </Button>
               </div>
             )}

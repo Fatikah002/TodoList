@@ -65,17 +65,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             </SidebarProvider>
           </TooltipProvider>
         </TodosProvider>
-        {/* <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        /> */}
         <Toaster richColors position="top-center" />
         <Scripts />
       </body>

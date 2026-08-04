@@ -33,7 +33,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="offcanvas">
-      {/* ================= Header ================= */}
+      {/* Header */}
       <SidebarHeader className="flex h-16 items-center border-b px-5">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500 text-white shadow-sm">
@@ -52,7 +52,7 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      {/* ================= Menu ================= */}
+      {/* Menu */}
       <SidebarContent className="px-3 py-5">
         <SidebarGroup>
           <SidebarGroupContent>
@@ -77,7 +77,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      {/* ================= Footer ================= */}
+      {/* Footer */}
       <SidebarFooter className="mt-auto border-t p-4">
         <SidebarMenu className="space-y-2">
           <SidebarNavItem

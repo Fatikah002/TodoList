@@ -55,7 +55,6 @@ export function TodoFilter({
           }`}
         >
           <SlidersHorizontal size={16} />
-          {/* <span className="text-sm">Filter</span> */}
         </Button>
       </DropdownMenuTrigger>
 

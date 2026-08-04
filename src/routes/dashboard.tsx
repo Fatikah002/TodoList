@@ -245,14 +245,7 @@ function DashboardPage() {
               Weekly Progress
             </h2>
 
-            {/* <Link
-              to="/todos"
-              search={{ view: 'all' }}
-              className="flex items-center gap-1 text-xs font-medium text-green-600 transition-colors hover:text-green-700"
-            >
-              View Weekly
-              <ChevronRight className="h-3 w-3" />
-            </Link> */}
+
           </div>
 
           <div className="flex items-center gap-5">
@@ -310,7 +303,6 @@ function DashboardPage() {
                     className="flex items-center justify-between gap-4"
                   >
                     <div className="flex min-w-0 flex-1 items-center gap-3">
-                      {/* <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-green-50"> */}
                       <span className="text-sm font-bold ">
                         {format(d, 'd MMM')}
                       </span>
