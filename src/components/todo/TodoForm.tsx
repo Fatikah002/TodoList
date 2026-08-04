@@ -2,7 +2,7 @@ import { useForm } from '@tanstack/react-form'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { todoFieldValidators } from '@/lib/schemas'
+import { todoFieldValidators, type TodoFormData } from '@/lib/schemas'
 import { categories } from '@/lib/categories'
 import { Label } from '@/components/ui/label'
 import {
@@ -14,31 +14,15 @@ import {
 } from '@/components/ui/select'
 import { DatePicker } from '@/components/ui/date-picker'
 import { TimePicker } from '@/components/ui/time-picker'
-import type { Todo, RepeatType } from '@/lib/types'
+import type { RepeatType } from '@/lib/types'
 
 type TodoFormProps = {
-  initialData?: {
-    title: string
-    detail: string
-    category: string
-    priority: Todo['priority']
-    deadline: string
-    dueTime: string
-    repeat: RepeatType
-  }
+  initialData?: TodoFormData
   submitLabel?: string
   showCancel?: boolean
   showPriority?: boolean
   showRepeat?: boolean
-  onSubmit: (data: {
-    title: string
-    detail: string
-    category: string
-    priority: Todo['priority']
-    deadline: string
-    dueTime: string
-    repeat: RepeatType
-  }) => void
+  onSubmit: (data: TodoFormData) => void
   onCancel?: () => void
 }
 

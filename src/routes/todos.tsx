@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { todosSearchSchema } from '@/lib/schemas'
-import type { Todo, RepeatType } from '@/lib/types'
+import type { Todo } from '@/lib/types'
+import type { TodoFormData } from '@/lib/schemas'
 import { TodoItem } from '@/components/todo/TodoItem'
 import { TodoFilter } from '@/components/todo/TodoFilter'
 import type {
@@ -145,15 +146,7 @@ function TodosPage() {
     })
   }
 
-  function handleAddTodo(data: {
-    title: string
-    detail: string
-    category: string
-    priority: Todo['priority']
-    deadline: string
-    dueTime: string
-    repeat: RepeatType
-  }) {
+  function handleAddTodo(data: TodoFormData) {
     const newTodo: Todo = {
       id: crypto.randomUUID(),
       title: data.title,
@@ -161,7 +154,7 @@ function TodosPage() {
       category: data.category,
       priority: data.priority,
       deadline: data.deadline,
-      dueTime: data.dueTime,
+      dueTime: data.dueTime ?? '',
       completed: false,
       repeat: data.repeat,
       archived: false,

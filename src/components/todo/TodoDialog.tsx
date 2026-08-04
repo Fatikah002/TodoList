@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { TodoForm } from '@/components/todo/TodoForm'
-import type { Todo, RepeatType } from '@/lib/types'
+import type { TodoFormData } from '@/lib/schemas'
 
 type TodoDialogProps = {
   isOpen: boolean
@@ -16,27 +16,11 @@ type TodoDialogProps = {
   showPriority?: boolean
   showRepeat?: boolean
 
-  initialData?: {
-    title: string
-    detail: string
-    category: string
-    priority: Todo['priority']
-    deadline: string
-    dueTime: string
-    repeat: RepeatType
-  }
+  initialData?: TodoFormData
 
   submitLabel: string
 
-  onSubmit: (data: {
-    title: string
-    detail: string
-    category: string
-    priority: Todo['priority']
-    deadline: string
-    dueTime: string
-    repeat: RepeatType
-  }) => void
+  onSubmit: (data: TodoFormData) => void
 }
 
 export function TodoDialog({
