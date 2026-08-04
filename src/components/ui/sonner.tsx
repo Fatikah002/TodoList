@@ -29,9 +29,10 @@ const Toaster = ({ ...props }: SonnerToasterProps) => {
       }}
       toastOptions={{
         classNames: {
+          actionButton: "!bg-transparent !border !border-current !font-medium !text-current hover:!bg-current/10",
           success: "!bg-green-50 !text-green-700 !border-green-200",
           error: "!bg-red-50 !text-red-700 !border-red-200",
-          warning: "!bg-amber-50 !text-amber-700 !border-amber-200",
+          warning: "!bg-amber-50 !text-amber-700 !border-amber-200 [&_[data-action]]:!border-amber-500 [&_[data-action]]:!text-amber-700 [&_[data-action]]:hover:!border-amber-100",
           info: "!bg-blue-50 !text-blue-700 !border-blue-200",
         },
       }}

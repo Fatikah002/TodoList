@@ -141,13 +141,7 @@ function ArchivedPage() {
           <AlertDialogAction
             onClick={() => {
               deleteManyArchived(selectedIds)
-              toast.success(`${selectedIds.length} todo(s) deleted permanently`, {
-                style: {
-                  background: '#fee2e2',
-                  border: '1px solid #ef4444',
-                  color: '#b91c1c',
-                },
-              })
+              toast.error(`${selectedIds.length} todo(s) deleted permanently`)
               setSelectedIds([])
               setSelectMode(false)
               setShowBulkDelete(false)

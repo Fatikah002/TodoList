@@ -328,22 +328,10 @@ export function TodoItem({
               onClick={() => {
                 if (archivedView) {
                   onDeletePermanent?.(todo.id)
-                  toast.success('Todo deleted permanently', {
-                    style: {
-                      background: '#fee2e2',
-                      border: '1px solid #ef4444',
-                      color: '#b91c1c',
-                    },
-                  })
+                  toast.error('Todo deleted permanently')
                 } else {
                   onDelete(todo.id)
-                  toast.success('Todo deleted', {
-                    style: {
-                      background: '#fee2e2',
-                      border: '1px solid #ef4444',
-                      color: '#b91c1c',
-                    },
-                  })
+                  toast.error('Todo deleted')
                 }
                 setShowDelete(false)
               }}
@@ -367,19 +355,12 @@ export function TodoItem({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500"
+              className="bg-amber-400 text-amber-900 hover:bg-amber-500 focus:ring-amber-500"
               onClick={() => {
                 onArchive?.(todo.id)
-                toast.success('Todo archived', {
-                  style: {
-                    background: '#f3f4f6',
-                    border: '1px solid #9ca3af',
-                    color: '#4b5563',
-                  },
-                  actionButtonStyle: {
-                    background: 'transparent',
-                    border: '1px solid #9ca3af',
-                    color: '#4b5563',
+                toast.warning('Todo archived', {
+                  classNames: {
+                    toast: '!bg-amber-50 !text-amber-700 !border-amber-200',
                   },
                   action: {
                     label: 'Undo',
