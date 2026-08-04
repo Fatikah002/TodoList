@@ -11,6 +11,7 @@ import appCss from '../styles.css?url'
 import { MobileNavbar } from '@/components/layout/MobileNavbar'
 import { AppHeader } from '@/components/layout/AppHeader'
 import { TodosProvider } from '@/hooks/useTodos'
+import { ProfileProvider } from '@/hooks/useProfile'
 import { Toaster } from '@/components/ui/sonner'
 
 export const Route = createRootRoute({
@@ -53,18 +54,20 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <TodosProvider>
-          <TooltipProvider>
-            <SidebarProvider>
-              <AppSidebar />
-              <SidebarInset className="flex min-h-screen flex-col">
-                <AppHeader title={pageTitle} className="hidden md:flex" />
-                <main className="flex-1 pb-24 md:pb-0">{children}</main>
-                <MobileNavbar />
-              </SidebarInset>
-            </SidebarProvider>
-          </TooltipProvider>
-        </TodosProvider>
+        <ProfileProvider>
+          <TodosProvider>
+            <TooltipProvider>
+              <SidebarProvider>
+                <AppSidebar />
+                <SidebarInset className="flex min-h-screen flex-col">
+                  <AppHeader title={pageTitle} className="hidden md:flex" />
+                  <main className="flex-1 pb-24 md:pb-0">{children}</main>
+                  <MobileNavbar />
+                </SidebarInset>
+              </SidebarProvider>
+            </TooltipProvider>
+          </TodosProvider>
+        </ProfileProvider>
         <Toaster richColors position="top-center" />
         <Scripts />
       </body>

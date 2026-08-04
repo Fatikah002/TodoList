@@ -1,11 +1,7 @@
 import { Bell } from 'lucide-react'
 import { SidebarTrigger } from '@/components/ui/sidebar'
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { UserAvatar } from '@/components/ui/user-avatar'
 
 type AppHeaderProps = {
   title?: string
@@ -39,10 +35,7 @@ export function AppHeader({ title, className }: AppHeaderProps) {
           <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500" />
         </Button>
 
-        <Avatar className="h-9 w-9">
-          <AvatarImage src="/avatar.png" />
-          <AvatarFallback>FS</AvatarFallback>
-        </Avatar>
+        <UserAvatar className="h-9 w-9" />
       </div>
     </header>
   )

@@ -1,12 +1,13 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { ArrowLeft, Camera, Eye, EyeOff, Trash2, X } from 'lucide-react'
 import { toast } from 'sonner'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { UserAvatar } from '@/components/ui/user-avatar'
+import { useProfile, DEFAULT_AVATAR } from '@/hooks/useProfile'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,39 +19,22 @@ export const Route = createFileRoute('/account/editAccount')({
   component: EditProfilePage,
 })
 
-const DEFAULT_AVATAR =
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200'
-
 function EditProfilePage() {
   const navigate = useNavigate()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { profile, updateProfile } = useProfile()
 
-  const [name, setName] = useState('Fatikah')
-  const [email, setEmail] = useState('fatikah@email.com')
+  const [name, setName] = useState(profile.name)
+  const [email, setEmail] = useState(profile.email)
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPasswordForm, setShowPasswordForm] = useState(false)
-  const [storedPassword, setStoredPassword] = useState('')
+  const storedPassword = profile.password
   const [currentPassword, setCurrentPassword] = useState('')
   const [showCurrent, setShowCurrent] = useState(false)
   const [showNew, setShowNew] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
-  const [avatar, setAvatar] = useState<string | null>(null)
-
-  useEffect(() => {
-    const storedProfile = localStorage.getItem('profile')
-    if (!storedProfile) return
-
-    try {
-      const profile = JSON.parse(storedProfile)
-      setName(profile.name ?? 'Fatikah')
-      setEmail(profile.email ?? 'fatikah@email.com')
-      setStoredPassword(profile.password ?? '')
-      setAvatar(profile.avatar ?? DEFAULT_AVATAR)
-    } catch {
-      localStorage.removeItem('profile')
-    }
-  }, [])
+  const [avatar, setAvatar] = useState<string | null>(profile.avatar)
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -105,15 +89,12 @@ function EditProfilePage() {
     }
 
     const promise = new Promise<void>((resolve) => {
-      localStorage.setItem(
-        'profile',
-        JSON.stringify({
-          name,
-          email,
-          password: finalPassword,
-          avatar,
-        }),
-      )
+      updateProfile({
+        name,
+        email,
+        password: finalPassword,
+        avatar: avatar ?? DEFAULT_AVATAR,
+      })
       setTimeout(resolve, 300)
     })
 
@@ -147,15 +128,11 @@ function EditProfilePage() {
       <div className="space-y-8 md:space-y-10">
         <section className="flex flex-col items-center gap-5  py-6 sm:flex-row sm:justify-between">
             <div className="flex flex-col items-center gap-4 sm:flex-row">
-              <Avatar className="h-20 w-20 border-2 border-white shadow-md">
-                <AvatarImage
-                  src={avatar ?? undefined}
-                  alt={`${name}'s profile`}
-                />
-                <AvatarFallback>
-                  {name.charAt(0).toUpperCase() || 'F'}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar
+                src={avatar}
+                name={name}
+                className="h-20 w-20 border-1 border-gray shadow-md bg-gray-300"
+              />
               <div className="text-center sm:text-left">
                 <h3 className="font-semibold text-gray-900">Profile Photo</h3>
                 <p className="mt-0.5 text-sm text-gray-500">
@@ -200,13 +177,13 @@ function EditProfilePage() {
         <section className="grid gap-5 sm:grid-cols-2">
             <div className="space-y-2">
               <Label
-                htmlFor="full-name"
+                htmlFor="username"
                 className="text-sm font-medium text-gray-900"
               >
-                Full Name
+                Username
               </Label>
               <Input
-                id="full-name"
+                id="username"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="h-11 rounded-xl border-gray-200 focus:border-green-600 focus:ring-green-600/20"
