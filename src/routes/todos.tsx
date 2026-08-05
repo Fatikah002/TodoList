@@ -7,6 +7,8 @@ import { TodosHeader } from '@/components/todo/TodosHeader'
 import { TodosSearchBar } from '@/components/todo/TodosSearchBar'
 import { BulkDeleteDialog } from '@/components/todo/BulkDeleteDialog'
 import { HorizontalCalendar } from '@/components/dashboard/HorizontalCalendar'
+import { StatsGrid } from '@/components/dashboard/StatsGrid'
+import { calculateTodoStats } from '@/lib/todoStats'
 import { useFilteredTodos } from '@/hooks/useFilteredTodos'
 import { toast } from 'sonner'
 import { TodoDialog } from '@/components/todo/TodoDialog'
@@ -79,6 +81,8 @@ function TodosPage() {
     setSelectMode(false)
     setShowBulkDelete(false)
   }
+
+  const stats = calculateTodoStats(todos, { selectedDate, showAllTasks })
 
   return (
     <div className="flex flex-1 flex-col">
@@ -158,6 +162,10 @@ function TodosPage() {
               count={selectedIds.length}
               onConfirm={handleBulkDelete}
             />
+          </div>
+
+          <div className="order-1 w-full space-y-4 xl:order-2 xl:sticky xl:top-24 xl:h-fit">
+            <StatsGrid stats={stats} showTotal={false} />
           </div>
         </div>
       </main>

@@ -76,10 +76,10 @@ export function DailyProgress({
               </p>
             )}
 
-            <div className="mt-4 flex justify-between">
+            <div className="mt-3 flex justify-around gap-2">
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <p className={`text-lg font-bold ${stat.color}`}>
+                  <p className={`text-lg font-bold leading-tight ${stat.color}`}>
                     {stat.count}
                   </p>
                   <p className="text-xs text-gray-500">{stat.label}</p>

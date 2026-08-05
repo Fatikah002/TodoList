@@ -1,7 +1,8 @@
 ﻿import { createFileRoute } from '@tanstack/react-router'
 import { useTodos } from '@/hooks/useTodos'
 import { useProfile } from '@/hooks/useProfile'
-import { isSameDay, isOverdue, formatLocalDate } from '@/lib/date'
+import { isSameDay, formatLocalDate } from '@/lib/date'
+import { calculateTodoStats } from '@/lib/todoStats'
 import { CalendarDays } from 'lucide-react'
 import { startOfWeek, endOfWeek, isWithinInterval, format } from 'date-fns'
 import { StatsGrid } from '@/components/dashboard/StatsGrid'
@@ -37,16 +38,7 @@ function DashboardPage() {
     (todo) => isSameDay(todo.deadline, today) && !todo.completed,
   )
 
-  const completed = activeTodos.filter((todo) => todo.completed).length
-  const pending = activeTodos.filter(
-    (todo) =>
-      !todo.completed &&
-      !isOverdue(todo.completed, todo.deadline, todo.dueTime),
-  ).length
-  const overdue = activeTodos.filter((todo) =>
-    isOverdue(todo.completed, todo.deadline, todo.dueTime),
-  ).length
-  const total = activeTodos.length
+  const stats = calculateTodoStats(todos, { showAllTasks: true })
 
   const now = new Date()
   const weekStart = startOfWeek(now, { weekStartsOn: 1 })
@@ -100,12 +92,7 @@ function DashboardPage() {
       </div>
 
       {/* Overview */}
-      <StatsGrid
-        total={total}
-        completed={completed}
-        pending={pending}
-        overdue={overdue}
-      />
+      <StatsGrid stats={stats} showTotal={true} />
 
       {/* Sections */}
       <div className="mt-6 grid grid-cols-1 gap-3 pb-24 sm:grid-cols-3 sm:pb-0">
