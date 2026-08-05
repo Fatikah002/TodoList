@@ -1,46 +1,15 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+﻿import { createFileRoute } from '@tanstack/react-router'
 import { todosSearchSchema } from '@/lib/schemas'
 import type { Todo } from '@/lib/types'
 import type { TodoFormData } from '@/lib/schemas'
 import { TodoItem } from '@/components/todo/TodoItem'
-import { TodoFilter } from '@/components/todo/TodoFilter'
-import type {
-  SortBy,
-  StatusFilter,
-  PriorityFilter,
-} from '@/components/todo/TodoFilter'
+import { TodosHeader } from '@/components/todo/TodosHeader'
+import { TodosSearchBar } from '@/components/todo/TodosSearchBar'
+import { BulkDeleteDialog } from '@/components/todo/BulkDeleteDialog'
 import { HorizontalCalendar } from '@/components/dashboard/HorizontalCalendar'
-import { Button } from '@/components/ui/button'
-import { useTodos } from '@/hooks/useTodos'
-import { useState, useMemo } from 'react'
+import { useFilteredTodos } from '@/hooks/useFilteredTodos'
 import { toast } from 'sonner'
-import {
-  Plus,
-  X,
-  Search,
-  ChevronDown,
-  Check,
-  SquareCheckBig,
-} from 'lucide-react'
-import { formatLocalDate, isSameDay, isOverdue } from '@/lib/date'
 import { TodoDialog } from '@/components/todo/TodoDialog'
-import { Input } from '@/components/ui/input'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
 
 export const Route = createFileRoute('/todos')({
   component: TodosPage,
@@ -48,9 +17,9 @@ export const Route = createFileRoute('/todos')({
 })
 
 function TodosPage() {
-  const navigate = useNavigate()
   const { view } = Route.useSearch()
   const showAllTasks = view === 'all'
+
   const {
     todos,
     addTodo,
@@ -59,90 +28,31 @@ function TodosPage() {
     toggleTodo,
     updateTodo,
     archiveTodo,
-  } = useTodos()
-  const [showForm, setShowForm] = useState(false)
-  const [search, setSearch] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('All')
-  const [selectedDate, setSelectedDate] = useState(formatLocalDate(new Date()))
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
-  const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('all')
-  const [sortBy, setSortBy] = useState<SortBy>('none')
-  const [selectMode, setSelectMode] = useState(false)
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [showBulkDelete, setShowBulkDelete] = useState(false)
-
-  const activeTodos = todos.filter((todo) => !todo.archived)
-  const categories = Array.from(
-    new Set(activeTodos.map((todo) => todo.category)),
-  )
-
-  const isFilterActive =
-    statusFilter !== 'all' ||
-    priorityFilter !== 'all' ||
-    selectedCategory !== 'All' ||
-    sortBy !== 'none'
-
-  const filteredTodos = useMemo(() => {
-      const result = [...activeTodos].filter((todo) => {
-      const keyword = search.trim().toLowerCase()
-
-      const matchesSearch =
-        keyword === '' ||
-        todo.title.toLowerCase().includes(keyword) ||
-        todo.detail.toLowerCase().includes(keyword) ||
-        todo.category.toLowerCase().includes(keyword) ||
-        todo.priority.toLowerCase().includes(keyword)
-
-      const matchesCategory =
-        selectedCategory === 'All' || todo.category === selectedCategory
-
-      const todoIsOverdue = isOverdue(todo.completed, todo.deadline, todo.dueTime)
-
-      const matchesStatus =
-        statusFilter === 'all' ||
-        (statusFilter === 'completed' && todo.completed) ||
-        (statusFilter === 'pending' && !todo.completed) ||
-        (statusFilter === 'overdue' && todoIsOverdue)
-
-      const matchesPriority =
-        priorityFilter === 'all' || todo.priority === priorityFilter
-
-      const matchesDate = showAllTasks || isSameDay(todo.deadline, selectedDate)
-
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesStatus &&
-        matchesPriority &&
-        (isFilterActive || matchesDate)
-      )
-    })
-
-    if (sortBy !== 'none') {
-      result.sort((a, b) => {
-        switch (sortBy) {
-          case 'deadline':
-            return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-
-          case 'priority': {
-            const priorityOrder = {
-              High: 3,
-              Medium: 2,
-              Low: 1,
-              None: 0,
-            }
-
-            return priorityOrder[b.priority] - priorityOrder[a.priority]
-          }
-
-          case 'name':
-            return a.title.localeCompare(b.title)
-        }
-      })
-    }
-
-    return result
-  }, [activeTodos, search, selectedCategory, statusFilter, priorityFilter, sortBy, showAllTasks, selectedDate, isFilterActive])
+    showForm,
+    setShowForm,
+    search,
+    setSearch,
+    selectedCategory,
+    setSelectedCategory,
+    selectedDate,
+    setSelectedDate,
+    statusFilter,
+    setStatusFilter,
+    priorityFilter,
+    setPriorityFilter,
+    sortBy,
+    setSortBy,
+    selectMode,
+    setSelectMode,
+    selectedIds,
+    setSelectedIds,
+    showBulkDelete,
+    setShowBulkDelete,
+    categories,
+    filteredTodos,
+    toggleSelect,
+    cancelSelectMode,
+  } = useFilteredTodos(showAllTasks)
 
   function handleAddTodo(data: TodoFormData) {
     const newTodo: Todo = {
@@ -162,75 +72,25 @@ function TodosPage() {
     toast.success('Todo added successfully!')
   }
 
+  function handleBulkDelete() {
+    deleteMany(selectedIds)
+    toast.error(`${selectedIds.length} todo(s) deleted`)
+    setSelectedIds([])
+    setSelectMode(false)
+    setShowBulkDelete(false)
+  }
+
   return (
     <div className="flex flex-1 flex-col">
       <main className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6 lg:px-8">
         <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_340px]">
           <div className="order-2 w-full space-y-4 lg:space-y-6 xl:order-1">
-            <div className="flex items-center justify-between">
-              <DropdownMenu>
-                <DropdownMenuTrigger className="focus:outline-none">
-                  <div className="flex items-center gap-1.5 cursor-pointer text-lg font-bold text-gray-900 transition-colors">
-                    <h2>{showAllTasks ? 'All Tasks' : 'Today'}</h2>
-                    <ChevronDown className="h-5 w-5 text-gray-900 mt-1 " />
-                  </div>
-                </DropdownMenuTrigger>
+            <TodosHeader
+              showAllTasks={showAllTasks}
+              showForm={showForm}
+              onToggleForm={() => setShowForm(!showForm)}
+            />
 
-                <DropdownMenuContent
-                  align="start"
-                  className="w-40 rounded-2xl p-1.5 shadow-md"
-                >
-                  <DropdownMenuItem
-                    onClick={() =>
-                      navigate({ to: '/todos', search: { view: 'today' } })
-                    }
-                    className={`flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium cursor-pointer ${
-                      !showAllTasks
-                        ? 'bg-green-50 text-green-700 font-semibold'
-                        : ''
-                    }`}
-                  >
-                    <span>Today</span>
-                    {!showAllTasks && (
-                      <Check className="h-4 w-4 text-green-300" />
-                    )}
-                  </DropdownMenuItem>
-
-                  <DropdownMenuItem
-                    onClick={() =>
-                      navigate({ to: '/todos', search: { view: 'all' } })
-                    }
-                    className={`flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium cursor-pointer ${
-                      showAllTasks
-                        ? 'bg-green-50 text-green-700 font-semibold'
-                        : ''
-                    }`}
-                  >
-                    <span>All Tasks</span>
-                    {showAllTasks && (
-                      <Check className="h-4 w-4 text-green-300" />
-                    )}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <div className="flex items-center gap-2">
-                <Button
-                  onClick={() => setShowForm(!showForm)}
-                  className="h-9 w-18 rounded-full bg-green-600 hover:bg-green-700"
-                >
-                  {showForm ? (
-                    <X size={18} />
-                  ) : (
-                    <>
-                      <Plus size={18} /> <span>Add</span>
-                    </>
-                  )}
-                </Button>
-              </div>
-            </div>
-
-            {/* Calendar */}
             <HorizontalCalendar
               selectedDate={selectedDate}
               onDateChange={setSelectedDate}
@@ -238,74 +98,24 @@ function TodosPage() {
               showAllTasks={showAllTasks}
             />
 
-            {/* Search / Select bar */}
-            {selectMode ? (
-              <div className="flex items-center justify-between gap-3">
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    setSelectMode(false)
-                    setSelectedIds([])
-                  }}
-                >
-                  Cancel
-                </Button>
-
-                <p className="text-sm font-medium text-muted-foreground">
-                  {selectedIds.length} item selected
-                </p>
-
-                <Button
-                  variant="destructive"
-                  disabled={selectedIds.length === 0}
-                  onClick={() => setShowBulkDelete(true)}
-                >
-                  Delete
-                </Button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-
-                  <Input
-                    placeholder="Search todo..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="h-11 rounded-xl pl-10 pr-10"
-                  />
-
-                  {search && (
-                    <button
-                      onClick={() => setSearch('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2"
-                    >
-                      <X className="h-4 w-4 text-muted-foreground" />
-                    </button>
-                  )}
-                </div>
-
-                <TodoFilter
-                  statusFilter={statusFilter}
-                  onStatusChange={setStatusFilter}
-                  priorityFilter={priorityFilter}
-                  onPriorityChange={setPriorityFilter}
-                  sortBy={sortBy}
-                  onSortChange={setSortBy}
-                  selectedCategory={selectedCategory}
-                  onCategoryChange={setSelectedCategory}
-                  categories={categories}
-                />
-
-                <Button
-                  variant="outline"
-                  onClick={() => setSelectMode(true)}
-                  className="h-11 gap-1.5 rounded-xl px-3"
-                >
-                  <SquareCheckBig size={16} />
-                </Button>
-              </div>
-            )}
+            <TodosSearchBar
+              search={search}
+              onSearchChange={setSearch}
+              selectMode={selectMode}
+              onCancelSelect={cancelSelectMode}
+              onEnterSelectMode={() => setSelectMode(true)}
+              selectedCount={selectedIds.length}
+              onDeleteSelected={() => setShowBulkDelete(true)}
+              statusFilter={statusFilter}
+              onStatusChange={setStatusFilter}
+              priorityFilter={priorityFilter}
+              onPriorityChange={setPriorityFilter}
+              sortBy={sortBy}
+              onSortChange={setSortBy}
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+              categories={categories}
+            />
 
             {showForm && (
               <TodoDialog
@@ -336,44 +146,18 @@ function TodosPage() {
                     onUndoArchive={updateTodo}
                     selectMode={selectMode}
                     isSelected={selectedIds.includes(todo.id)}
-                    onToggleSelect={(id) =>
-                      setSelectedIds((prev) =>
-                        prev.includes(id)
-                          ? prev.filter((x) => x !== id)
-                          : [...prev, id],
-                      )
-                    }
+                    onToggleSelect={toggleSelect}
                   />
                 ))
               )}
             </div>
 
-            <AlertDialog open={showBulkDelete} onOpenChange={setShowBulkDelete}>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete Todo</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to delete {selectedIds.length}{' '}
-                    selected item(s)?
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => {
-                      deleteMany(selectedIds)
-                      toast.error(`${selectedIds.length} todo(s) deleted`)
-                      setSelectedIds([])
-                      setSelectMode(false)
-                      setShowBulkDelete(false)
-                    }}
-                  >
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <BulkDeleteDialog
+              open={showBulkDelete}
+              onOpenChange={setShowBulkDelete}
+              count={selectedIds.length}
+              onConfirm={handleBulkDelete}
+            />
           </div>
         </div>
       </main>
