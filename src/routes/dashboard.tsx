@@ -1,8 +1,9 @@
-﻿import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useTodos } from '@/hooks/useTodos'
 import { useProfile } from '@/hooks/useProfile'
 import { isSameDay, formatLocalDate } from '@/lib/date'
 import { calculateTodoStats } from '@/lib/todoStats'
+import { getUpcomingTodos } from '@/lib/upcomingTasks'
 import { CalendarDays } from 'lucide-react'
 import { startOfWeek, endOfWeek, isWithinInterval, format } from 'date-fns'
 import { StatsGrid } from '@/components/dashboard/StatsGrid'
@@ -52,22 +53,7 @@ function DashboardPage() {
   const weeklyPct =
     weeklyTotal === 0 ? 0 : Math.round((weeklyCompleted / weeklyTotal) * 100)
 
-  const upcomingTodos = activeTodos
-    .filter((todo) => {
-      if (todo.completed) return false
-      const d = new Date(todo.deadline)
-      const tomorrow = new Date(now)
-      tomorrow.setDate(tomorrow.getDate() + 1)
-      tomorrow.setHours(0, 0, 0, 0)
-      const nextWeek = new Date(now)
-      nextWeek.setDate(nextWeek.getDate() + 8)
-      nextWeek.setHours(0, 0, 0, 0)
-      return d >= tomorrow && d < nextWeek
-    })
-    .sort(
-      (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
-    )
-    .slice(0, 5)
+  const upcomingTodos = getUpcomingTodos(todos)
 
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6 lg:px-8">

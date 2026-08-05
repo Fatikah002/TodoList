@@ -1,4 +1,4 @@
-﻿import { Link } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
 import { format } from 'date-fns'
 import type { Todo } from '@/lib/types'
@@ -9,7 +9,7 @@ type UpcomingTasksSectionProps = {
 
 export function UpcomingTasksSection({ todos }: UpcomingTasksSectionProps) {
   return (
-    <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md flex h-[200px] flex-col">
+    <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md flex min-h-[200px] flex-col">
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-sm font-semibold text-gray-900 sm:text-base">
           Upcoming Tasks

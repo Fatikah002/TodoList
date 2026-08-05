@@ -1,4 +1,4 @@
-﻿import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { todosSearchSchema } from '@/lib/schemas'
 import type { Todo } from '@/lib/types'
 import type { TodoFormData } from '@/lib/schemas'
@@ -8,7 +8,9 @@ import { TodosSearchBar } from '@/components/todo/TodosSearchBar'
 import { BulkDeleteDialog } from '@/components/todo/BulkDeleteDialog'
 import { HorizontalCalendar } from '@/components/dashboard/HorizontalCalendar'
 import { StatsGrid } from '@/components/dashboard/StatsGrid'
+import { UpcomingTasksSection } from '@/components/dashboard/UpcomingTasksSection'
 import { calculateTodoStats } from '@/lib/todoStats'
+import { getUpcomingTodos } from '@/lib/upcomingTasks'
 import { useFilteredTodos } from '@/hooks/useFilteredTodos'
 import { toast } from 'sonner'
 import { TodoDialog } from '@/components/todo/TodoDialog'
@@ -83,6 +85,7 @@ function TodosPage() {
   }
 
   const stats = calculateTodoStats(todos, { selectedDate, showAllTasks })
+  const upcomingTodos = getUpcomingTodos(todos)
 
   return (
     <div className="flex flex-1 flex-col">
@@ -166,6 +169,7 @@ function TodosPage() {
 
           <div className="order-1 w-full space-y-4 xl:order-2 xl:sticky xl:top-24 xl:h-fit">
             <StatsGrid stats={stats} showTotal={false} />
+            <UpcomingTasksSection todos={upcomingTodos} />
           </div>
         </div>
       </main>
