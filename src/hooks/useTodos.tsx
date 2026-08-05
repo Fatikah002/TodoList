@@ -11,7 +11,6 @@ type TodosContextType = {
   toggleTodo: (id: string) => void
   updateTodo: (updatedTodo: Todo) => void
   archiveTodo: (id: string) => void
-  archiveMany: (ids: string[]) => void
   restoreTodo: (id: string) => void
   deletePermanently: (id: string) => void
   deleteManyArchived: (ids: string[]) => void
@@ -90,14 +89,6 @@ export function TodosProvider({ children }: { children: ReactNode }) {
     )
   }
 
-  function archiveMany(ids: string[]) {
-    setTodos((prev) =>
-      prev.map((todo) =>
-        ids.includes(todo.id) ? { ...todo, archived: true } : todo,
-      ),
-    )
-  }
-
   function restoreTodo(id: string) {
     setTodos((prev) =>
       prev.map((todo) =>
@@ -124,7 +115,6 @@ export function TodosProvider({ children }: { children: ReactNode }) {
         toggleTodo,
         updateTodo,
         archiveTodo,
-        archiveMany,
         restoreTodo,
         deletePermanently,
         deleteManyArchived,
