@@ -136,8 +136,6 @@ export function TodoFilter({
         }
       >
         <SlidersHorizontal className="h-4 w-4" />
-
-       
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-64 p-0 rounded-2xl">
