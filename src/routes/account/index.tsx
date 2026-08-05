@@ -19,12 +19,8 @@ function RouteComponent() {
       <div className="flex flex-col items-center gap-4 rounded-2xl border border-gray-200  p-6 shadow-md backdrop-blur">
         <UserAvatar className="size-20 border-1 border-gray shadow-md bg-gray-300" />
         <div className="text-center">
-          <h1 className="text-xl font-bold text-gray-900">
-            {profile.name}
-          </h1>
-          <p className="text-sm text-gray-500">
-            {profile.email}
-          </p>
+          <h1 className="text-xl font-bold text-gray-900">{profile.name}</h1>
+          <p className="text-sm text-gray-500">{profile.email}</p>
         </div>
       </div>
 
@@ -38,9 +34,7 @@ function RouteComponent() {
             <div className="flex h-9 w-9 items-center justify-center">
               <User className="h-5 w-5 text-green-600" />
             </div>
-            <span className="flex-1 text-sm font-medium ">
-              Edit Profile
-            </span>
+            <span className="flex-1 text-sm font-medium ">Edit Profile</span>
             <ChevronRight className="h-4 w-4 text-green-600" />
           </button>
 
@@ -48,9 +42,7 @@ function RouteComponent() {
             <div className="flex h-9 w-9 items-center justify-center">
               <Settings className="h-5 w-5 text-green-600" />
             </div>
-            <span className="flex-1 text-sm font-medium">
-              Settings
-            </span>
+            <span className="flex-1 text-sm font-medium">Settings</span>
             <ChevronRight className="h-4 w-4 " />
           </button>
         </CardContent>

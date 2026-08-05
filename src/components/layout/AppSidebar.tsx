@@ -66,8 +66,7 @@ export function AppSidebar() {
                   onClick={() =>
                     navigate({
                       to: item.to,
-                      ...(item.search ? 
-                        { search: item.search } : {}),
+                      ...(item.search ? { search: item.search } : {}),
                     })
                   }
                 />

@@ -13,4 +13,3 @@ export type Todo = {
   repeat: RepeatType
   archived: boolean
 }
-

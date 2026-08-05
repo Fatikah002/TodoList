@@ -1,8 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-import {
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from '@/components/ui/sidebar'
+import { SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
 
 type SidebarNavItemProps = {
   icon: LucideIcon
@@ -45,9 +42,7 @@ export function SidebarNavItem({
       >
         <Icon className="h-5 w-5 shrink-0" />
 
-        <span className="group-data-[collapsible=icon]:hidden">
-          {label}
-        </span>
+        <span className="group-data-[collapsible=icon]:hidden">{label}</span>
       </SidebarMenuButton>
     </SidebarMenuItem>
   )

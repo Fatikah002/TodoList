@@ -3,7 +3,10 @@ type CircularProgressProps = {
   className?: string
 }
 
-export function CircularProgress({ percentage, className = 'h-[110px] w-[110px]' }: CircularProgressProps) {
+export function CircularProgress({
+  percentage,
+  className = 'h-[110px] w-[110px]',
+}: CircularProgressProps) {
   const radius = 45
   const stroke = 10
 

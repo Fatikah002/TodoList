@@ -19,7 +19,8 @@ export function MobileNavbar() {
   return (
     <nav
       className=" fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around h-16 border-t bg-white px-3 
-      backdrop-blur-md shadow-[0_-2px_10px_rgba(0,0,0,0.05)] md:hidden" >
+      backdrop-blur-md shadow-[0_-2px_10px_rgba(0,0,0,0.05)] md:hidden"
+    >
       {navigationItems.map((item) => {
         const Icon = item.icon
 

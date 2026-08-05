@@ -30,7 +30,9 @@ export function DailyProgress({
   ).length
 
   const pending = scopedTodos.filter(
-    (todo) => !todo.completed && !isOverdue(todo.completed, todo.deadline, todo.dueTime),
+    (todo) =>
+      !todo.completed &&
+      !isOverdue(todo.completed, todo.deadline, todo.dueTime),
   ).length
 
   const percentage = total === 0 ? 0 : Math.round((completed / total) * 100)

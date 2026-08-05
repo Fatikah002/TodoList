@@ -83,13 +83,18 @@ export function TodoDetailDialog({
 
             <div>
               <h4 className="font-medium">Deadline</h4>
-              <p>{todo.deadline}{todo.dueTime && ` ${todo.dueTime}`}</p>
+              <p>
+                {todo.deadline}
+                {todo.dueTime && ` ${todo.dueTime}`}
+              </p>
             </div>
 
-            { todo.repeat !== 'none' && (
+            {todo.repeat !== 'none' && (
               <div>
                 <h4 className="font-medium">Repeat</h4>
-                <p>{todo.repeat.charAt(0).toUpperCase() + todo.repeat.slice(1)}</p>
+                <p>
+                  {todo.repeat.charAt(0).toUpperCase() + todo.repeat.slice(1)}
+                </p>
               </div>
             )}
 

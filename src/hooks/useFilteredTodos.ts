@@ -31,8 +31,7 @@ export function useFilteredTodos(showAllTasks: boolean) {
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [selectedDate, setSelectedDate] = useState(formatLocalDate(new Date()))
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
-  const [priorityFilter, setPriorityFilter] =
-    useState<PriorityFilter>('all')
+  const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('all')
   const [sortBy, setSortBy] = useState<SortBy>('none')
   const [selectMode, setSelectMode] = useState(false)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -86,8 +85,7 @@ export function useFilteredTodos(showAllTasks: boolean) {
       const matchesPriority =
         priorityFilter === 'all' || todo.priority === priorityFilter
 
-      const matchesDate =
-        showAllTasks || isSameDay(todo.deadline, selectedDate)
+      const matchesDate = showAllTasks || isSameDay(todo.deadline, selectedDate)
 
       return (
         matchesSearch &&
@@ -102,15 +100,13 @@ export function useFilteredTodos(showAllTasks: boolean) {
       case 'deadline':
         result.sort(
           (a, b) =>
-            new Date(a.deadline).getTime() -
-            new Date(b.deadline).getTime(),
+            new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
         )
         break
 
       case 'priority':
         result.sort(
-          (a, b) =>
-            PRIORITY_ORDER[b.priority] - PRIORITY_ORDER[a.priority],
+          (a, b) => PRIORITY_ORDER[b.priority] - PRIORITY_ORDER[a.priority],
         )
         break
 

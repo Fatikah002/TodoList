@@ -13,8 +13,8 @@ type HorizontalCalendarProps = {
 export function HorizontalCalendar({
   selectedDate,
   onDateChange,
-  showAllTasks, 
-  todos
+  showAllTasks,
+  todos,
 }: HorizontalCalendarProps) {
   const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
@@ -92,7 +92,11 @@ export function HorizontalCalendar({
           {calendarDays.map((item) => {
             const isSelected = item.fullDate === selectedDate
 
-            const hasTodo = todos.some((todo) => todo.deadline === item.fullDate && (showAllTasks || !todo.completed))
+            const hasTodo = todos.some(
+              (todo) =>
+                todo.deadline === item.fullDate &&
+                (showAllTasks || !todo.completed),
+            )
             return (
               <button
                 key={item.fullDate}
@@ -105,9 +109,7 @@ export function HorizontalCalendar({
               >
                 <span
                   className={`text-xs sm:text-sm ${
-                    isSelected
-                      ? 'font-semibold text-gray-900'
-                      : 'text-gray-500'
+                    isSelected ? 'font-semibold text-gray-900' : 'text-gray-500'
                   }`}
                 >
                   {item.day}

@@ -298,7 +298,7 @@ export function TodoItem({
                 </span>
               </div>
             </div>
-          ):null}
+          ) : null}
         </CardContent>
       </Card>
 
@@ -364,7 +364,8 @@ export function TodoItem({
                   },
                   action: {
                     label: 'Undo',
-                    onClick: () => onUndoArchive?.({ ...todo, archived: false }),
+                    onClick: () =>
+                      onUndoArchive?.({ ...todo, archived: false }),
                   },
                 })
                 setShowArchive(false)

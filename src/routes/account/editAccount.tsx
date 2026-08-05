@@ -127,22 +127,20 @@ function EditProfilePage() {
 
       <div className="space-y-8 md:space-y-10">
         <section className="flex flex-col items-center gap-5  py-6 sm:flex-row sm:justify-between">
-            <div className="flex flex-col items-center gap-4 sm:flex-row">
-              <UserAvatar
-                src={avatar}
-                name={name}
-                className="h-20 w-20 border-1 border-gray shadow-md bg-gray-300"
-              />
-              <div className="text-center sm:text-left">
-                <h3 className="font-semibold text-gray-900">Profile Photo</h3>
-                <p className="mt-0.5 text-sm text-gray-500">
-                  Upload a new profile picture.
-                </p>
-                <p className="text-xs text-gray-500/60">
-                  JPG, PNG or WEBP
-                </p>
-              </div>
-              <input
+          <div className="flex flex-col items-center gap-4 sm:flex-row">
+            <UserAvatar
+              src={avatar}
+              name={name}
+              className="h-20 w-20 border-1 border-gray shadow-md bg-gray-300"
+            />
+            <div className="text-center sm:text-left">
+              <h3 className="font-semibold text-gray-900">Profile Photo</h3>
+              <p className="mt-0.5 text-sm text-gray-500">
+                Upload a new profile picture.
+              </p>
+              <p className="text-xs text-gray-500/60">JPG, PNG or WEBP</p>
+            </div>
+            <input
               ref={fileInputRef}
               hidden
               type="file"
@@ -171,148 +169,148 @@ function EditProfilePage() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            </div>
+          </div>
         </section>
 
         <section className="grid gap-5 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label
-                htmlFor="username"
-                className="text-sm font-medium text-gray-900"
-              >
-                Username
-              </Label>
-              <Input
-                id="username"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="h-11 rounded-xl border-gray-200 focus:border-green-600 focus:ring-green-600/20"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label
-                htmlFor="email"
-                className="text-sm font-medium text-gray-900"
-              >
-                Email Address
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-11 rounded-xl border-gray-200 focus:border-green-600 focus:ring-green-600/20"
-              />
-            </div>
+          <div className="space-y-2">
+            <Label
+              htmlFor="username"
+              className="text-sm font-medium text-gray-900"
+            >
+              Username
+            </Label>
+            <Input
+              id="username"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="h-11 rounded-xl border-gray-200 focus:border-green-600 focus:ring-green-600/20"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label
+              htmlFor="email"
+              className="text-sm font-medium text-gray-900"
+            >
+              Email Address
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="h-11 rounded-xl border-gray-200 focus:border-green-600 focus:ring-green-600/20"
+            />
+          </div>
         </section>
 
         <section className="space-y-3">
-            <Label className="text-sm font-medium text-gray-900">Password</Label>
+          <Label className="text-sm font-medium text-gray-900">Password</Label>
 
-            {showPasswordForm ? (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-gray-500">
-                    {storedPassword ? 'Update your password.' : 'Set a password for your account.'}
-                  </p>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleCancelPasswordChange}
+          {showPasswordForm ? (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-gray-500">
+                  {storedPassword
+                    ? 'Update your password.'
+                    : 'Set a password for your account.'}
+                </p>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleCancelPasswordChange}
                   className="h-8 gap-1.5 px-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              {storedPassword && (
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-900">
+                    Current Password
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      type={showCurrent ? 'text' : 'password'}
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      className="h-11 rounded-xl border-gray-200 pr-10 focus:border-green-600 focus:ring-green-600/20"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowCurrent(!showCurrent)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600"
+                    >
+                      {showCurrent ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-900">
+                  {storedPassword ? 'New Password' : 'Password'}
+                </Label>
+                <div className="relative">
+                  <Input
+                    type={showNew ? 'text' : 'password'}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="h-11 rounded-xl border-gray-200 pr-10 focus:border-green-600 focus:ring-green-600/20"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNew(!showNew)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600"
                   >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-                {storedPassword && (
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-900">
-                      Current Password
-                    </Label>
-                    <div className="relative">
-                      <Input
-                        type={showCurrent ? 'text' : 'password'}
-                        value={currentPassword}
-                        onChange={(e) => setCurrentPassword(e.target.value)}
-                        className="h-11 rounded-xl border-gray-200 pr-10 focus:border-green-600 focus:ring-green-600/20"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowCurrent(!showCurrent)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600"
-                      >
-                        {showCurrent ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-900">
-                    {storedPassword ? 'New Password' : 'Password'}
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      type={showNew ? 'text' : 'password'}
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      className="h-11 rounded-xl border-gray-200 pr-10 focus:border-green-600 focus:ring-green-600/20"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowNew(!showNew)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600"
-                    >
-                      {showNew ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-900">
-                    {storedPassword
-                      ? 'Confirm New Password'
-                      : 'Confirm Password'}
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      type={showConfirm ? 'text' : 'password'}
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="h-11 rounded-xl border-gray-200 pr-10 focus:border-green-600 focus:ring-green-600/20"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirm(!showConfirm)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600"
-                    >
-                      {showConfirm ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </button>
-                  </div>
+                    {showNew ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
                 </div>
               </div>
-            ) : (
-              <Button
-                variant="outline"
-                onClick={() => setShowPasswordForm(true)}
-                className="rounded-lg border border-green-300 bg-white px-4 text-sm font-medium text-green-600 hover:bg-green-50"
-              >
-                {storedPassword ? 'Change password' : 'Set password'}
-              </Button>
-            )}
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-900">
+                  {storedPassword ? 'Confirm New Password' : 'Confirm Password'}
+                </Label>
+                <div className="relative">
+                  <Input
+                    type={showConfirm ? 'text' : 'password'}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="h-11 rounded-xl border-gray-200 pr-10 focus:border-green-600 focus:ring-green-600/20"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirm(!showConfirm)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600"
+                  >
+                    {showConfirm ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <Button
+              variant="outline"
+              onClick={() => setShowPasswordForm(true)}
+              className="rounded-lg border border-green-300 bg-white px-4 text-sm font-medium text-green-600 hover:bg-green-50"
+            >
+              {storedPassword ? 'Change password' : 'Set password'}
+            </Button>
+          )}
         </section>
 
         <div className="flex justify-end gap-3  pt-6">

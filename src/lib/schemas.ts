@@ -25,7 +25,7 @@ export const todoSchema = z.object({
     .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Time format HH:MM')
     .optional()
     .or(z.literal('')),
-  repeat: z.enum(['none', 'daily', 'weekly', 'monthly']) 
+  repeat: z.enum(['none', 'daily', 'weekly', 'monthly']),
 })
 
 export type TodoFormData = z.infer<typeof todoSchema>
@@ -51,5 +51,3 @@ export const todoFieldValidators = {
 export const todosSearchSchema = z.object({
   view: z.enum(['today', 'all']).optional().default('today'),
 })
-
-
