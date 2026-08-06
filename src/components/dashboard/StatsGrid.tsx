@@ -56,7 +56,7 @@ export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
     },
   ]
 
-  const gridCols = showTotal ? 'grid-cols-4' : 'grid-cols-3'
+  const gridCols = showTotal ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3'
 
   if (!showTotal) {
     return (
@@ -88,24 +88,24 @@ export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
         Overview
       </h2>
 
-      <div className={`mt-3 grid ${gridCols} gap-3`}>
+      <div className={`mt-3 grid ${gridCols} gap-2.5 sm:gap-3`}>
         {statItems.map((stat) => {
           const Icon = stat.icon
 
           return (
             <div
               key={stat.label}
-              className="flex min-h-[115px] flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white p-3 shadow-sm transition-shadow hover:shadow-md sm:p-4"
+              className="flex min-h-[105px] flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white p-2.5 sm:p-4 shadow-sm transition-shadow hover:shadow-md"
             >
-              <div className={`flex h-10 w-10 items-center justify-center rounded-full sm:h-12 sm:w-12 ${stat.iconBackground}`}>
-                <Icon className={`h-5 w-5 sm:h-6 sm:w-6 ${stat.iconColor}`} />
+              <div className={`flex h-9 w-9 items-center justify-center rounded-full sm:h-12 sm:w-12 ${stat.iconBackground}`}>
+                <Icon className={`h-4 w-4 sm:h-6 sm:w-6 ${stat.iconColor}`} />
               </div>
 
-              <p className="mt-2 text-[10px] text-gray-500 sm:text-xs">
+              <p className="mt-1.5 text-[10px] text-gray-500 sm:text-xs text-center">
                 {stat.label}
               </p>
 
-              <p className="text-lg font-bold text-gray-900 sm:text-xl">
+              <p className="text-base font-bold text-gray-900 sm:text-xl">
                 {stat.value}
               </p>
             </div>

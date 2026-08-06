@@ -11,13 +11,13 @@ type AppHeaderProps = {
 export function AppHeader({ title, className }: AppHeaderProps) {
   return (
     <header
-      className={`hidden md:flex h-14 items-center justify-between border-b bg-background px-4 md:h-16 md:px-6 ${className ?? ''}`}
+      className={`sticky top-0 z-40 flex h-14 items-center justify-between border-b bg-background/95 backdrop-blur-md px-4 md:h-16 md:px-6 ${className ?? ''}`}
     >
       {/* Left */}
       <div className="flex items-center gap-3">
-        <SidebarTrigger className="hidden md:flex" />
+        <SidebarTrigger className="flex" />
 
-        {title && <h1 className="text-xl font-semibold">{title}</h1>}
+        {title && <h1 className="text-base font-semibold md:text-xl">{title}</h1>}
       </div>
 
       {/* Right */}
@@ -29,7 +29,7 @@ export function AppHeader({ title, className }: AppHeaderProps) {
           <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500" />
         </Button>
 
-        <UserAvatar className="h-9 w-9" />
+        <UserAvatar className="h-8 w-8 md:h-9 md:w-9" />
       </div>
     </header>
   )

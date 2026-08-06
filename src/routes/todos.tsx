@@ -1,14 +1,17 @@
+import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { todosSearchSchema } from '@/lib/schemas'
 import type { Todo } from '@/lib/types'
 import type { TodoFormData } from '@/lib/schemas'
 import { TodoItem } from '@/components/todo/TodoItem'
-import { TodosHeader } from '@/components/todo/TodosHeader'
+import { TodosHeader} from '@/components/todo/TodosHeader'
+import  type {  CalendarView } from '@/components/todo/TodosHeader'
 import { TodosSearchBar } from '@/components/todo/TodosSearchBar'
 import { BulkDeleteDialog } from '@/components/todo/BulkDeleteDialog'
 import { HorizontalCalendar } from '@/components/dashboard/HorizontalCalendar'
 import { StatsGrid } from '@/components/dashboard/StatsGrid'
 import { UpcomingTasksSection } from '@/components/dashboard/UpcomingTasksSection'
+import { MiniCalendar } from '@/components/dashboard/MiniCalendar'
 import { calculateTodoStats } from '@/lib/todoStats'
 import { getUpcomingTodos } from '@/lib/upcomingTasks'
 import { useFilteredTodos } from '@/hooks/useFilteredTodos'
@@ -23,6 +26,33 @@ export const Route = createFileRoute('/todos')({
 function TodosPage() {
   const { view } = Route.useSearch()
   const showAllTasks = view === 'all'
+
+  const [calendarView, setCalendarView] = useState<CalendarView>('day')
+  const [currentWeek, setCurrentWeek] = useState(new Date())
+
+  const handlePreviousNav = () => {
+    setCurrentWeek((prev) => {
+      const d = new Date(prev)
+      if (calendarView === 'day') {
+        d.setDate(d.getDate() - 7)
+      } else {
+        d.setMonth(d.getMonth() - 1)
+      }
+      return d
+    })
+  }
+
+  const handleNextNav = () => {
+    setCurrentWeek((prev) => {
+      const d = new Date(prev)
+      if (calendarView === 'day') {
+        d.setDate(d.getDate() + 7)
+      } else {
+        d.setMonth(d.getMonth() + 1)
+      }
+      return d
+    })
+  }
 
   const {
     todos,
@@ -96,14 +126,31 @@ function TodosPage() {
               showAllTasks={showAllTasks}
               showForm={showForm}
               onToggleForm={() => setShowForm(!showForm)}
+              calendarView={calendarView}
+              onCalendarViewChange={setCalendarView}
+              currentWeek={currentWeek}
+              onPreviousWeek={handlePreviousNav}
+              onNextWeek={handleNextNav}
             />
 
-            <HorizontalCalendar
-              selectedDate={selectedDate}
-              onDateChange={setSelectedDate}
-              todos={todos}
-              showAllTasks={showAllTasks}
-            />
+            {calendarView === 'day' ? (
+              <HorizontalCalendar
+                selectedDate={selectedDate}
+                onDateChange={setSelectedDate}
+                todos={todos}
+                showAllTasks={showAllTasks}
+                currentWeek={currentWeek}
+              />
+            ) : (
+              <MiniCalendar
+                selectedDate={selectedDate}
+                onDateChange={setSelectedDate}
+                todos={todos}
+                showAllTasks={showAllTasks}
+                month={currentWeek}
+                onMonthChange={setCurrentWeek}
+              />
+            )}
 
             <TodosSearchBar
               search={search}
@@ -167,7 +214,7 @@ function TodosPage() {
             />
           </div>
 
-          <div className="order-1 w-full space-y-4 xl:order-2 xl:sticky xl:top-24 xl:h-fit">
+          <div className="order-1 w-full space-y-4 xl:order-2">
             <StatsGrid stats={stats} showTotal={false} />
             <UpcomingTasksSection todos={upcomingTodos} />
           </div>

@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { formatLocalDate } from '@/lib/date'
 import type { Todo } from '@/lib/types'
 
@@ -8,6 +7,7 @@ type HorizontalCalendarProps = {
   onDateChange: (date: string) => void
   todos: Todo[]
   showAllTasks: boolean
+  currentWeek?: Date
 }
 
 export function HorizontalCalendar({
@@ -15,24 +15,12 @@ export function HorizontalCalendar({
   onDateChange,
   showAllTasks,
   todos,
+  currentWeek: externalWeek,
 }: HorizontalCalendarProps) {
   const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
-  const [currentWeek, setCurrentWeek] = useState(new Date())
-
-  const previousWeek = () => {
-    setCurrentWeek(
-      (prev) =>
-        new Date(prev.getFullYear(), prev.getMonth(), prev.getDate() - 7),
-    )
-  }
-
-  const nextWeek = () => {
-    setCurrentWeek(
-      (prev) =>
-        new Date(prev.getFullYear(), prev.getMonth(), prev.getDate() + 7),
-    )
-  }
+  const [internalWeek] = useState(new Date())
+  const currentWeek = externalWeek || internalWeek
 
   const calendarDays = useMemo(() => {
     const currentDay = currentWeek.getDay()
@@ -62,29 +50,7 @@ export function HorizontalCalendar({
 
   return (
     <div>
-      {/* Header */}
-      <div className="mb-5 flex items-center justify-between">
-        <button
-          onClick={previousWeek}
-          className="rounded-full p-2 transition hover:bg-gray-100"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-
-        <h2 className="text-lg font-semibold">
-          {currentWeek.toLocaleDateString('en-US', {
-            month: 'long',
-            year: 'numeric',
-          })}
-        </h2>
-
-        <button
-          onClick={nextWeek}
-          className="rounded-full p-2 transition hover:bg-gray-100"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
-      </div>
+      {/* Calendar Grid */}
 
       {/* Calendar */}
       <div className="overflow-x-hidden">
@@ -119,7 +85,7 @@ export function HorizontalCalendar({
                   className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold sm:h-10 sm:w-10 sm:text-sm ${
                     isSelected
                       ? 'bg-green-600 text-white'
-                      : hasTodo && showAllTasks
+                      : hasTodo
                         ? 'bg-green-600 text-white'
                         : 'bg-gray-100 text-gray-500'
                   }`}
