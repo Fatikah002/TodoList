@@ -18,6 +18,8 @@ import { useFilteredTodos } from '@/hooks/useFilteredTodos'
 import { toast } from 'sonner'
 import { TodoDialog } from '@/components/todo/TodoDialog'
 
+import { CategoryBreakdownSection } from '@/components/dashboard/CategoryBreakdownSection'
+
 export const Route = createFileRoute('/todos')({
   component: TodosPage,
   validateSearch: (search) => todosSearchSchema.parse(search),
@@ -120,8 +122,8 @@ function TodosPage() {
   return (
     <div className="flex flex-1 flex-col">
       <main className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_340px]">
-          <div className="order-2 w-full space-y-4 lg:space-y-6 xl:order-1">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_340px]">
+          <div className="order-2 w-full space-y-4 lg:space-y-6 lg:order-1">
             <TodosHeader
               showAllTasks={showAllTasks}
               showForm={showForm}
@@ -214,8 +216,13 @@ function TodosPage() {
             />
           </div>
 
-          <div className="order-1 w-full space-y-4 xl:order-2">
+          <div className="order-1 w-full space-y-4 lg:order-2">
             <StatsGrid stats={stats} showTotal={false} />
+            <CategoryBreakdownSection
+              todos={todos}
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
+            />
             <UpcomingTasksSection todos={upcomingTodos} />
           </div>
         </div>

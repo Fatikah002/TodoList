@@ -61,7 +61,7 @@ export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
   if (!showTotal) {
     return (
       <section className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
-        <h2 className="mb-2 text-sm font-semibold text-gray-700">
+         <h2 className="text-sm font-semibold text-gray-900 sm:text-base">
           Daily Summary
         </h2>
 
