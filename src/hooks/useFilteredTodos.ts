@@ -15,7 +15,17 @@ const PRIORITY_ORDER = {
   None: 0,
 } as const
 
-export function useFilteredTodos(showAllTasks: boolean) {
+type FilterInitialValues = {
+  status?: StatusFilter
+  priority?: PriorityFilter
+  category?: string
+  sort?: SortBy
+}
+
+export function useFilteredTodos(
+  showAllTasks: boolean,
+  initialValues?: FilterInitialValues,
+) {
   const {
     todos,
     addTodo,
@@ -28,11 +38,17 @@ export function useFilteredTodos(showAllTasks: boolean) {
 
   const [showForm, setShowForm] = useState(false)
   const [search, setSearch] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('All')
+  const [selectedCategory, setSelectedCategory] = useState(
+    initialValues?.category ?? 'All',
+  )
   const [selectedDate, setSelectedDate] = useState(formatLocalDate(new Date()))
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
-  const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('all')
-  const [sortBy, setSortBy] = useState<SortBy>('none')
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>(
+    initialValues?.status ?? 'all',
+  )
+  const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>(
+    initialValues?.priority ?? 'all',
+  )
+  const [sortBy, setSortBy] = useState<SortBy>(initialValues?.sort ?? 'none')
   const [selectMode, setSelectMode] = useState(false)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [showBulkDelete, setShowBulkDelete] = useState(false)

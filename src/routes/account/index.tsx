@@ -38,12 +38,15 @@ function RouteComponent() {
             <ChevronRight className="h-4 w-4 text-green-600" />
           </button>
 
-          <button className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-gray-100">
+          <button
+            onClick={() => navigate({ to: '/account/settings' })}
+            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-gray-100"
+          >
             <div className="flex h-9 w-9 items-center justify-center">
               <Settings className="h-5 w-5 text-green-600" />
             </div>
             <span className="flex-1 text-sm font-medium">Settings</span>
-            <ChevronRight className="h-4 w-4 " />
+            <ChevronRight className="h-4 w-4 text-green-600" />
           </button>
         </CardContent>
       </Card>

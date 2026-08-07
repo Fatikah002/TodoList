@@ -15,6 +15,8 @@ import { MiniCalendar } from '@/components/dashboard/MiniCalendar'
 import { calculateTodoStats } from '@/lib/todoStats'
 import { getUpcomingTodos } from '@/lib/upcomingTasks'
 import { useFilteredTodos } from '@/hooks/useFilteredTodos'
+import { QuickFilterBar } from '@/components/todo/QuickFilterBar'
+import type { StatusFilter, PriorityFilter, SortBy } from '@/components/todo/TodoFilter'
 import { toast } from 'sonner'
 import { TodoDialog } from '@/components/todo/TodoDialog'
 
@@ -26,7 +28,7 @@ export const Route = createFileRoute('/todos')({
 })
 
 function TodosPage() {
-  const { view } = Route.useSearch()
+  const { view, status, priority, category, sort } = Route.useSearch()
   const showAllTasks = view === 'all'
 
   const [calendarView, setCalendarView] = useState<CalendarView>('day')
@@ -88,7 +90,12 @@ function TodosPage() {
     filteredTodos,
     toggleSelect,
     cancelSelectMode,
-  } = useFilteredTodos(showAllTasks)
+  } = useFilteredTodos(showAllTasks, {
+    status: status as StatusFilter | undefined,
+    priority: priority as PriorityFilter | undefined,
+    category,
+    sort: sort as SortBy | undefined,
+  })
 
   function handleAddTodo(data: TodoFormData) {
     const newTodo: Todo = {
@@ -171,6 +178,17 @@ function TodosPage() {
               selectedCategory={selectedCategory}
               onCategoryChange={setSelectedCategory}
               categories={categories}
+            />
+
+            <QuickFilterBar
+              activeStatus={statusFilter}
+              activePriority={priorityFilter}
+              activeSort={sortBy}
+              onSelect={(f) => {
+                setStatusFilter(f.status)
+                setPriorityFilter(f.priority)
+                setSortBy(f.sort)
+              }}
             />
 
             {showForm && (
