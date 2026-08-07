@@ -3,14 +3,10 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import {
   ArrowLeft,
   SlidersHorizontal,
-  ListChecks,
   Bell,
-  Database,
-  User,
   Info,
-  
 } from 'lucide-react'
-import type  { LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -19,6 +15,7 @@ import {
   toggleQuickFilter,
 } from '@/lib/presets'
 import type { QuickFilter } from '@/lib/presets'
+import { AboutContent } from '@/components/settings/AboutContent'
 
 export const Route = createFileRoute('/account/settings')({
   component: RouteComponent,
@@ -132,7 +129,8 @@ function RouteComponent() {
                 onToggle={handleToggle}
               />
             )}
-            {activeTab !== 'quick-filters' && (
+            {activeTab === 'about' && <AboutContent />}
+            {activeTab !== 'quick-filters' && activeTab !== 'about' && (
               <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center text-gray-400">
                 Coming soon
               </div>
