@@ -1,4 +1,5 @@
 import { ListChecks, CheckCircle2, Clock, AlertTriangle } from 'lucide-react'
+import { StreakCard } from './StreakCard'
 
 export type TodoStats = {
   total: number
@@ -17,10 +18,11 @@ type Stat = {
 
 type StatsGridProps = {
   stats: TodoStats
+  streak?: number
   showTotal?: boolean
 }
 
-export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
+export function StatsGrid({ stats, streak = 0, showTotal = true }: StatsGridProps) {
   const statItems: Stat[] = [
     ...(showTotal
       ? [
@@ -56,7 +58,7 @@ export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
     },
   ]
 
-  const gridCols = showTotal ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3'
+  const gridCols = showTotal ? 'grid-cols-2 sm:grid-cols-5' : 'grid-cols-3'
 
   if (!showTotal) {
     return (
@@ -111,6 +113,8 @@ export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
             </div>
           )
         })}
+
+        <StreakCard streak={streak} />
       </div>
     </section>
   )

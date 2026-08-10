@@ -50,7 +50,13 @@ export function TodosProvider({ children }: { children: ReactNode }) {
 
     setTodos((prev) => {
       const updated = prev.map((t) =>
-        t.id === id ? { ...t, completed: newCompleted } : t,
+        t.id === id
+          ? {
+              ...t,
+              completed: newCompleted,
+              completedAt: newCompleted ? new Date().toISOString() : undefined,
+            }
+          : t,
       )
 
       if (!wasCompleted && newCompleted && todo.repeat !== 'none') {

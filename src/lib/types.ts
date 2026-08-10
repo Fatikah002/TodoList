@@ -10,6 +10,7 @@ export type Todo = {
   deadline: string
   dueTime: string
   completed: boolean
+  completedAt?: string
   repeat: RepeatType
   archived: boolean
 }

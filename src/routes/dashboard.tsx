@@ -3,6 +3,7 @@ import { useTodos } from '@/hooks/useTodos'
 import { useProfile } from '@/hooks/useProfile'
 import { isSameDay, formatLocalDate } from '@/lib/date'
 import { calculateTodoStats } from '@/lib/todoStats'
+import { calculateStreak } from '@/lib/streak'
 import { getUpcomingTodos } from '@/lib/upcomingTasks'
 import { CalendarDays } from 'lucide-react'
 import { startOfWeek, endOfWeek, isWithinInterval, format } from 'date-fns'
@@ -40,6 +41,7 @@ function DashboardPage() {
   )
 
   const stats = calculateTodoStats(todos, { showAllTasks: true })
+  const streak = calculateStreak(todos)
 
   const now = new Date()
   const weekStart = startOfWeek(now, { weekStartsOn: 1 })
@@ -78,7 +80,7 @@ function DashboardPage() {
       </div>
 
       {/* Overview */}
-      <StatsGrid stats={stats} showTotal={true} />
+      <StatsGrid stats={stats} streak={streak} showTotal={true} />
 
       {/* Sections */}
       <div className="mt-6 grid grid-cols-1 gap-3 pb-24 sm:grid-cols-3 sm:pb-0">
