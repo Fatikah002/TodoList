@@ -2,6 +2,7 @@ import { describe, it, expect, vi, afterEach } from 'vitest'
 import {
   calculateStreak,
   getUniqueCompletedDates,
+  getWeeklyActivity,
   formatLocalDate,
   subtractDays,
 } from './streak'
@@ -265,5 +266,72 @@ describe('calculateStreak', () => {
       })
     })
     expect(calculateStreak(todos)).toBe(7)
+  })
+})
+
+describe('getWeeklyActivity', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('returns 7 days with no completions when no todos completed', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 7, 10, 12, 0, 0))
+
+    const todos = [makeTodo({ completed: false })]
+    const result = getWeeklyActivity(todos)
+    expect(result).toHaveLength(7)
+    expect(result.every((d) => d.completed)).toBe(false)
+  })
+
+  it('marks today as completed when todo finished today', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 7, 10, 12, 0, 0))
+
+    const todos = [
+      makeTodo({
+        completed: true,
+        completedAt: '2026-08-10T09:00:00',
+      }),
+    ]
+    const result = getWeeklyActivity(todos)
+    const today = result.find((d) => d.completed)
+    expect(today).toBeDefined()
+    expect(today?.shortLabel).toBe('Mon')
+  })
+
+  it('marks correct days in the week', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 7, 10, 12, 0, 0))
+
+    const todos = [
+      makeTodo({
+        completed: true,
+        completedAt: '2026-08-11T09:00:00',
+      }),
+      makeTodo({
+        completed: true,
+        completedAt: '2026-08-13T09:00:00',
+      }),
+    ]
+    const result = getWeeklyActivity(todos)
+    const completedDays = result.filter((d) => d.completed)
+    expect(completedDays.map((d) => d.shortLabel)).toEqual(['Tue', 'Thu'])
+  })
+
+  it('returns correct day labels in order', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 7, 10, 12, 0, 0))
+
+    const result = getWeeklyActivity([])
+    expect(result.map((d) => d.shortLabel)).toEqual([
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+      'Sun',
+    ])
   })
 })

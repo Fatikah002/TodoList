@@ -54,3 +54,37 @@ export function calculateStreak(todos: Todo[]): number {
 
   return streak
 }
+
+type DayActivity = {
+  label: string
+  shortLabel: string
+  completed: boolean
+}
+
+export function getWeeklyActivity(todos: Todo[]): DayActivity[] {
+  const today = new Date()
+  const dayOfWeek = today.getDay()
+  const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
+
+  const uniqueDates = new Set(getUniqueCompletedDates(todos))
+
+  const dayLabels: { label: string; shortLabel: string }[] = [
+    { label: 'Monday', shortLabel: 'Mon' },
+    { label: 'Tuesday', shortLabel: 'Tue' },
+    { label: 'Wednesday', shortLabel: 'Wed' },
+    { label: 'Thursday', shortLabel: 'Thu' },
+    { label: 'Friday', shortLabel: 'Fri' },
+    { label: 'Saturday', shortLabel: 'Sat' },
+    { label: 'Sunday', shortLabel: 'Sun' },
+  ]
+
+  return dayLabels.map((day, i) => {
+    const date = new Date(today)
+    date.setDate(today.getDate() + mondayOffset + i)
+    return {
+      label: day.label,
+      shortLabel: day.shortLabel,
+      completed: uniqueDates.has(formatLocalDate(date)),
+    }
+  })
+}
