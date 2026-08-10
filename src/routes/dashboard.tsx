@@ -3,11 +3,12 @@ import { useTodos } from '@/hooks/useTodos'
 import { useProfile } from '@/hooks/useProfile'
 import { isSameDay, formatLocalDate } from '@/lib/date'
 import { calculateTodoStats } from '@/lib/todoStats'
-import { calculateStreak } from '@/lib/streak'
 import { getUpcomingTodos } from '@/lib/upcomingTasks'
 import { CalendarDays } from 'lucide-react'
 import { startOfWeek, endOfWeek, isWithinInterval, format } from 'date-fns'
 import { StatsGrid } from '@/components/dashboard/StatsGrid'
+import { StreakCard } from '@/components/dashboard/StreakCard'
+import { DailyGoalCard } from '@/components/dashboard/DailyGoalCard'
 import { TodayTasksSection } from '@/components/dashboard/TodayTasksSection'
 import { WeeklyProgressSection } from '@/components/dashboard/WeeklyProgressSection'
 import { UpcomingTasksSection } from '@/components/dashboard/UpcomingTasksSection'
@@ -41,7 +42,6 @@ function DashboardPage() {
   )
 
   const stats = calculateTodoStats(todos, { showAllTasks: true })
-  const streak = calculateStreak(todos)
 
   const now = new Date()
   const weekStart = startOfWeek(now, { weekStartsOn: 1 })
@@ -80,10 +80,16 @@ function DashboardPage() {
       </div>
 
       {/* Overview */}
-      <StatsGrid stats={stats} streak={streak} showTotal={true} />
+      <StatsGrid stats={stats} showTotal={true} />
+
+      {/* Streak & Daily Goal */}
+      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <StreakCard />
+        <DailyGoalCard />
+      </div>
 
       {/* Sections */}
-      <div className="mt-6 grid grid-cols-1 gap-3 pb-24 sm:grid-cols-3 sm:pb-0">
+      <div className="mt-3 grid grid-cols-1 gap-3 pb-24 sm:grid-cols-3 sm:pb-0">
         <TodayTasksSection todos={todayTodos} onToggleTodo={toggleTodo} />
 
         <WeeklyProgressSection
