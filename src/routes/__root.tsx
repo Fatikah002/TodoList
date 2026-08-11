@@ -13,6 +13,7 @@ import { AppHeader } from '@/components/layout/AppHeader'
 import { TodosProvider } from '@/hooks/useTodos'
 import { ProfileProvider } from '@/hooks/useProfile'
 import { Toaster } from '@/components/ui/sonner'
+import { GlobalAchievementNotifier } from '@/components/GlobalAchievementNotifier'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -47,7 +48,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       '/dashboard': 'Dashboard',
       '/todos': 'Tasks',
       '/archived': 'Archived',
+      '/account': 'Account',
+      '/account/achievements': 'Achievements',
+      '/account/achievement': 'Achievements',
+      '/account/settings': 'Settings',
+      '/account/editAccount': 'Edit Profile',
     }[pathname] ?? ''
+
   return (
     <html lang="en">
       <head>
@@ -56,13 +63,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <ProfileProvider>
           <TodosProvider>
+            <GlobalAchievementNotifier />
             <TooltipProvider>
               <SidebarProvider>
                 <AppSidebar />
                 <SidebarInset className="flex min-h-screen flex-col">
                   <AppHeader title={pageTitle} className="hidden md:flex" />
                   <main className="flex-1 pb-24 md:pb-0">{children}</main>
-                  <MobileNavbar />
+                  <MobileNavbar onAddTodo={() => {}} />
                 </SidebarInset>
               </SidebarProvider>
             </TooltipProvider>

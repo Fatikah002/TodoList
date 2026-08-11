@@ -2,10 +2,10 @@ import { useLocation, useNavigate } from '@tanstack/react-router'
 import { navigationItems } from '@/lib/navigation'
 
 interface MobileNavbarProps {
-  onAddTodo: () => void
+  onAddTodo?: () => void
 }
 
-export function MobileNavbar({ onAddTodo }: MobileNavbarProps) {
+export function MobileNavbar({ onAddTodo = () => {} }: MobileNavbarProps) {
   const navigate = useNavigate()
   const location = useLocation()
 

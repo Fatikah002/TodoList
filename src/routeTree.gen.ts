@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountIndexRouteImport } from './routes/account/index'
 import { Route as AccountSettingsRouteImport } from './routes/account/settings'
 import { Route as AccountEditAccountRouteImport } from './routes/account/editAccount'
+import { Route as AccountAchievementsRouteImport } from './routes/account/achievements'
 
 const TodosRoute = TodosRouteImport.update({
   id: '/todos',
@@ -52,12 +53,18 @@ const AccountEditAccountRoute = AccountEditAccountRouteImport.update({
   path: '/account/editAccount',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountAchievementsRoute = AccountAchievementsRouteImport.update({
+  id: '/account/achievements',
+  path: '/account/achievements',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/archived': typeof ArchivedRoute
   '/dashboard': typeof DashboardRoute
   '/todos': typeof TodosRoute
+  '/account/achievements': typeof AccountAchievementsRoute
   '/account/editAccount': typeof AccountEditAccountRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/': typeof AccountIndexRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/archived': typeof ArchivedRoute
   '/dashboard': typeof DashboardRoute
   '/todos': typeof TodosRoute
+  '/account/achievements': typeof AccountAchievementsRoute
   '/account/editAccount': typeof AccountEditAccountRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account': typeof AccountIndexRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/archived': typeof ArchivedRoute
   '/dashboard': typeof DashboardRoute
   '/todos': typeof TodosRoute
+  '/account/achievements': typeof AccountAchievementsRoute
   '/account/editAccount': typeof AccountEditAccountRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/': typeof AccountIndexRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/archived'
     | '/dashboard'
     | '/todos'
+    | '/account/achievements'
     | '/account/editAccount'
     | '/account/settings'
     | '/account/'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/archived'
     | '/dashboard'
     | '/todos'
+    | '/account/achievements'
     | '/account/editAccount'
     | '/account/settings'
     | '/account'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/archived'
     | '/dashboard'
     | '/todos'
+    | '/account/achievements'
     | '/account/editAccount'
     | '/account/settings'
     | '/account/'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   ArchivedRoute: typeof ArchivedRoute
   DashboardRoute: typeof DashboardRoute
   TodosRoute: typeof TodosRoute
+  AccountAchievementsRoute: typeof AccountAchievementsRoute
   AccountEditAccountRoute: typeof AccountEditAccountRoute
   AccountSettingsRoute: typeof AccountSettingsRoute
   AccountIndexRoute: typeof AccountIndexRoute
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountEditAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/achievements': {
+      id: '/account/achievements'
+      path: '/account/achievements'
+      fullPath: '/account/achievements'
+      preLoaderRoute: typeof AccountAchievementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   ArchivedRoute: ArchivedRoute,
   DashboardRoute: DashboardRoute,
   TodosRoute: TodosRoute,
+  AccountAchievementsRoute: AccountAchievementsRoute,
   AccountEditAccountRoute: AccountEditAccountRoute,
   AccountSettingsRoute: AccountSettingsRoute,
   AccountIndexRoute: AccountIndexRoute,

@@ -1,10 +1,12 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { ChevronRight, LogOut, Settings, User } from 'lucide-react'
+import { Award, ChevronRight, LogOut, Settings, User } from 'lucide-react'
 import { UserAvatar } from '@/components/ui/user-avatar'
 import { useProfile } from '@/hooks/useProfile'
 import { useTodos } from '@/hooks/useTodos'
 import { getProgressInfo } from '@/lib/xp'
 import { ProgressCard } from '@/components/account/LevelXP'
+
+import { useAchievements } from '@/hooks/useAchievements'
 
 export const Route = createFileRoute('/account/')({
   component: RouteComponent,
@@ -14,7 +16,8 @@ function RouteComponent() {
   const navigate = useNavigate()
   const { profile } = useProfile()
   const { todos } = useTodos()
-  const info = getProgressInfo(todos)
+  const { unlockedIds, unlockedCount, totalCount } = useAchievements()
+  const info = getProgressInfo(todos, unlockedIds)
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-4 sm:p-6">
@@ -56,6 +59,22 @@ function RouteComponent() {
           <Settings className="h-5 w-5 text-green-600" />
           <span className="flex-1 text-sm font-medium text-gray-900">
             Settings
+          </span>
+          <ChevronRight className="h-5 w-5 text-green-600" />
+        </button>
+
+        <hr className="border-gray-200" />
+
+        <button
+          onClick={() => navigate({ to: '/account/achievements' })}
+          className="flex w-full items-center gap-4 rounded-lg px-3 py-4 text-left transition-colors hover:bg-green-50"
+        >
+          <Award className="h-5 w-5 text-green-600" />
+          <span className="flex-1 text-sm font-medium text-gray-900">
+            Achievements
+          </span>
+          <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-bold text-green-700">
+            {unlockedCount}/{totalCount}
           </span>
           <ChevronRight className="h-5 w-5 text-green-600" />
         </button>

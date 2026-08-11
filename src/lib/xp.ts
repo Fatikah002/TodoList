@@ -1,4 +1,5 @@
 import type { Todo } from './types'
+import { getUnlockedAchievementIds, getAchievementsXp } from './achievements'
 
 const XP_PER_TASK: Record<string, number> = {
   High: 30,
@@ -12,13 +13,19 @@ const LEVEL_THRESHOLDS = [
   9100, 10500,
 ]
 
-export function calculateTotalXp(todos: Todo[]): number {
+
+
+export function calculateTotalXp(todos: Todo[], unlockedAchievementIds?: string[]): number {
   let total = 0
   for (const todo of todos) {
     if (todo.completed && todo.completedAt) {
       total += XP_PER_TASK[todo.priority] ?? XP_PER_TASK.None
     }
   }
+
+  const unlockedIds = unlockedAchievementIds ?? getUnlockedAchievementIds()
+  total += getAchievementsXp(unlockedIds)
+
   return total
 }
 
@@ -57,8 +64,8 @@ export type ProgressInfo = {
   percentage: number
 }
 
-export function getProgressInfo(todos: Todo[]): ProgressInfo {
-  const totalXp = calculateTotalXp(todos)
+export function getProgressInfo(todos: Todo[], unlockedAchievementIds?: string[]): ProgressInfo {
+  const totalXp = calculateTotalXp(todos, unlockedAchievementIds)
   const level = getLevel(totalXp)
   const xpForCurrentLevel = getXpForLevel(level)
   const xpForNextLevel = getXpForNextLevel(level)
