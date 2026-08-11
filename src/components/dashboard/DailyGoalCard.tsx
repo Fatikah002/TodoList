@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { Target } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTodos } from '@/hooks/useTodos'
@@ -7,19 +7,36 @@ import { getDailyGoalInfo } from '@/lib/dailyGoal'
 export function DailyGoalCard() {
   const { todos } = useTodos()
   const goal = getDailyGoalInfo(todos)
-  const hasCelebrated = useRef(false)
+const DAILY_GOAL_CELEBRATED_KEY = 'daily-goal-celebrated'
 
-  useEffect(() => {
-    if (goal.isComplete && !hasCelebrated.current) {
-      hasCelebrated.current = true
-      toast.success('Daily Goal Complete! 🎉', {
-        description: 'Amazing! You finished all your tasks for today.',
-      })
-    }
-    if (!goal.isComplete) {
-      hasCelebrated.current = false
-    }
-  }, [goal.isComplete])
+useEffect(() => {
+  if (!goal.isComplete) return
+
+  const today = new Date().toISOString().split('T')[0]
+
+  const saved = JSON.parse(
+    localStorage.getItem(DAILY_GOAL_CELEBRATED_KEY) ?? '{}',
+  )
+
+  if (
+    saved.date === today &&
+    saved.progress >= goal.progress
+  ) {
+    return
+  }
+
+  toast.success('Daily Goal Complete! 🎉', {
+    description: 'Amazing! You finished all your tasks for today.',
+  })
+
+  localStorage.setItem(
+    DAILY_GOAL_CELEBRATED_KEY,
+    JSON.stringify({
+      date: today,
+      progress: goal.progress,
+    }),
+  )
+}, [goal.isComplete, goal.progress])
 
   if (goal.isEmpty) {
     return (
@@ -48,12 +65,11 @@ export function DailyGoalCard() {
             Daily Goal
           </span>
         </div>
-        {goal.isComplete }
+        {goal.isComplete}
       </div>
 
       <p className="mt-2 text-sm text-gray-700">
-        <span className="font-bold">{goal.progress}</span> / {goal.target}{' '}
-        tasks
+        <span className="font-bold">{goal.progress}</span> / {goal.target} tasks
       </p>
 
       <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-gray-100">
