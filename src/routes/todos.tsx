@@ -99,8 +99,13 @@ function TodosPage() {
   })
 
   function handleAddTodo(data: TodoFormData) {
+    const id =
+      typeof crypto !== 'undefined' && typeof (crypto as any).randomUUID === 'function'
+        ? (crypto as any).randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
+
     const newTodo: Todo = {
-      id: crypto.randomUUID(),
+      id,
       title: data.title,
       detail: data.detail,
       category: data.category,

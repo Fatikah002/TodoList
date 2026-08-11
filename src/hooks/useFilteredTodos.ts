@@ -151,7 +151,12 @@ export function useFilteredTodos(
         break
     }
 
-    return result
+    // Ensure completed tasks appear after pending tasks while preserving
+    // the existing sort order within each group.
+    const pending = result.filter((t) => !t.completed)
+    const completed = result.filter((t) => t.completed)
+
+    return [...pending, ...completed]
   }, [
     activeTodos,
     search,
