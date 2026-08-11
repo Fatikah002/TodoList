@@ -53,6 +53,7 @@ export function useFilteredTodos(
   const [selectMode, setSelectMode] = useState(false)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [showBulkDelete, setShowBulkDelete] = useState(false)
+  const [dateFilterMode, setDateFilterMode] = useState<'none' | 'day' | 'week'>('none')
 
   const activeTodos = useMemo(
     () => todos.filter((todo: Todo) => !todo.archived),
@@ -110,7 +111,25 @@ export function useFilteredTodos(
       const matchesPriority =
         priorityFilter === 'all' || todo.priority === priorityFilter
 
-      const matchesDate = showAllTasks || isSameDay(todo.deadline, selectedDate)
+      const matchesDateDay = isSameDay(todo.deadline, selectedDate)
+      const defaultMatchesDate = showAllTasks || matchesDateDay
+
+      // compute week match based on selectedDate (start of week)
+      let matchesDateWeek = false
+      try {
+        const ref = new Date(selectedDate)
+        const start = new Date(ref)
+        // assume week starts on Sunday
+        const day = start.getDay()
+        start.setDate(start.getDate() - day)
+        start.setHours(0, 0, 0, 0)
+        const end = new Date(start)
+        end.setDate(start.getDate() + 7)
+        const td = new Date(todo.deadline)
+        matchesDateWeek = td >= start && td < end
+      } catch {
+        matchesDateWeek = false
+      }
 
       const matchesUpcoming = !showUpcoming || (
         !todo.completed &&
@@ -118,13 +137,22 @@ export function useFilteredTodos(
         new Date(todo.deadline) < nextWeek
       )
 
+      const finalMatchesDate =
+        dateFilterMode === 'none'
+          ? defaultMatchesDate
+          : dateFilterMode === 'day'
+          ? matchesDateDay
+          : matchesDateWeek
+
+      const passesDate = dateFilterMode === 'none' ? isFilterActive || finalMatchesDate : finalMatchesDate
+
       return (
         matchesSearch &&
         matchesCategory &&
         matchesStatus &&
         matchesPriority &&
         matchesUpcoming &&
-        (isFilterActive || matchesDate)
+        passesDate
       )
     })
 
@@ -226,6 +254,9 @@ export function useFilteredTodos(
 
     showBulkDelete,
     setShowBulkDelete,
+
+    dateFilterMode,
+    setDateFilterMode,
 
     toggleSelect,
     cancelSelectMode,

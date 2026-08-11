@@ -16,6 +16,8 @@ import { calculateTodoStats } from '@/lib/todoStats'
 import { getUpcomingTodos } from '@/lib/upcomingTasks'
 import { useFilteredTodos } from '@/hooks/useFilteredTodos'
 import { QuickFilterBar } from '@/components/todo/QuickFilterBar'
+import type { QuickFilter } from '@/lib/presets'
+import { formatLocalDate } from '@/lib/date'
 import type { StatusFilter, PriorityFilter, SortBy } from '@/components/todo/TodoFilter'
 import { toast } from 'sonner'
 import { TodoDialog } from '@/components/todo/TodoDialog'
@@ -81,6 +83,7 @@ function TodosPage() {
     setPriorityFilter,
     sortBy,
     setSortBy,
+    setDateFilterMode,
     selectMode,
     setSelectMode,
     selectedIds,
@@ -190,10 +193,33 @@ function TodosPage() {
               activeStatus={statusFilter}
               activePriority={priorityFilter}
               activeSort={sortBy}
-              onSelect={(f) => {
-                setStatusFilter(f.status)
-                setPriorityFilter(f.priority)
-                setSortBy(f.sort)
+              onSelect={(f: QuickFilter) => {
+                const isActive =
+                  f.filters.status === statusFilter &&
+                  f.filters.priority === priorityFilter &&
+                  f.filters.sort === sortBy
+
+                if (isActive) {
+                  setStatusFilter('all')
+                  setPriorityFilter('all')
+                  setSortBy('none')
+                  setDateFilterMode('none')
+                  return
+                }
+
+                setStatusFilter(f.filters.status)
+                setPriorityFilter(f.filters.priority)
+                setSortBy(f.filters.sort)
+
+                if (f.id === 'due-today') {
+                  setDateFilterMode('day')
+                  setSelectedDate(formatLocalDate(new Date()))
+                } else if (f.id === 'due-this-week') {
+                  setDateFilterMode('week')
+                  setSelectedDate(formatLocalDate(new Date()))
+                } else {
+                  setDateFilterMode('none')
+                }
               }}
             />
 

@@ -8,11 +8,7 @@ type QuickFilterBarProps = {
   activeStatus: StatusFilter
   activePriority: PriorityFilter
   activeSort: SortBy
-  onSelect: (filters: {
-    status: StatusFilter
-    priority: PriorityFilter
-    sort: SortBy
-  }) => void
+  onSelect: (filter: QuickFilter) => void
 }
 
 export function QuickFilterBar({
@@ -39,11 +35,7 @@ export function QuickFilterBar({
   }
 
   function handleClick(f: QuickFilter) {
-    if (isActive(f)) {
-      onSelect({ status: 'all', priority: 'all', sort: 'none' })
-    } else {
-      onSelect(f.filters)
-    }
+    onSelect(f)
   }
 
   return (
