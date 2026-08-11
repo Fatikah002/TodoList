@@ -144,7 +144,6 @@ function RouteComponent() {
 
 function QuickFiltersContent({
   filters,
-  enabledCount,
   onToggle,
 }: {
   filters: QuickFilter[]
@@ -181,19 +180,6 @@ function QuickFiltersContent({
             ))}
         </CardContent>
       </Card>
-
-      {/* Footer */}
-      <div className="flex items-center gap-4 rounded-2xl border border-green-200 bg-green-50 px-5 py-4">
-        <div className="flex-1">
-          <p className="font-medium text-gray-900">Visible shortcuts</p>
-          <p className="text-sm text-gray-500">
-            {enabledCount} of {filters.length} shortcuts selected
-          </p>
-        </div>
-        <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
-          {enabledCount} / {filters.length}
-        </span>
-      </div>
     </div>
   )
 }
