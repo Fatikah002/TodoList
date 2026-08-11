@@ -21,6 +21,7 @@ import { formatLocalDate } from '@/lib/date'
 import type { StatusFilter, PriorityFilter, SortBy } from '@/components/todo/TodoFilter'
 import { toast } from 'sonner'
 import { TodoDialog } from '@/components/todo/TodoDialog'
+import { generateId } from '@/lib/utils'
 
 import { CategoryBreakdownSection } from '@/components/dashboard/CategoryBreakdownSection'
 
@@ -102,13 +103,8 @@ function TodosPage() {
   })
 
   function handleAddTodo(data: TodoFormData) {
-    const id =
-      typeof crypto !== 'undefined' && typeof (crypto as any).randomUUID === 'function'
-        ? (crypto as any).randomUUID()
-        : `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
-
     const newTodo: Todo = {
-      id,
+      id: generateId(),
       title: data.title,
       detail: data.detail,
       category: data.category,

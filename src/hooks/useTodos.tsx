@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
 import type { Todo } from '@/lib/types'
 import { getNextDeadline } from '@/lib/repeat'
+import { generateId } from '@/lib/utils'
 
 type TodosContextType = {
   todos: Todo[]
@@ -71,7 +72,7 @@ export function TodosProvider({ children }: { children: ReactNode }) {
         if (!exists) {
           const newTodo: Todo = {
             ...todo,
-            id: crypto.randomUUID(),
+            id: generateId(),
             deadline: nextDeadline,
             completed: false,
           }
