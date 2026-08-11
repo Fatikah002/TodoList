@@ -17,8 +17,7 @@ export function AppSidebar() {
   const location = useLocation()
 
   const pathname = location.pathname
-  const searchParams = new URLSearchParams(location.search)
-  const view = searchParams.get('view')
+  const view = (location.search as Record<string, unknown>)?.view as string | undefined
 
   function isActive(item: (typeof navigationItems)[number]) {
     if (item.search?.view) {

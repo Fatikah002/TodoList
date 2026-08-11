@@ -5,7 +5,7 @@ export type NavigationItem = {
   label: string
   icon: LucideIcon
   to: string
-  search?: Record<string, string>
+  search?: Record<string, string | boolean>
 }
 
 export const navigationItems: NavigationItem[] = [

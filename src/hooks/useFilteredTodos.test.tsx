@@ -32,7 +32,7 @@ describe('useFilteredTodos', () => {
 
   describe('activeTodos', () => {
     it('excludes archived todos', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -49,7 +49,7 @@ describe('useFilteredTodos', () => {
 
   describe('categories', () => {
     it('extracts unique categories from active todos', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -65,7 +65,7 @@ describe('useFilteredTodos', () => {
 
   describe('search', () => {
     it('filters by title', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -80,7 +80,7 @@ describe('useFilteredTodos', () => {
     })
 
     it('filters by detail', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -95,7 +95,7 @@ describe('useFilteredTodos', () => {
     })
 
     it('filters by category', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -110,7 +110,7 @@ describe('useFilteredTodos', () => {
     })
 
     it('is case-insensitive', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -125,7 +125,7 @@ describe('useFilteredTodos', () => {
 
   describe('category filter', () => {
     it('filters by selected category', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -142,7 +142,7 @@ describe('useFilteredTodos', () => {
 
   describe('status filter', () => {
     it('filters completed todos', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -157,7 +157,7 @@ describe('useFilteredTodos', () => {
     })
 
     it('filters pending todos', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -175,7 +175,7 @@ describe('useFilteredTodos', () => {
       vi.useFakeTimers()
       vi.setSystemTime(new Date('2026-06-15T10:00:00'))
 
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -198,7 +198,7 @@ describe('useFilteredTodos', () => {
 
   describe('priority filter', () => {
     it('filters by priority', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -215,7 +215,7 @@ describe('useFilteredTodos', () => {
 
   describe('sort', () => {
     it('sorts by deadline ascending', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -234,7 +234,7 @@ describe('useFilteredTodos', () => {
     })
 
     it('sorts by priority (High to Low)', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -253,7 +253,7 @@ describe('useFilteredTodos', () => {
     })
 
     it('sorts by name alphabetically', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -293,7 +293,7 @@ describe('useFilteredTodos', () => {
     })
 
     it('shows all todos when showAllTasks is true', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -308,7 +308,7 @@ describe('useFilteredTodos', () => {
 
   describe('isFilterActive', () => {
     it('returns true when a filter is active', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -320,7 +320,7 @@ describe('useFilteredTodos', () => {
     })
 
     it('returns false when all filters are default', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -330,7 +330,7 @@ describe('useFilteredTodos', () => {
 
   describe('selection', () => {
     it('toggleSelect adds and removes id', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 
@@ -351,7 +351,7 @@ describe('useFilteredTodos', () => {
     })
 
     it('cancelSelectMode resets selection and mode', () => {
-      const { result } = renderHook(() => useFilteredTodos(true), {
+      const { result } = renderHook(() => useFilteredTodos(true, false), {
         wrapper: TestWrapper,
       })
 

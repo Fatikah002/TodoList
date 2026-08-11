@@ -28,8 +28,9 @@ export const Route = createFileRoute('/todos')({
 })
 
 function TodosPage() {
-  const { view, status, priority, category, sort } = Route.useSearch()
+  const { view, status, priority, category, sort, upcoming } = Route.useSearch()
   const showAllTasks = view === 'all'
+  const showUpcomingTasks = upcoming === true
 
   const [calendarView, setCalendarView] = useState<CalendarView>('day')
   const [currentWeek, setCurrentWeek] = useState(new Date())
@@ -90,7 +91,7 @@ function TodosPage() {
     filteredTodos,
     toggleSelect,
     cancelSelectMode,
-  } = useFilteredTodos(showAllTasks, {
+  } = useFilteredTodos(showAllTasks, showUpcomingTasks, {
     status: status as StatusFilter | undefined,
     priority: priority as PriorityFilter | undefined,
     category,
@@ -206,7 +207,7 @@ function TodosPage() {
             <div className="space-y-3">
               {filteredTodos.length === 0 ? (
                 <p className="py-8 text-center text-muted-foreground">
-                  No todos found
+                  {showUpcomingTasks ? 'No upcoming task' : 'No todos found'}
                 </p>
               ) : (
                 filteredTodos.map((todo) => (

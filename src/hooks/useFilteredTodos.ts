@@ -24,6 +24,7 @@ type FilterInitialValues = {
 
 export function useFilteredTodos(
   showAllTasks: boolean,
+  showUpcoming: boolean = false,
   initialValues?: FilterInitialValues,
 ) {
   const {
@@ -75,6 +76,14 @@ export function useFilteredTodos(
   const filteredTodos = useMemo(() => {
     const keyword = search.trim().toLowerCase()
 
+    const now = new Date()
+    const tomorrow = new Date(now)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    tomorrow.setHours(0, 0, 0, 0)
+    const nextWeek = new Date(now)
+    nextWeek.setDate(nextWeek.getDate() + 8)
+    nextWeek.setHours(0, 0, 0, 0)
+
     const result = activeTodos.filter((todo) => {
       const matchesSearch =
         keyword === '' ||
@@ -103,11 +112,18 @@ export function useFilteredTodos(
 
       const matchesDate = showAllTasks || isSameDay(todo.deadline, selectedDate)
 
+      const matchesUpcoming = !showUpcoming || (
+        !todo.completed &&
+        new Date(todo.deadline) >= tomorrow &&
+        new Date(todo.deadline) < nextWeek
+      )
+
       return (
         matchesSearch &&
         matchesCategory &&
         matchesStatus &&
         matchesPriority &&
+        matchesUpcoming &&
         (isFilterActive || matchesDate)
       )
     })
@@ -145,6 +161,7 @@ export function useFilteredTodos(
     priorityFilter,
     sortBy,
     showAllTasks,
+    showUpcoming,
     isFilterActive,
   ])
 

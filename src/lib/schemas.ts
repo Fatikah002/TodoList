@@ -50,6 +50,7 @@ export const todoFieldValidators = {
 
 export const todosSearchSchema = z.object({
   view: z.enum(['today', 'all']).optional().default('today'),
+  upcoming: z.boolean().optional(),
   status: z.enum(['all', 'completed', 'pending', 'overdue']).optional().default('all'),
   priority: z.enum(['all', 'High', 'Medium', 'Low', 'None']).optional().default('all'),
   category: z.string().optional().default('All'),

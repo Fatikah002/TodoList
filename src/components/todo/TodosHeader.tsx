@@ -59,7 +59,7 @@ export function TodosHeader({
           >
             <DropdownMenuItem
               onClick={() =>
-                navigate({ to: '/todos', search: { view: 'today' } })
+                navigate({ to: '/todos', search: { view: 'today' as const, status: 'all' as const, priority: 'all' as const, category: 'All', sort: 'none' as const } })
               }
               className={`flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium cursor-pointer ${
                 !showAllTasks ? 'bg-green-50 text-green-700 font-semibold' : ''
@@ -70,7 +70,7 @@ export function TodosHeader({
             </DropdownMenuItem>
 
             <DropdownMenuItem
-              onClick={() => navigate({ to: '/todos', search: { view: 'all' } })}
+              onClick={() => navigate({ to: '/todos', search: { view: 'all' as const, status: 'all' as const, priority: 'all' as const, category: 'All', sort: 'none' as const } })}
               className={`flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium cursor-pointer ${
                 showAllTasks ? 'bg-green-50 text-green-700 font-semibold' : ''
               }`}
