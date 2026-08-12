@@ -9,6 +9,11 @@ type DatePickerProps = {
   onChange: (value: string) => void
 }
 
+function getToday(): Date {
+  const now = new Date()
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate())
+}
+
 export function DatePicker({ value, onChange }: DatePickerProps) {
   const selectedDate = value ? new Date(value + 'T00:00:00') : undefined
 
@@ -21,7 +26,11 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
             className="h-9 w-full justify-start gap-2 text-left font-normal"
           >
             <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-            {value || 'Pick a date'}
+            {value ? (
+              value
+            ) : (
+              <span className="text-muted-foreground">Pick a date</span>
+            )}
           </Button>
         }
       />
@@ -29,6 +38,7 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
         <Calendar
           mode="single"
           selected={selectedDate}
+          disabled={(date) => date < getToday()}
           onSelect={(date: Date | undefined) => {
             if (date) {
               onChange(formatLocalDate(date))

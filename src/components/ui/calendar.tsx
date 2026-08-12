@@ -28,7 +28,7 @@ function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
-        'group/calendar bg-background p-2 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
+        'group/calendar bg-background p-3 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(9)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className,
@@ -62,7 +62,7 @@ function Calendar({
           defaultClassNames.button_next,
         ),
         month_caption: cn(
-          'flex h-9 w-full items-center justify-center',
+          'flex h-10 w-full items-center justify-center',
           defaultClassNames.month_caption,
         ),
         dropdowns: cn(
@@ -87,7 +87,7 @@ function Calendar({
         month_grid: cn('w-full border-collapse', defaultClassNames.month_grid),
         weekdays: cn(defaultClassNames.weekdays),
         weekday: cn(
-          'flex-1 text-xs font-medium text-gray-500 select-none',
+          'flex-1 text-sm font-medium text-gray-500 select-none',
           defaultClassNames.weekday,
         ),
         week: cn(defaultClassNames.week),
@@ -99,7 +99,7 @@ function Calendar({
           'text-[0.8rem] text-muted-foreground select-none',
           defaultClassNames.week_number,
         ),
-        day: cn('group/day p-0 text-center', defaultClassNames.day),
+        day: cn('group/day p-0.5 text-center', defaultClassNames.day),
        
         today: cn(defaultClassNames.today),
         outside: cn(
@@ -221,6 +221,11 @@ function CalendarDayButton({
 
         data-[selected-single=true]:bg-green-600
         data-[selected-single=true]:text-white
+
+        aria-disabled:cursor-not-allowed
+        aria-disabled:opacity-30
+        aria-disabled:pointer-events-none
+        aria-disabled:hover:bg-transparent
 
         focus-visible:ring-2
         focus-visible:ring-green-200
