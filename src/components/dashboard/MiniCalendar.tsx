@@ -52,7 +52,7 @@ export function MiniCalendar({
             className="h-7 gap-1 rounded-full border-green-200 px-2.5 text-xs text-green-700 hover:bg-green-50 hover:text-green-800"
           >
             <RotateCcw className="h-3 w-3" />
-            <span>Hari Ini</span>
+            <span>Today</span>
           </Button>
         </div>
       )}

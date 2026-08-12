@@ -152,8 +152,8 @@ export function TodosHeader({
                 className="rounded-full p-1 hover:bg-gray-100 text-gray-700 transition-colors"
                 title={
                   calendarView === 'day'
-                    ? 'Minggu Sebelumnya'
-                    : 'Bulan Sebelumnya'
+                    ? 'Previous Week'
+                    : 'Previous Month'
                 }
               >
                 <ChevronLeft className="h-4 w-4" />
@@ -171,8 +171,8 @@ export function TodosHeader({
                 className="rounded-full p-1 hover:bg-gray-100 text-gray-700 transition-colors"
                 title={
                   calendarView === 'day'
-                    ? 'Minggu Berikutnya'
-                    : 'Bulan Berikutnya'
+                    ? 'Next Week'
+                    : 'Next Month'
                 }
               >
                 <ChevronRight className="h-4 w-4" />
