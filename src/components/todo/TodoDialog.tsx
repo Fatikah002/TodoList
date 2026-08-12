@@ -3,6 +3,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog'
 import { TodoForm } from '@/components/todo/TodoForm'
 import type { TodoFormData } from '@/lib/schemas'
@@ -38,6 +39,7 @@ export function TodoDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>Fill in the details to create a new todo</DialogDescription>
         </DialogHeader>
 
         <TodoForm
