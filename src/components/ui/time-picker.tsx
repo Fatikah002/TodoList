@@ -29,7 +29,7 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
         render={
           <Button
             variant="outline"
-            className="h-9 w-full justify-start gap-2 text-left font-normal"
+            className="h-10 w-full justify-start gap-2 text-left font-normal"
           >
             <Clock className="h-4 w-4 text-muted-foreground" />
 
