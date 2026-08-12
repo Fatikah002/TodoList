@@ -1,13 +1,93 @@
 import { useState, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
+import { X } from 'lucide-react'
 import { useTodos } from '@/hooks/useTodos'
+import { BadgeIcon } from '@/components/account/BadgeIcon'
+import { triggerFireworks } from '@/components/ui/confetti'
 import {
   ACHIEVEMENTS,
   getAchievementProgress,
   getUnlockedAchievementIds,
   saveUnlockedAchievementId,
 } from '@/lib/achievements'
-import { triggerFireworks } from '@/components/ui/confetti'
+import type { Achievement, AchievementFilter } from '@/lib/achievements'
+
+const toastThemeByColor = {
+  green: {
+    card: 'from-emerald-50 via-white to-emerald-50',
+    border: 'border-emerald-300/90',
+    accent: 'text-emerald-600',
+    accentStrong: 'text-emerald-700',
+    pillBg: 'bg-emerald-100 text-emerald-700',
+    glow: 'bg-emerald-200/35',
+  },
+  orange: {
+    card: 'from-orange-50 via-white to-rose-50',
+    border: 'border-orange-300/90',
+    accent: 'text-orange-500',
+    accentStrong: 'text-orange-600',
+    pillBg: 'bg-orange-100 text-orange-600',
+    glow: 'bg-orange-200/35',
+  },
+  purple: {
+    card: 'from-violet-50 via-white to-purple-50',
+    border: 'border-violet-300/90',
+    accent: 'text-violet-500',
+    accentStrong: 'text-violet-600',
+    pillBg: 'bg-violet-100 text-violet-600',
+    glow: 'bg-violet-200/35',
+  },
+  gold: {
+    card: 'from-amber-50 via-white to-yellow-50',
+    border: 'border-amber-300/90',
+    accent: 'text-amber-500',
+    accentStrong: 'text-amber-600',
+    pillBg: 'bg-amber-100 text-amber-700',
+    glow: 'bg-amber-200/35',
+  },
+  blue: {
+    card: 'from-sky-50 via-white to-blue-50',
+    border: 'border-sky-300/90',
+    accent: 'text-sky-500',
+    accentStrong: 'text-sky-600',
+    pillBg: 'bg-sky-100 text-sky-700',
+    glow: 'bg-sky-200/35',
+  },
+  indigo: {
+    card: 'from-indigo-50 via-white to-violet-50',
+    border: 'border-indigo-300/90',
+    accent: 'text-indigo-500',
+    accentStrong: 'text-indigo-600',
+    pillBg: 'bg-indigo-100 text-indigo-700',
+    glow: 'bg-indigo-200/35',
+  },
+  teal: {
+    card: 'from-cyan-50 via-white to-teal-50',
+    border: 'border-cyan-300/90',
+    accent: 'text-cyan-500',
+    accentStrong: 'text-cyan-600',
+    pillBg: 'bg-cyan-100 text-cyan-700',
+    glow: 'bg-cyan-200/35',
+  },
+  amber: {
+    card: 'from-amber-50 via-white to-orange-50',
+    border: 'border-yellow-300/90',
+    accent: 'text-yellow-500',
+    accentStrong: 'text-yellow-600',
+    pillBg: 'bg-yellow-100 text-yellow-700',
+    glow: 'bg-yellow-200/35',
+  },
+} satisfies Record<
+  Achievement['accentColor'],
+  {
+    card: string
+    border: string
+    accent: string
+    accentStrong: string
+    pillBg: string
+    glow: string
+  }
+>
 
 export function useAchievements() {
   const { todos } = useTodos()
@@ -15,9 +95,6 @@ export function useAchievements() {
     getUnlockedAchievementIds(),
   )
   const [filter, setFilter] = useState<AchievementFilter>('All')
-  const [activeModalAchievement, setActiveModalAchievement] =
-    useState<Achievement | null>(null)
-  const [isCelebration, setIsCelebration] = useState<boolean>(false)
 
   const isInitialMount = useRef(true)
 
@@ -43,30 +120,48 @@ export function useAchievements() {
     }
 
     if (newlyUnlocked) {
-      setActiveModalAchievement(newlyUnlocked)
-      setIsCelebration(true)
-
-      // Trigger Magic UI Fireworks confetti animation
       triggerFireworks()
+      const theme = toastThemeByColor[newlyUnlocked.accentColor]
 
       toast.custom(
         () => (
-          <div className="flex items-center gap-3 rounded-2xl border border-green-200 bg-white p-4 shadow-lg">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-100 text-green-600">
-              <span className="text-xl">🏆</span>
+          <div className={`relative flex items-center gap-4 overflow-hidden rounded-2xl border ${theme.border} bg-gradient-to-r ${theme.card} px-4 py-3 shadow-[0_18px_34px_-20px_rgba(0,0,0,0.18)] backdrop-blur-sm`}>
+            <div className={`pointer-events-none absolute left-0 top-0 h-full w-1 ${theme.glow}`} />
+
+            <div className="relative flex shrink-0 items-center justify-center">
+              <BadgeIcon
+                iconType={newlyUnlocked.iconType}
+                accentColor={newlyUnlocked.accentColor}
+                isUnlocked
+                size="md"
+              />
+              <span className={`absolute -left-1 top-0 text-[10px] ${theme.accent}`}>✦</span>
+              <span className={`absolute -right-1 bottom-0 text-[10px] ${theme.accent}`}>✦</span>
             </div>
-            <div className="flex-1">
-              <p className="text-xs font-semibold uppercase tracking-wider text-green-600">
+
+            <div className="min-w-0 flex-1 pr-8">
+              <p className={`text-[11px] font-extrabold uppercase tracking-[0.18em] ${theme.accent}`}>
                 Achievement Unlocked!
               </p>
-              <h4 className="text-sm font-bold text-gray-900">
+              <h4 className="mt-1 truncate text-[15px] font-bold text-sea-ink">
                 {newlyUnlocked.title}
               </h4>
-              <p className="text-xs text-gray-500">{newlyUnlocked.description}</p>
+              <p className="mt-1 truncate text-xs text-sea-ink-soft">
+                {newlyUnlocked.description}
+              </p>
             </div>
-            <span className="shrink-0 rounded-full bg-green-100 px-2.5 py-1 text-xs font-bold text-green-700">
+
+            <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-bold ${theme.pillBg}`}>
               +{newlyUnlocked.rewardXp} XP
             </span>
+
+            <button
+              type="button"
+              aria-label="Dismiss achievement toast"
+              className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full text-sea-ink-soft transition hover:bg-black/5 hover:text-sea-ink"
+            >
+              <X size={14} />
+            </button>
           </div>
         ),
         { duration: 4000 },
@@ -98,16 +193,6 @@ export function useAchievements() {
   const totalCount = ACHIEVEMENTS.length
   const overallPercentage = Math.round((unlockedCount / totalCount) * 100)
 
-  function openDetail(achievement: Achievement) {
-    setActiveModalAchievement(achievement)
-    setIsCelebration(false)
-  }
-
-  function closeModal() {
-    setActiveModalAchievement(null)
-    setIsCelebration(false)
-  }
-
   return {
     achievements: filteredAchievements,
     allAchievements: achievementsWithStatus,
@@ -117,9 +202,5 @@ export function useAchievements() {
     overallPercentage,
     filter,
     setFilter,
-    activeModalAchievement,
-    isCelebration,
-    openDetail,
-    closeModal,
   }
 }

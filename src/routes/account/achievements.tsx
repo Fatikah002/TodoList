@@ -1,8 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { ChevronLeft, Award, ArrowLeft } from 'lucide-react'
+import { Award, ArrowLeft } from 'lucide-react'
 import { useAchievements } from '@/hooks/useAchievements'
 import { AchievementCard } from '@/components/account/AchievementCard'
-import { CelebrationModal } from '@/components/account/CelebrationModal'
 import type { AchievementFilter } from '@/lib/achievements'
 import { Button } from '#/components/ui/button'
 
@@ -26,10 +25,6 @@ function RouteComponent() {
     overallPercentage,
     filter,
     setFilter,
-    activeModalAchievement,
-    isCelebration,
-    openDetail,
-    closeModal,
   } = useAchievements()
 
   return (
@@ -111,7 +106,7 @@ function RouteComponent() {
             <AchievementCard
               key={item.id}
               achievement={item}
-              onSelect={openDetail}
+              onSelect={() => undefined}
             />
           ))
         ) : (
@@ -123,12 +118,6 @@ function RouteComponent() {
         )}
       </div>
 
-      {/* Modal */}
-      <CelebrationModal
-        achievement={activeModalAchievement}
-        isCelebration={isCelebration}
-        onClose={closeModal}
-      />
     </div>
   )
 }
