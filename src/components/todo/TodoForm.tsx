@@ -176,7 +176,7 @@ export function TodoForm({
                   Priority <span className="text-red-500">*</span>{' '}
                 </Label>
                 <Combobox
-                  value={field.state.value}
+                  value={field.state.value === 'None' ? '' : field.state.value}
                   onChange={(val) => field.setValue(val as never)}
                   options={['None', 'High', 'Medium', 'Low']}
                   placeholder="Select priority"
@@ -282,7 +282,7 @@ export function TodoForm({
             <div className="flex flex-col gap-1.5">
               <Label className="text-sm font-medium">Repeat</Label>
               <Select
-                value={field.state.value}
+                value={field.state.value === 'none' ? '' : field.state.value}
                 onValueChange={(value) =>
                   field.handleChange(value as RepeatType)
                 }
@@ -291,10 +291,10 @@ export function TodoForm({
                   <SelectValue placeholder="Select repeat" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="None">None</SelectItem>
-                  <SelectItem value="Daily">Daily</SelectItem>
-                  <SelectItem value="Weekly">Weekly</SelectItem>
-                  <SelectItem value="Monthly">Monthly</SelectItem>
+                  <SelectItem value="none">None</SelectItem>
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
                 </SelectContent>
               </Select>
             </div>
