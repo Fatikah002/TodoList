@@ -2,9 +2,7 @@ import { useMemo } from 'react'
 import {
   Briefcase,
   User,
-  BookOpen,
   ShoppingBag,
-  Heart,
   MoreHorizontal,
   ChevronRight,
 } from 'lucide-react'
@@ -17,22 +15,23 @@ type CategoryBreakdownSectionProps = {
   className?: string
 }
 
+const MAIN_CATEGORIES = ['Work', 'Personal', 'Shopping'] as const
+
 const CATEGORY_CONFIG: Record<
   string,
   { icon: typeof Briefcase; bgColor: string } | undefined
 > = {
   Work: { icon: Briefcase, bgColor: 'bg-blue-500' },
-  Pekerjaan: { icon: Briefcase, bgColor: 'bg-blue-500' },
   Personal: { icon: User, bgColor: 'bg-emerald-500' },
-  Pribadi: { icon: User, bgColor: 'bg-emerald-500' },
-  Study: { icon: BookOpen, bgColor: 'bg-purple-500' },
-  Belajar: { icon: BookOpen, bgColor: 'bg-purple-500' },
   Shopping: { icon: ShoppingBag, bgColor: 'bg-amber-500' },
-  Belanja: { icon: ShoppingBag, bgColor: 'bg-amber-500' },
-  Health: { icon: Heart, bgColor: 'bg-rose-500' },
-  Kesehatan: { icon: Heart, bgColor: 'bg-rose-500' },
   Other: { icon: MoreHorizontal, bgColor: 'bg-gray-400' },
-  Lainnya: { icon: MoreHorizontal, bgColor: 'bg-gray-400' },
+}
+
+function resolveCategoryName(name: string): string {
+  if (MAIN_CATEGORIES.includes(name as typeof MAIN_CATEGORIES[number])) {
+    return name
+  }
+  return 'Other'
 }
 
 function getCategoryMeta(name: string) {
@@ -54,7 +53,7 @@ export function CategoryBreakdownSection({
     const map = new Map<string, { total: number; completed: number }>()
 
     active.forEach((todo) => {
-      const cat = todo.category || 'Other'
+      const cat = resolveCategoryName(todo.category || 'Other')
       const current = map.get(cat) || { total: 0, completed: 0 }
       map.set(cat, {
         total: current.total + 1,

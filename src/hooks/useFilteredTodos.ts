@@ -8,6 +8,8 @@ import type {
   StatusFilter,
 } from '@/components/todo/TodoFilter'
 
+const MAIN_CATEGORIES = ['Work', 'Personal', 'Shopping'] as const
+
 const PRIORITY_ORDER = {
   High: 3,
   Medium: 2,
@@ -60,10 +62,16 @@ export function useFilteredTodos(
     [todos],
   )
 
-  const categories = useMemo(
-    () => Array.from(new Set(activeTodos.map((todo) => todo.category))),
-    [activeTodos],
-  )
+  const categories = useMemo(() => {
+    const resolved = activeTodos.map((todo) => {
+      const cat = todo.category
+      if (MAIN_CATEGORIES.includes(cat as typeof MAIN_CATEGORIES[number])) {
+        return cat
+      }
+      return 'Other'
+    })
+    return Array.from(new Set(resolved))
+  }, [activeTodos])
 
   const isFilterActive = useMemo(
     () =>
@@ -94,7 +102,10 @@ export function useFilteredTodos(
         todo.priority.toLowerCase().includes(keyword)
 
       const matchesCategory =
-        selectedCategory === 'All' || todo.category === selectedCategory
+        selectedCategory === 'All' ||
+        todo.category === selectedCategory ||
+        (selectedCategory === 'Other' &&
+          !MAIN_CATEGORIES.includes(todo.category as typeof MAIN_CATEGORIES[number]))
 
       const todoIsOverdue = isOverdue(
         todo.completed,
