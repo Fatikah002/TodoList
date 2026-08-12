@@ -16,7 +16,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import type { RepeatType } from '@/lib/types'
-import {  Plus } from 'lucide-react'
 import { Combobox } from '@/components/ui/combobox'
 
 const CUSTOM_CATEGORIES_KEY = 'customCategories'
@@ -306,7 +305,6 @@ export function TodoForm({
         type="submit"
         className="h-11 w-full gap-2 bg-green-600 text-white hover:bg-green-700"
       >
-        <Plus className="h-4 w-4" />
         {submitLabel ?? 'Add Todo'}
       </Button>
 
