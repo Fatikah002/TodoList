@@ -6,7 +6,12 @@ export const Route = createFileRoute('/')({ component: Home })
 function Home() {
   const navigate = useNavigate()
   useEffect(() => {
-    navigate({ to: '/dashboard', search: { view: 'dashboard' } })
+    const isCompleted = localStorage.getItem('todospace_onboarding_completed') === 'true'
+    if (!isCompleted) {
+      navigate({ to: '/onboarding' })
+    } else {
+      navigate({ to: '/dashboard', search: { view: 'dashboard' } })
+    }
   }, [navigate])
   return null
 }

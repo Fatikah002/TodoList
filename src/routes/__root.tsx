@@ -46,6 +46,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const pageTitle =
     {
       '/dashboard': 'Dashboard',
+      '/onboarding': 'Welcome Tour',
       '/todos': 'Tasks',
       '/archived': 'Archived',
       '/account': 'Account',
@@ -65,14 +66,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <TodosProvider>
             <GlobalAchievementNotifier />
             <TooltipProvider>
-              <SidebarProvider>
-                <AppSidebar />
-                <SidebarInset className="flex min-h-screen flex-col">
-                  <AppHeader title={pageTitle} className="hidden md:flex" />
-                  <main className="flex-1 pb-24 md:pb-0">{children}</main>
-                  <MobileNavbar onAddTodo={() => {}} />
-                </SidebarInset>
-              </SidebarProvider>
+              {pathname === '/onboarding' ? (
+                <main className="min-h-screen w-full transition-opacity duration-300 ease-in-out">{children}</main>
+              ) : (
+                <SidebarProvider>
+                  <AppSidebar />
+                  <SidebarInset className="flex min-h-screen flex-col transition-all duration-300 ease-in-out animate-in fade-in-50">
+                    <AppHeader title={pageTitle} className="hidden md:flex" />
+                    <main className="flex-1 pb-24 md:pb-0">{children}</main>
+                    <MobileNavbar onAddTodo={() => {}} />
+                  </SidebarInset>
+                </SidebarProvider>
+              )}
             </TooltipProvider>
           </TodosProvider>
         </ProfileProvider>
