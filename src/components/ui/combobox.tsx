@@ -8,13 +8,24 @@ import {
 import { ChevronDownIcon, PlusIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
+type ComboboxOption = string | { value: string; label: string }
+
 type ComboboxProps = {
   value: string
   onChange: (value: string) => void
-  options: string[]
+  options: ComboboxOption[]
   placeholder?: string
   className?: string
   showAddOption?: boolean
+}
+
+function normalizeOptions(options: ComboboxOption[]): {
+  value: string
+  label: string
+}[] {
+  return options.map((option) =>
+    typeof option === 'string' ? { value: option, label: option } : option,
+  )
 }
 
 export function Combobox({
@@ -28,6 +39,9 @@ export function Combobox({
   const [open, setOpen] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
   const [newValue, setNewValue] = useState('')
+
+  const normalized = normalizeOptions(options)
+  const selectedLabel = normalized.find((o) => o.value === value)?.label ?? value
 
   const handleSelect = (selected: string) => {
     onChange(selected)
@@ -68,24 +82,24 @@ export function Combobox({
               className,
             )}
           >
-            {value || placeholder}
+            {selectedLabel || placeholder}
             <ChevronDownIcon className="h-4 w-4 shrink-0 opacity-50" />
           </Button>
         }
       />
       <PopoverPopup className="w-[--anchor-width] p-0" align="start">
         <div className="max-h-60 overflow-y-auto p-1">
-          {options.map((option) => (
+          {normalized.map((option) => (
             <button
-              key={option}
+              key={option.value}
               type="button"
-              onClick={() => handleSelect(option)}
+              onClick={() => handleSelect(option.value)}
               className={cn(
                 'flex w-full items-center rounded-md px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground',
-                value === option && 'bg-accent text-accent-foreground',
+                value === option.value && 'bg-accent text-accent-foreground',
               )}
             >
-              {option}
+              {option.label}
             </button>
           ))}
         </div>

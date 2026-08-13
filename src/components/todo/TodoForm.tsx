@@ -8,14 +8,6 @@ import { categories } from '@/lib/categories'
 import { Label } from '@/components/ui/label'
 import { DatePicker } from '@/components/ui/date-picker'
 import { TimePicker } from '@/components/ui/time-picker'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import type { RepeatType } from '@/lib/types'
 import { Combobox } from '@/components/ui/combobox'
 
 const CUSTOM_CATEGORIES_KEY = 'customCategories'
@@ -58,12 +50,14 @@ export function TodoForm({
 }: TodoFormProps) {
   const [categoryOptions, setCategoryOptions] = useState<string[]>(() => [
     ...categories,
-    ...loadCustomCategories().filter((c) => !categories.includes(c as typeof categories[number])),
+    ...loadCustomCategories().filter(
+      (c) => !categories.includes(c as (typeof categories)[number]),
+    ),
   ])
 
   useEffect(() => {
     const custom = categoryOptions.filter(
-      (c) => !categories.includes(c as typeof categories[number]),
+      (c) => !categories.includes(c as (typeof categories)[number]),
     )
     saveCustomCategories(custom)
   }, [categoryOptions])
@@ -152,7 +146,7 @@ export function TodoForm({
         {(field) => (
           <div className="flex flex-col gap-1.5">
             <Label className="text-sm font-medium">
-              Detail <span className="text-red-500">*</span>
+              Detail 
             </Label>
             <textarea
               placeholder="Enter todo detail..."
@@ -280,22 +274,18 @@ export function TodoForm({
           {(field) => (
             <div className="flex flex-col gap-1.5">
               <Label className="text-sm font-medium">Repeat</Label>
-              <Select
-                value={field.state.value === 'none' ? '' : field.state.value}
-                onValueChange={(value) =>
-                  field.handleChange(value as RepeatType)
-                }
-              >
-                <SelectTrigger className="h-10 w-full">
-                  <SelectValue placeholder="Select repeat" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">None</SelectItem>
-                  <SelectItem value="daily">Daily</SelectItem>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
-                </SelectContent>
-              </Select>
+              <Combobox
+                value={field.state.value}
+                onChange={(val) => field.setValue(val as never)}
+                options={[
+                  { value: 'none', label: 'None' },
+                  { value: 'daily', label: 'Daily' },
+                  { value: 'weekly', label: 'Weekly' },
+                  { value: 'monthly', label: 'Monthly' },
+                ]}
+                placeholder="Select repeat"
+                showAddOption={false}
+              />
             </div>
           )}
         </form.Field>
