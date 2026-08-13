@@ -17,7 +17,7 @@ export function AppSidebar() {
   const location = useLocation()
 
   const pathname = location.pathname
-  const view = (location.search as Record<string, unknown>)?.view as string | undefined
+  const view = (location.search as Record<string, unknown>).view as string | undefined
 
   function isActive(item: (typeof navigationItems)[number]) {
     if (item.search?.view) {
