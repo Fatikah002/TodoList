@@ -117,7 +117,7 @@ export function OnboardingFlow() {
   }, [handleNext, handlePrev])
 
   return (
-    <main className="relative flex h-dvh w-full flex-col overflow-hidden bg-slate-50/90 text-slate-900 select-none">
+    <main className="relative flex h-dvh w-full flex-col overflow-hidden bg-white text-slate-900 select-none">
       {/* Confetti */}
       <Confetti
         ref={confettiRef}
