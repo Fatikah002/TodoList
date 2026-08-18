@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { todosSearchSchema } from '@/lib/schemas'
-import type { Todo } from '@/lib/types'
 import type { TodoFormData } from '@/lib/schemas'
 import { TodoItem } from '@/components/todo/TodoItem'
 import { TodosHeader} from '@/components/todo/TodosHeader'
@@ -21,7 +20,7 @@ import { formatLocalDate } from '@/lib/date'
 import type { StatusFilter, PriorityFilter, SortBy } from '@/components/todo/TodoFilter'
 import { toast } from 'sonner'
 import { TodoDialog } from '@/components/todo/TodoDialog'
-import { generateId } from '@/lib/utils'
+import { createTodoFromForm } from '@/lib/todos'
 
 import { CategoryBreakdownSection } from '@/components/dashboard/CategoryBreakdownSection'
 
@@ -103,20 +102,7 @@ function TodosPage() {
   })
 
   function handleAddTodo(data: TodoFormData) {
-    const newTodo: Todo = {
-      id: generateId(),
-      title: data.title,
-      detail: data.detail,
-      category: data.category,
-      priority: data.priority,
-      deadline: data.deadline,
-      dueTime: data.dueTime ?? '',
-      completed: false,
-      repeat: data.repeat,
-      archived: false,
-    }
-
-    addTodo(newTodo)
+    addTodo(createTodoFromForm(data))
     toast.success('Todo added successfully!')
   }
 
