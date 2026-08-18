@@ -56,8 +56,6 @@ export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
     },
   ]
 
-  const gridCols = showTotal ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3'
-
   if (!showTotal) {
     return (
       <section className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
@@ -84,30 +82,36 @@ export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
 
   return (
     <section className="mt-6">
-      <h2 className="text-sm font-semibold text-gray-900 sm:text-base">
+      {/* <h2 className="mb-3 text-sm font-semibold text-gray-900 sm:text-base">
         Overview
-      </h2>
+      </h2> */}
 
-      <div className={`mt-3 grid ${gridCols} gap-2.5 sm:gap-3`}>
-        {statItems.map((stat) => {
+      <div className="flex h-10 w-full items-center overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        {statItems.map((stat, index) => {
           const Icon = stat.icon
 
           return (
             <div
               key={stat.label}
-              className="flex min-h-[105px] flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white p-2.5 sm:p-4 shadow-sm transition-shadow hover:shadow-md"
+              className={`flex h-full flex-1 items-center justify-center gap-1.5 px-2 sm:gap-2 sm:px-4 ${
+                index !== 0 ? 'border-l border-gray-200' : ''
+              }`}
             >
-              <div className={`flex h-9 w-9 items-center justify-center rounded-full sm:h-12 sm:w-12 ${stat.iconBackground}`}>
-                <Icon className={`h-4 w-4 sm:h-6 sm:w-6 ${stat.iconColor}`} />
-              </div>
+              <Icon
+                className={`h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4 ${stat.iconColor}`}
+              />
 
-              <p className="mt-1.5 text-[10px] text-gray-500 sm:text-xs text-center">
-                {stat.label}
-              </p>
-
-              <p className="text-base font-bold text-gray-900 sm:text-xl">
+              <span className="text-sm font-semibold text-gray-900">
                 {stat.value}
-              </p>
+              </span>
+
+              <span className="hidden text-xs text-gray-500 sm:inline">
+                {stat.label}
+              </span>
+
+              <span className="text-[10px] text-gray-500 sm:hidden">
+                {stat.label.replace(' Tasks', '')}
+              </span>
             </div>
           )
         })}
@@ -115,3 +119,4 @@ export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
     </section>
   )
 }
+

@@ -6,28 +6,33 @@ export function StreakCard() {
   const { todos } = useTodos()
   const streak = calculateStreak(todos)
   const weeklyActivity = getWeeklyActivity(todos)
+  const streakLabel = streak === 1 ? 'DAY' : 'DAYS'
+
+    const description =
+    streak === 0
+      ? 'Complete a task today to start your streak!'
+      : streak === 1
+        ? 'Complete a task today to keep your streak!'
+        : 'Keep completing tasks to maintain your streak!'
 
   return (
     <div className="rounded-2xl shadow-sm border border-orange-200 bg-orange-100/50 p-4 sm:p-5">
-      <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <span className="text-4xl">🔥</span>
-          <div>
-            <p className="text-3xl font-bold text-orange-500">{streak}</p>
-            <p className="text-xs font-semibold uppercase tracking-wide text-orange-500">
-              Day Streak
+        <span className="text-4xl leading-none">🔥</span>
+
+        <div>
+          <div className="flex items-baseline gap-1.5">
+            <p className="text-3xl font-bold leading-none text-orange-500">
+              {streak}
+            </p>
+
+            <p className="text-xs font-bold uppercase tracking-wide text-orange-500">
+              {streakLabel}
             </p>
           </div>
-        </div>
 
-        <div className="text-right">
-          <p className="text-sm font-semibold text-gray-800">
-            Keep going! 
-          </p>
-          <p className="mt-0.5 text-xs text-gray-500">
-            {streak > 0
-              ? 'Complete a task today to keep your streak alive.'
-              : 'Complete a task today to start your streak!'}
+          <p className="mt-1 text-xs text-gray-500">
+            {description}
           </p>
         </div>
       </div>
