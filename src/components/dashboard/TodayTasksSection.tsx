@@ -1,16 +1,20 @@
 ﻿import { Link } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, ListChecks, Plus } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 import type { Todo } from '@/lib/types'
+import { Button } from '@/components/ui/button'
+import { format } from 'date-fns'
 
 type TodayTasksSectionProps = {
   todos: Todo[]
   onToggleTodo: (id: string) => void
+  onAddTodo: () => void
 }
 
 export function TodayTasksSection({
   todos,
   onToggleTodo,
+  onAddTodo,
 }: TodayTasksSectionProps) {
   return (
     <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white p-4 shadow-sm flex h-[200px] flex-col">
@@ -39,9 +43,18 @@ export function TodayTasksSection({
 
       <div className="space-y-2.5">
         {todos.length === 0 ? (
-          <p className="py-4 text-center text-xs text-gray-500">
-            No tasks scheduled for today
-          </p>
+          <div className="flex h-[100px] flex-col items-center justify-center ">
+            <ListChecks className="h-6 w-6 text-gray-300" />
+            <p className="py-1 text-center text-xs text-gray-500">
+              Nothing due today
+            </p>
+            <Button
+              onClick={onAddTodo}
+              className=" mt-2 h-9 rounded-full bg-green-600 px-4 hover:bg-green-700 font-medium"
+            >
+              <Plus size={18} /> <span>Add Task</span>
+            </Button>
+          </div>
         ) : (
           todos
             .sort((a, b) => (a.dueTime || '').localeCompare(b.dueTime || ''))
@@ -65,7 +78,8 @@ export function TodayTasksSection({
                 </div>
 
                 <p className="shrink-0 whitespace-nowrap text-xs text-gray-500">
-                  {todo.dueTime || 'No due time'}
+                  {format(new Date(todo.deadline), 'dd MMM yyyy')}
+                  {todo.dueTime && ` ${todo.dueTime}`}
                 </p>
               </div>
             ))

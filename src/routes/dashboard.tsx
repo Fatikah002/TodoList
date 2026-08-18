@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
 import { useTodos } from '@/hooks/useTodos'
 import { useProfile } from '@/hooks/useProfile'
 import { isSameDay, formatLocalDate } from '@/lib/date'
@@ -12,6 +13,10 @@ import { DailyGoalCard } from '@/components/dashboard/DailyGoalCard'
 import { TodayTasksSection } from '@/components/dashboard/TodayTasksSection'
 import { WeeklyProgressSection } from '@/components/dashboard/WeeklyProgressSection'
 import { UpcomingTasksSection } from '@/components/dashboard/UpcomingTasksSection'
+import { TodoDialog } from '@/components/todo/TodoDialog'
+import { createTodoFromForm } from '@/lib/todos'
+import type { TodoFormData } from '@/lib/schemas'
+import { toast } from 'sonner'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardPage,
@@ -32,10 +37,11 @@ function getGreetingEmoji() {
 }
 
 function DashboardPage() {
-  const { todos, toggleTodo } = useTodos()
+  const { todos, toggleTodo, addTodo } = useTodos()
   const { profile } = useProfile()
   const activeTodos = todos.filter((todo) => !todo.archived)
   const today = formatLocalDate(new Date())
+  const [showAddTodo, setShowAddTodo] = useState(false)
 
   const todayTodos = activeTodos.filter(
     (todo) => isSameDay(todo.deadline, today) && !todo.completed,
@@ -56,6 +62,11 @@ function DashboardPage() {
     weeklyTotal === 0 ? 0 : Math.round((weeklyCompleted / weeklyTotal) * 100)
 
   const upcomingTodos = getUpcomingTodos(todos)
+
+  function handleAddTodo(data: TodoFormData) {
+    addTodo(createTodoFromForm(data))
+    toast.success('Todo added successfully!')
+  }
 
   return (
     <div className="rise-in mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6 lg:px-8 motion-reduce:animate-none">
@@ -82,16 +93,34 @@ function DashboardPage() {
       {/* Overview */}
       <StatsGrid stats={stats} showTotal={true} />
 
-      {/* Streak & Daily Goal */}
-      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <StreakCard />
-        <DailyGoalCard />
+      <div className="mt-3">
+        <TodayTasksSection
+          todos={todayTodos}
+          onToggleTodo={toggleTodo}
+          onAddTodo={() => setShowAddTodo(true)}
+        />
+      </div>
+
+      {showAddTodo && (
+        <TodoDialog
+          isOpen={showAddTodo}
+          onClose={() => setShowAddTodo(false)}
+          title="Add Todo"
+          submitLabel="Add Todo"
+          showPriority={true}
+          showRepeat={true}
+          onSubmit={handleAddTodo}
+        />
+      )}
+
+      {/* Streak */}
+      <div className="mt-3 ">
+        <StreakCard/>
       </div>
 
       {/* Sections */}
       <div className="mt-3 grid grid-cols-1 gap-3 pb-24 sm:grid-cols-3 sm:pb-0">
-        <TodayTasksSection todos={todayTodos} onToggleTodo={toggleTodo} />
-
+        <DailyGoalCard />
         <WeeklyProgressSection
           completed={weeklyCompleted}
           total={weeklyTotal}
