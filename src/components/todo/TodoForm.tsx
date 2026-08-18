@@ -166,7 +166,7 @@ export function TodoForm({
             {(field) => (
               <div className="flex flex-col gap-1.5">
                 <Label className="text-sm font-medium">
-                  Priority <span className="text-red-500">*</span>{' '}
+                  Priority 
                 </Label>
                 <Combobox
                   value={field.state.value === 'None' ? '' : field.state.value}

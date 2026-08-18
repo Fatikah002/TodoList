@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight,  CalendarDays  } from 'lucide-react'
 import { format } from 'date-fns'
 import type { Todo } from '@/lib/types'
 
@@ -27,9 +27,12 @@ export function UpcomingTasksSection({ todos }: UpcomingTasksSectionProps) {
 
       <div className="space-y-2.5">
         {todos.length === 0 ? (
-          <p className="py-4 text-center text-xs text-gray-500">
-            No upcoming task
-          </p>
+          <div className="flex h-[100px] flex-col items-center justify-center ">
+            <CalendarDays className="h-6 w-6 text-gray-300" />
+            <p className="py-1 text-center text-xs text-gray-500">
+              No upcoming task
+            </p>
+          </div>
         ) : (
           todos.map((todo) => {
             const d = new Date(todo.deadline)
