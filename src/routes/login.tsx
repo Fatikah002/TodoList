@@ -176,10 +176,6 @@ function LoginPage() {
             )}
           </div>
         </div>
-
-        <p className="mt-6 text-center text-[11px] text-slate-400">
-          Your tasks. Your progress. Your space.
-        </p>
       </div>
     </div>
   )
