@@ -44,18 +44,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     select: (state) => state.location.pathname,
   })
   const pageTitle =
-    {
-      '/dashboard': 'Dashboard',
-      '/onboarding': 'Welcome Tour',
-      '/login': 'Login',
-      '/todos': 'Tasks',
-      '/archived': 'Archived',
-      '/account': 'Account',
-      '/account/achievements': 'Achievements',
-      '/account/achievement': 'Achievements',
-      '/account/settings': 'Settings',
-      '/account/editAccount': 'Edit Profile',
-    }[pathname] ?? ''
+    pathname === '/dashboard' ? 'Dashboard'
+    : pathname === '/onboarding' ? 'Welcome Tour'
+    : pathname === '/login' ? 'Login'
+    : pathname === '/todos' ? 'Tasks'
+    : pathname === '/archived' ? 'Archived'
+    : pathname.startsWith('/account/achievements') ? 'Achievements'
+    : pathname.startsWith('/account/settings') ? 'Settings'
+    : pathname.startsWith('/account/edit') ? 'Edit Profile'
+    : pathname.startsWith('/account') ? 'Account'
+    : ''
 
   return (
     <html lang="en">
