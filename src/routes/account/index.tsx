@@ -5,8 +5,8 @@ import { useProfile } from '@/hooks/useProfile'
 import { useTodos } from '@/hooks/useTodos'
 import { getProgressInfo } from '@/lib/xp'
 import { ProgressCard } from '@/components/account/LevelXP'
-
 import { useAchievements } from '@/hooks/useAchievements'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 export const Route = createFileRoute('/account/')({
   component: RouteComponent,
@@ -83,8 +83,8 @@ function RouteComponent() {
 
         <button
           onClick={() => {
-            localStorage.removeItem('todospace_logged_in')
-            localStorage.removeItem('todospace_user_email')
+            localStorage.removeItem(STORAGE_KEYS.LOGGED_IN)
+            localStorage.removeItem(STORAGE_KEYS.USER_EMAIL)
             navigate({ to: '/login', replace: true })
           }}
           className="flex w-full items-center gap-4 rounded-lg px-3 py-4 text-left transition-colors hover:bg-red-50"
