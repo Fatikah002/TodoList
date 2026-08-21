@@ -1,45 +1,14 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { toast } from 'sonner'
-import {
-  Trash2,
-  CalendarDays,
-  TriangleAlert,
-  EllipsisVertical,
-  Flag,
-  Repeat,
-  Archive,
-  RotateCcw,
-  Trash,
-} from 'lucide-react'
+import { TriangleAlert } from 'lucide-react'
 import type { Todo } from '@/lib/types'
 import { useState } from 'react'
 import { TodoDetailDialog } from '@/components/todo/TodoDetailDialog'
-import { Badge } from '@/components/ui/badge'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { format } from 'date-fns'
+import { TodoItemBadges } from '@/components/todo/TodoItemBadges'
+import { TodoItemDropdown } from '@/components/todo/TodoItemDropdown'
+import { TodoItemDeleteDialog } from '@/components/todo/TodoItemDeleteDialog'
+import { TodoItemArchiveDialog } from '@/components/todo/TodoItemArchiveDialog'
 import { getDeadlineStatus } from '@/lib/deadline'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuRadioGroup,
-} from '@/components/ui/dropdown-menu'
 
 type TodoItemProps = {
   todo: Todo
@@ -73,32 +42,6 @@ export function TodoItem({
   const [showDetail, setShowDetail] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
   const [showArchive, setShowArchive] = useState(false)
-
-  const getBadgeColor = (type: 'category' | 'priority', value: string) => {
-    if (type === 'category') {
-      switch (value) {
-        case 'Work':
-          return 'bg-blue-100 text-blue-700'
-        case 'Personal':
-          return 'bg-purple-100 text-purple-700'
-        case 'Shopping':
-          return 'bg-orange-100 text-orange-700'
-        default:
-          return 'bg-gray-100 text-gray-900'
-      }
-    }
-
-    switch (value) {
-      case 'High':
-        return 'bg-red-100 text-red-700'
-      case 'Medium':
-        return 'bg-yellow-100 text-yellow-700'
-      case 'Low':
-        return 'bg-green-50 text-green-600'
-      default:
-        return 'bg-gray-100 text-gray-900'
-    }
-  }
 
   const status =
     !todo.completed && todo.deadline
@@ -154,151 +97,20 @@ export function TodoItem({
 
               <p className="text-gray-500">{todo.detail}</p>
 
-              <div className="mt-1 flex flex-wrap items-center gap-3">
-                <Badge className={getBadgeColor('category', todo.category)}>
-                  {todo.category}
-                </Badge>
-
-                {todo.priority !== 'None' && (
-                  <Badge className={getBadgeColor('priority', todo.priority)}>
-                    <Flag className="mr-1 h-4 w-4" />
-                    {todo.priority}
-                  </Badge>
-                )}
-
-                {archivedView && (
-                  <Badge className="bg-gray-100 text-gray-500">
-                    <Archive className="mr-1 h-4 w-4" />
-                    Archived
-                  </Badge>
-                )}
-
-                {todo.repeat !== 'none' && (
-                  <Badge className="bg-teal-100 text-teal-700">
-                    <Repeat className="mr-1 h-4 w-4" />
-                    {todo.repeat.charAt(0).toUpperCase() + todo.repeat.slice(1)}
-                  </Badge>
-                )}
-              </div>
+              <TodoItemBadges todo={todo} archivedView={archivedView} />
             </div>
           </div>
 
-          {!selectMode ? (
-            <div className="flex min-h-full flex-col items-end justify-between">
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={(e) => e.stopPropagation()}
-                    onPointerDown={(e) => e.stopPropagation()}
-                  >
-                    <EllipsisVertical className="h-5 w-5 text-gray-500" />
-                  </Button>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent
-                  align="end"
-                  className="w-44"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {archivedView ? (
-                    <>
-                      <DropdownMenuItem
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          onRestore?.(todo.id)
-                        }}
-                      >
-                        <RotateCcw className="mr-2 h-4 w-4 text-blue-500" />
-                        Restore
-                      </DropdownMenuItem>
-
-                      <DropdownMenuSeparator />
-
-                      <DropdownMenuItem
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setShowDelete(true)
-                        }}
-                        className="text-red-600 focus:text-red-600"
-                      >
-                        <Trash className="mr-2 h-4 w-4" />
-                        Delete Permanently
-                      </DropdownMenuItem>
-                    </>
-                  ) : (
-                    <>
-                      <DropdownMenuGroup>
-                        <DropdownMenuLabel>Priority</DropdownMenuLabel>
-
-                        <DropdownMenuRadioGroup
-                          value={todo.priority}
-                          onValueChange={(value) => {
-                            onUpdate({
-                              ...todo,
-                              priority: value as Todo['priority'],
-                            })
-                            toast.success('Priority updated!')
-                          }}
-                        >
-                          <DropdownMenuRadioItem value="High">
-                            <Flag className="mr-2 h-4 w-4 text-red-500" />
-                            High
-                          </DropdownMenuRadioItem>
-
-                          <DropdownMenuRadioItem value="Medium">
-                            <Flag className="mr-2 h-4 w-4 text-yellow-500" />
-                            Medium
-                          </DropdownMenuRadioItem>
-
-                          <DropdownMenuRadioItem value="Low">
-                            <Flag className="mr-2 h-4 w-4 text-green-500" />
-                            Low
-                          </DropdownMenuRadioItem>
-
-                          <DropdownMenuRadioItem value="None">
-                            <Flag className="mr-2 h-4 w-4 text-gray-400" />
-                            None
-                          </DropdownMenuRadioItem>
-                        </DropdownMenuRadioGroup>
-                      </DropdownMenuGroup>
-
-                      <DropdownMenuSeparator />
-
-                      <DropdownMenuItem
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setShowArchive(true)
-                        }}
-                      >
-                        <Archive className="mr-2 h-4 w-4 text-gray-500" />
-                        Archive
-                      </DropdownMenuItem>
-
-                      <DropdownMenuItem
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setShowDelete(true)
-                        }}
-                        className="text-red-600 focus:text-red-600"
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Delete
-                      </DropdownMenuItem>
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <div className="flex items-center gap-1 text-xs text-gray-500">
-                <CalendarDays className="h-3.5 w-3.5" />
-                <span>
-                  {format(new Date(todo.deadline), 'dd MMM yyyy')}
-                  {todo.dueTime && ` ${todo.dueTime}`}
-                </span>
-              </div>
-            </div>
-          ) : null}
+          {!selectMode && (
+            <TodoItemDropdown
+              todo={todo}
+              archivedView={archivedView}
+              onUpdate={onUpdate}
+              onRestore={onRestore}
+              onArchive={onArchive}
+              onDelete={() => setShowDelete(true)}
+            />
+          )}
         </CardContent>
       </Card>
 
@@ -309,73 +121,28 @@ export function TodoItem({
         onUpdate={onUpdate}
       />
 
-      <AlertDialog open={showDelete} onOpenChange={setShowDelete}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {archivedView ? 'Delete Permanently' : 'Delete Todo'}
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              {archivedView
-                ? 'This will permanently delete this todo. This action cannot be undone.'
-                : 'Are you sure you want to delete this todo?'}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+      <TodoItemDeleteDialog
+        open={showDelete}
+        onOpenChange={setShowDelete}
+        archivedView={archivedView}
+        onConfirm={() => {
+          if (archivedView) {
+            onDeletePermanent?.(todo.id)
+          } else {
+            onDelete(todo.id)
+          }
+        }}
+      />
 
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                if (archivedView) {
-                  onDeletePermanent?.(todo.id)
-                  toast.error('Todo deleted permanently')
-                } else {
-                  onDelete(todo.id)
-                  toast.error('Todo deleted')
-                }
-                setShowDelete(false)
-              }}
-            >
-              {archivedView ? 'Delete Permanently' : 'Delete'}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog open={showArchive} onOpenChange={setShowArchive}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Archive Todo</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to archive this todo? You can restore it
-              later from the archived section.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-amber-400 text-amber-900 hover:bg-amber-500 focus:ring-amber-500"
-              onClick={() => {
-                onArchive?.(todo.id)
-                toast.warning('Todo archived', {
-                  classNames: {
-                    toast: '!bg-amber-50 !text-amber-700 !border-amber-200',
-                  },
-                  action: {
-                    label: 'Undo',
-                    onClick: () =>
-                      onUndoArchive?.({ ...todo, archived: false }),
-                  },
-                })
-                setShowArchive(false)
-              }}
-            >
-              Archive
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      {onArchive && onUndoArchive && (
+        <TodoItemArchiveDialog
+          open={showArchive}
+          onOpenChange={setShowArchive}
+          todo={todo}
+          onArchive={onArchive}
+          onUndoArchive={onUndoArchive}
+        />
+      )}
     </>
   )
 }
