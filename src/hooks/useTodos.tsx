@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import type { Todo } from '@/lib/types'
 import { getNextDeadline } from '@/lib/repeat'
 import { generateId } from '@/lib/utils'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 type TodosContextType = {
   todos: Todo[]
@@ -22,12 +23,12 @@ const TodosContext = createContext<TodosContextType | null>(null)
 export function TodosProvider({ children }: { children: ReactNode }) {
   const [todos, setTodos] = useState<Todo[]>(() => {
     if (typeof window === 'undefined') return []
-    const storedTodos = localStorage.getItem('todos')
+    const storedTodos = localStorage.getItem(STORAGE_KEYS.TODOS)
     return storedTodos ? JSON.parse(storedTodos) : []
   })
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos))
+    localStorage.setItem(STORAGE_KEYS.TODOS, JSON.stringify(todos))
   }, [todos])
 
   function addTodo(todo: Todo) {
@@ -43,13 +44,12 @@ export function TodosProvider({ children }: { children: ReactNode }) {
   }
 
   function toggleTodo(id: string) {
-    const todo = todos.find((t) => t.id === id)
-    if (!todo) return
-
-    const wasCompleted = todo.completed
-    const newCompleted = !wasCompleted
-
     setTodos((prev) => {
+      const todo = prev.find((t) => t.id === id)
+      if (!todo) return prev
+
+      const newCompleted = !todo.completed
+
       const updated = prev.map((t) =>
         t.id === id
           ? {
@@ -60,7 +60,7 @@ export function TodosProvider({ children }: { children: ReactNode }) {
           : t,
       )
 
-      if (!wasCompleted && newCompleted && todo.repeat !== 'none') {
+      if (!todo.completed && newCompleted && todo.repeat !== 'none') {
         const nextDeadline = getNextDeadline(todo.deadline, todo.repeat)
         const exists = prev.some(
           (t) =>
@@ -70,13 +70,15 @@ export function TodosProvider({ children }: { children: ReactNode }) {
             !t.completed,
         )
         if (!exists) {
-          const newTodo: Todo = {
-            ...todo,
-            id: generateId(),
-            deadline: nextDeadline,
-            completed: false,
-          }
-          return [...updated, newTodo]
+          return [
+            ...updated,
+            {
+              ...todo,
+              id: generateId(),
+              deadline: nextDeadline,
+              completed: false,
+            },
+          ]
         }
       }
 
