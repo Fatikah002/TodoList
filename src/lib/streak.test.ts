@@ -3,9 +3,9 @@ import {
   calculateStreak,
   getUniqueCompletedDates,
   getWeeklyActivity,
-  formatLocalDate,
   subtractDays,
 } from './streak'
+import { formatLocalDate } from './date'
 import type { Todo } from './types'
 
 function makeTodo(overrides: Partial<Todo> = {}): Todo {

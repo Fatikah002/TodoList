@@ -9,10 +9,10 @@ import {
   Slide2Illustration,
   Slide3Illustration,
 } from './OnboardingIllustrations'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 type OnboardingSlide = {
   id: number
-  eyebrow: string
   title: string
   description: string
   illustration: React.ReactNode
@@ -22,7 +22,6 @@ type OnboardingSlide = {
 const SLIDES: OnboardingSlide[] = [
   {
     id: 1,
-    eyebrow: 'Organize Your Tasks',
     title: 'Organize Your Tasks',
     description:
       'Keep your tasks organized and easily manage everything in one place.',
@@ -31,7 +30,6 @@ const SLIDES: OnboardingSlide[] = [
   },
   {
     id: 2,
-    eyebrow: 'Stay Productive',
     title: 'Stay Productive',
     description:
       'Track your progress and stay focused on what matters most.',
@@ -40,7 +38,6 @@ const SLIDES: OnboardingSlide[] = [
   },
   {
     id: 3,
-    eyebrow: 'Make Every Task Count',
     title: 'Make Every Task Count',
     description:
       'Complete tasks, build your streak, and reach your daily goals.',
@@ -74,7 +71,7 @@ export function OnboardingFlow() {
       colors: ['#16a34a', '#22c55e', '#4ade80'],
     })
 
-    localStorage.setItem('todospace_onboarding_completed', 'true')
+    localStorage.setItem(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true')
 
     window.setTimeout(() => {
       navigate({
