@@ -36,13 +36,11 @@ export function AppSidebar() {
       <SidebarHeader className="flex h-16 items-center border-b px-5">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500 text-white shadow-sm">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500 text-white shadow-sm">
-              <img
-                src="/logo.png"
-                alt="TodoSpace"
-                className="h-full w-full object-cover"
-              />
-            </div>
+            <img
+              src="/logo.png"
+              alt="TodoSpace"
+              className="h-full w-full object-cover"
+            />
           </div>
           <div>
             <span className="text-lg font-bold text-green-600">Todo</span>
