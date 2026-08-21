@@ -1,23 +1,26 @@
 import {
   Briefcase,
   User,
-  ShoppingBag,
   GraduationCap,
   Heart,
   Wallet,
-  Plane,
-  Dumbbell,
-  Film,
   Folder,
   Tag,
   Sparkles,
   Coffee,
   Home,
-  Utensils,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
-export const categories = ['Work', 'Personal', 'Shopping', 'Other'] as const
+export const categories = [
+  'Work',
+  'Study',
+  'Personal',
+  'Health',
+  'Finance',
+  'Home',
+  'Other',
+] as const
 
 export type TodoCategory = (typeof categories)[number]
 
@@ -36,25 +39,18 @@ export const CATEGORY_CONFIG: Partial<Record<string, CategoryMeta>> = {
     lightBg: 'bg-blue-50',
   },
 
-  Personal: {
-    icon: User,
-    bgColor: 'bg-emerald-500',
-    textColor: 'text-emerald-600',
-    lightBg: 'bg-emerald-50',
-  },
-
-  Shopping: {
-    icon: ShoppingBag,
-    bgColor: 'bg-amber-500',
-    textColor: 'text-amber-600',
-    lightBg: 'bg-amber-50',
-  },
-
   Study: {
     icon: GraduationCap,
     bgColor: 'bg-purple-600',
     textColor: 'text-purple-600',
     lightBg: 'bg-purple-50',
+  },
+
+  Personal: {
+    icon: User,
+    bgColor: 'bg-emerald-500',
+    textColor: 'text-emerald-600',
+    lightBg: 'bg-emerald-50',
   },
 
   Health: {
@@ -71,39 +67,11 @@ export const CATEGORY_CONFIG: Partial<Record<string, CategoryMeta>> = {
     lightBg: 'bg-indigo-50',
   },
 
-  Travel: {
-    icon: Plane,
-    bgColor: 'bg-cyan-500',
-    textColor: 'text-cyan-600',
-    lightBg: 'bg-cyan-50',
-  },
-
-  Fitness: {
-    icon: Dumbbell,
-    bgColor: 'bg-orange-500',
-    textColor: 'text-orange-600',
-    lightBg: 'bg-orange-50',
-  },
-
-  Entertainment: {
-    icon: Film,
-    bgColor: 'bg-pink-500',
-    textColor: 'text-pink-600',
-    lightBg: 'bg-pink-50',
-  },
-
   Home: {
     icon: Home,
     bgColor: 'bg-lime-600',
     textColor: 'text-lime-700',
     lightBg: 'bg-lime-50',
-  },
-
-  Food: {
-    icon: Utensils,
-    bgColor: 'bg-red-500',
-    textColor: 'text-red-600',
-    lightBg: 'bg-red-50',
   },
 
   Other: {

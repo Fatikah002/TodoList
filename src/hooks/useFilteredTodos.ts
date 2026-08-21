@@ -8,7 +8,7 @@ import type {
   StatusFilter,
 } from '@/components/todo/TodoFilter'
 
-const MAIN_CATEGORIES = ['Work', 'Personal', 'Shopping'] as const
+const MAIN_CATEGORIES = ['Work', 'Study', 'Personal', 'Health', 'Finance', 'Home'] as const
 
 const PRIORITY_ORDER = {
   High: 3,

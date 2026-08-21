@@ -9,12 +9,11 @@ import { Label } from '@/components/ui/label'
 import { DatePicker } from '@/components/ui/date-picker'
 import { TimePicker } from '@/components/ui/time-picker'
 import { Combobox } from '@/components/ui/combobox'
-
-const CUSTOM_CATEGORIES_KEY = 'customCategories'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 function loadCustomCategories(): string[] {
   try {
-    const stored = localStorage.getItem(CUSTOM_CATEGORIES_KEY)
+    const stored = localStorage.getItem(STORAGE_KEYS.CUSTOM_CATEGORIES)
     return stored ? JSON.parse(stored) : []
   } catch {
     return []
@@ -23,7 +22,7 @@ function loadCustomCategories(): string[] {
 
 function saveCustomCategories(cats: string[]) {
   try {
-    localStorage.setItem(CUSTOM_CATEGORIES_KEY, JSON.stringify(cats))
+    localStorage.setItem(STORAGE_KEYS.CUSTOM_CATEGORIES, JSON.stringify(cats))
   } catch {
     // ignore storage errors
   }
