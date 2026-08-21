@@ -82,14 +82,17 @@ function RouteComponent() {
         <hr className="border-gray-200" />
 
         <button
-          onClick={() => {}}
-          className="flex w-full items-center gap-4 rounded-lg px-3 py-4 text-left transition-colors hover:bg-green-50"
+          onClick={() => {
+            localStorage.removeItem('todospace_logged_in')
+            localStorage.removeItem('todospace_user_email')
+            navigate({ to: '/login', replace: true })
+          }}
+          className="flex w-full items-center gap-4 rounded-lg px-3 py-4 text-left transition-colors hover:bg-red-50"
         >
           <LogOut className="h-5 w-5 text-red-500" />
           <span className="flex-1 text-sm font-medium text-red-500">
             Logout
           </span>
-          <ChevronRight className="h-5 w-5 text-green-600" />
         </button>
       </div>
     </div>

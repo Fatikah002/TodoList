@@ -95,8 +95,10 @@ export function OnboardingFlow() {
   }, [isLastSlide, handleComplete])
 
   const handlePrev = useCallback(() => {
+    if (isCompleting) return
+
     setCurrentSlideIndex((index) => Math.max(0, index - 1))
-  }, [])
+  }, [isCompleting])
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -117,7 +119,11 @@ export function OnboardingFlow() {
   }, [handleNext, handlePrev])
 
   return (
-    <main className="relative flex h-dvh w-full flex-col overflow-hidden bg-white text-slate-900 select-none">
+    <main
+      className={`relative flex h-dvh w-full flex-col overflow-hidden bg-white text-slate-900 transition-all duration-500 ease-out select-none ${
+        isCompleting ? 'scale-[0.98] opacity-0 pointer-events-none' : ''
+      }`}
+    >
       {/* Confetti */}
       <Confetti
         ref={confettiRef}

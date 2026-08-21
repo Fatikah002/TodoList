@@ -47,6 +47,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     {
       '/dashboard': 'Dashboard',
       '/onboarding': 'Welcome Tour',
+      '/login': 'Login',
       '/todos': 'Tasks',
       '/archived': 'Archived',
       '/account': 'Account',
@@ -66,7 +67,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <TodosProvider>
             <GlobalAchievementNotifier />
             <TooltipProvider>
-              {pathname === '/onboarding' ? (
+              {pathname === '/onboarding' || pathname === '/login' ? (
                 <main className="min-h-screen w-full transition-opacity duration-300 ease-in-out">{children}</main>
               ) : (
                 <SidebarProvider>
