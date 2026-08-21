@@ -1,8 +1,8 @@
 function IllustrationShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative flex h-64 items-center justify-center overflow-hidden sm:h-80 lg:h-96">
-      <div className="absolute -left-10 -top-12 h-32 w-32 rounded-full bg-primary/15 blur-2xl" />
-      <div className="absolute -bottom-12 -right-8 h-36 w-36 rounded-full bg-primary/25 blur-2xl" />
+    <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
+      <div className="absolute -left-8 -top-10 h-28 w-28 rounded-full bg-green-200/50 blur-2xl sm:h-36 sm:w-36" />
+      <div className="absolute -right-6 -bottom-10 h-32 w-32 rounded-full bg-emerald-200/60 blur-2xl sm:h-40 sm:w-40" />
 
       {children}
     </div>
@@ -15,7 +15,7 @@ export function Slide1Illustration() {
       <img
         src="/notelist.svg"
         alt="Organizing a task list"
-        className="relative h-full w-full max-w-[360px] object-contain"
+        className="relative h-full w-full max-w-[22rem] object-contain"
       />
     </IllustrationShell>
   )
@@ -27,7 +27,7 @@ export function Slide2Illustration() {
       <img
         src="/nexttask.svg"
         alt="Organizing the next task"
-        className="relative h-full w-full max-w-[360px] object-contain"
+        className="relative h-full w-full max-w-[25rem] object-contain"
       />
     </IllustrationShell>
   )
@@ -39,7 +39,7 @@ export function Slide3Illustration() {
       <img
         src="/todolist.svg"
         alt="TodoSpace task list"
-        className="relative h-full w-full max-w-[360px] object-contain"
+        className="relative h-full w-full max-w-[22rem] object-contain"
       />
     </IllustrationShell>
   )

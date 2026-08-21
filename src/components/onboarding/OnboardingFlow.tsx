@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
 import { Confetti } from '@/components/ui/confetti'
 import type { ConfettiRef } from '@/components/ui/confetti'
@@ -71,25 +72,29 @@ export function OnboardingFlow() {
       colors: ['#16a34a', '#22c55e', '#4ade80'],
     })
 
-    localStorage.setItem(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true')
+    localStorage.setItem(
+      STORAGE_KEYS.ONBOARDING_COMPLETED,
+      'true',
+    )
 
     window.setTimeout(() => {
       navigate({
-        to: '/dashboard',
-        search: { view: 'dashboard' },
+        to: '/login',
         replace: true,
       })
     }, COMPLETION_DELAY_MS)
   }, [isCompleting, navigate])
 
   const handleNext = useCallback(() => {
+    if (isCompleting) return
+
     if (!isLastSlide) {
       setCurrentSlideIndex((index) => index + 1)
       return
     }
 
     handleComplete()
-  }, [isLastSlide, handleComplete])
+  }, [isCompleting, isLastSlide, handleComplete])
 
   const handlePrev = useCallback(() => {
     if (isCompleting) return
@@ -117,10 +122,24 @@ export function OnboardingFlow() {
 
   return (
     <main
-      className={`relative flex h-dvh w-full flex-col overflow-hidden bg-white text-slate-900 transition-all duration-500 ease-out select-none ${
-        isCompleting ? 'scale-[0.98] opacity-0 pointer-events-none' : ''
+      className={`relative min-h-dvh w-full overflow-hidden bg-[#f6fbf7] text-slate-900 transition-all duration-500 ease-out ${
+        isCompleting
+          ? 'pointer-events-none scale-[0.98] opacity-0'
+          : ''
       }`}
     >
+      {/* Background decorations */}
+      <div
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        aria-hidden="true"
+      >
+        <div className="absolute -left-24 top-8 h-72 w-72 rounded-full bg-green-200/40 blur-3xl sm:h-96 sm:w-96" />
+
+        <div className="absolute -right-28 bottom-0 h-80 w-80 rounded-full bg-emerald-100 blur-3xl sm:h-[30rem] sm:w-[30rem]" />
+
+        <div className="absolute left-1/2 top-1/2 h-[30rem] w-[30rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/50 blur-3xl" />
+      </div>
+
       {/* Confetti */}
       <Confetti
         ref={confettiRef}
@@ -129,7 +148,7 @@ export function OnboardingFlow() {
       />
 
       <section
-        className={`mx-auto flex h-dvh w-full max-w-5xl flex-col justify-between px-5 py-6 sm:px-10 sm:py-8 ${
+        className={`relative mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-5 py-5 sm:px-8 sm:py-8 lg:px-10 lg:py-8 ${
           isCompleting ? 'pointer-events-none' : ''
         }`}
         aria-busy={isCompleting}
@@ -138,7 +157,7 @@ export function OnboardingFlow() {
         <header className="flex w-full shrink-0 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-3 select-none">
-            <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-xs">
+            <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm sm:h-10 sm:w-10">
               <img
                 src="/logo.png"
                 alt="TodoSpace"
@@ -148,8 +167,13 @@ export function OnboardingFlow() {
 
             <div className="leading-tight">
               <div className="flex items-center">
-                <span className="text-xl font-extrabold text-green-600">Todo</span>
-                <span className="text-xl font-extrabold text-slate-900">Space</span>
+                <span className="text-lg font-extrabold text-green-600 sm:text-xl">
+                  Todo
+                </span>
+
+                <span className="text-lg font-extrabold text-slate-900 sm:text-xl">
+                  Space
+                </span>
               </div>
             </div>
           </div>
@@ -162,41 +186,45 @@ export function OnboardingFlow() {
               disabled={isCompleting}
               variant="ghost"
               size="sm"
-              className="text-xs sm:text-sm font-semibold text-slate-400 hover:bg-green-50 hover:text-green-600 transition-colors cursor-pointer"
+              className="min-h-10 px-3 text-xs font-semibold text-slate-500 transition-colors hover:bg-green-50 hover:text-green-600 sm:text-sm"
             >
               Skip
             </Button>
           )}
         </header>
 
-        {/* Center Main Content - Scrollable & Well Proportioned */}
+        {/* Main content */}
         <div
           key={currentSlideIndex}
-          className="animate-slide-fade flex flex-1 flex-col items-center justify-center py-6 text-center max-w-4xl mx-auto w-full my-auto"
+          className="animate-slide-fade mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center text-center"
           aria-live="polite"
         >
-          {/* Illustration Container */}
-          <div className="w-full max-w-lg mx-auto h-52 sm:h-72 md:h-88 flex items-center justify-center">
+          {/* Illustration */}
+          <div className="flex h-48 w-full max-w-sm items-center justify-center sm:h-60 sm:max-w-md md:h-64 lg:h-72 lg:max-w-lg">
             {currentSlide.illustration}
           </div>
 
-          {/* Text Content */}
-          <div className="mt-7 max-w-xl mx-auto space-y-2.5 px-4 sm:mt-8">
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+          {/* Content */}
+          <div className="mt-5 max-w-2xl space-y-2 px-2 sm:mt-7 sm:space-y-3">
+            <p className="text-[0.68rem] font-bold tracking-[0.2em] text-green-600 uppercase sm:text-xs">
+              Step {currentSlide.id} of {SLIDES.length}
+            </p>
+
+            <h1 className="text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-[2.7rem]">
               {currentSlide.title}
             </h1>
 
-            <p className="text-sm sm:text-base md:text-lg text-slate-500 leading-relaxed font-medium max-w-lg mx-auto">
+            <p className="mx-auto max-w-xl text-sm leading-relaxed font-medium text-slate-500 sm:text-base lg:text-lg">
               {currentSlide.description}
             </p>
           </div>
         </div>
 
-        {/* Bottom Controls Footer */}
-        <footer className="mx-auto w-full max-w-xs sm:max-w-md shrink-0 pb-10 sm:pb-12 pt-4 flex flex-col items-center">
-          {/* Pagination Indicators */}
+        {/* Controls */}
+        <footer className="mx-auto flex w-full max-w-sm shrink-0 flex-col items-center pb-2 sm:max-w-md lg:pb-0">
+          {/* Pagination */}
           <div
-            className="mb-5 sm:mb-6 flex items-center justify-center gap-2"
+            className="mb-4 flex items-center justify-center gap-2 sm:mb-5"
             aria-label={`Step ${currentSlide.id} of ${SLIDES.length}`}
           >
             {SLIDES.map((slide, index) => {
@@ -206,34 +234,40 @@ export function OnboardingFlow() {
                 <button
                   key={slide.id}
                   type="button"
-                  onClick={() => setCurrentSlideIndex(index)}
+                  onClick={() => {
+                    if (!isCompleting) {
+                      setCurrentSlideIndex(index)
+                    }
+                  }}
                   disabled={isCompleting}
                   aria-label={`Go to step ${slide.id}`}
                   aria-current={isActive ? 'step' : undefined}
-                  className={`h-2 sm:h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                  className={`h-2.5 rounded-full transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-green-600 ${
                     isActive
-                      ? 'w-6 sm:w-8 bg-green-600'
-                      : 'w-2 sm:w-2.5 bg-slate-200 hover:bg-slate-300'
+                      ? 'w-6 bg-green-600 sm:w-8'
+                      : 'w-2 bg-slate-200 hover:bg-slate-300 sm:w-2.5'
                   }`}
                 />
               )
             })}
           </div>
 
-          {/* Primary Action Button */}
+          {/* Primary action */}
           <Button
             type="button"
             onClick={handleNext}
             disabled={isCompleting}
             size="lg"
-            className="h-12 sm:h-13 w-full rounded-xl sm:rounded-2xl bg-green-600 font-bold text-white text-sm sm:text-base shadow-lg shadow-green-600/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-green-700 active:translate-y-0 active:scale-98 cursor-pointer"
+            className="h-12 w-full rounded-xl bg-green-600 text-sm font-bold text-white shadow-lg shadow-green-600/25 transition-all hover:-translate-y-0.5 hover:bg-green-700 active:translate-y-0 active:scale-[0.98] sm:h-13 sm:rounded-2xl sm:text-base"
           >
             <span>{currentSlide.buttonText}</span>
 
-            {!isLastSlide && <ArrowRight className="ml-1 h-4 w-4 sm:h-5 sm:w-5" />}
+            {!isLastSlide && (
+              <ArrowRight className="ml-1 h-4 w-4 sm:h-5 sm:w-5" />
+            )}
           </Button>
 
-          {/* Previous/Back Button */}
+          {/* Back */}
           {currentSlideIndex > 0 && (
             <Button
               type="button"
@@ -241,7 +275,7 @@ export function OnboardingFlow() {
               disabled={isCompleting}
               variant="ghost"
               size="sm"
-              className="mt-2 sm:mt-3 font-semibold text-xs sm:text-sm text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer"
+              className="mt-1 min-h-10 text-xs font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-700 sm:mt-2 sm:text-sm"
             >
               Back
             </Button>
