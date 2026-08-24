@@ -18,6 +18,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountIndexRouteImport } from './routes/account/index'
 import { Route as AccountSettingsRouteImport } from './routes/account/settings'
 import { Route as AccountEditAccountRouteImport } from './routes/account/editAccount'
+import { Route as AccountDeleteAccountRouteImport } from './routes/account/deleteAccount'
 import { Route as AccountAchievementsRouteImport } from './routes/account/achievements'
 
 const TodosRoute = TodosRouteImport.update({
@@ -65,6 +66,11 @@ const AccountEditAccountRoute = AccountEditAccountRouteImport.update({
   path: '/account/editAccount',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountDeleteAccountRoute = AccountDeleteAccountRouteImport.update({
+  id: '/account/deleteAccount',
+  path: '/account/deleteAccount',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountAchievementsRoute = AccountAchievementsRouteImport.update({
   id: '/account/achievements',
   path: '/account/achievements',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRoute
   '/todos': typeof TodosRoute
   '/account/achievements': typeof AccountAchievementsRoute
+  '/account/deleteAccount': typeof AccountDeleteAccountRoute
   '/account/editAccount': typeof AccountEditAccountRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/': typeof AccountIndexRoute
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/todos': typeof TodosRoute
   '/account/achievements': typeof AccountAchievementsRoute
+  '/account/deleteAccount': typeof AccountDeleteAccountRoute
   '/account/editAccount': typeof AccountEditAccountRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account': typeof AccountIndexRoute
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRoute
   '/todos': typeof TodosRoute
   '/account/achievements': typeof AccountAchievementsRoute
+  '/account/deleteAccount': typeof AccountDeleteAccountRoute
   '/account/editAccount': typeof AccountEditAccountRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/': typeof AccountIndexRoute
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/todos'
     | '/account/achievements'
+    | '/account/deleteAccount'
     | '/account/editAccount'
     | '/account/settings'
     | '/account/'
@@ -130,6 +140,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/todos'
     | '/account/achievements'
+    | '/account/deleteAccount'
     | '/account/editAccount'
     | '/account/settings'
     | '/account'
@@ -142,6 +153,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/todos'
     | '/account/achievements'
+    | '/account/deleteAccount'
     | '/account/editAccount'
     | '/account/settings'
     | '/account/'
@@ -155,6 +167,7 @@ export interface RootRouteChildren {
   OnboardingRoute: typeof OnboardingRoute
   TodosRoute: typeof TodosRoute
   AccountAchievementsRoute: typeof AccountAchievementsRoute
+  AccountDeleteAccountRoute: typeof AccountDeleteAccountRoute
   AccountEditAccountRoute: typeof AccountEditAccountRoute
   AccountSettingsRoute: typeof AccountSettingsRoute
   AccountIndexRoute: typeof AccountIndexRoute
@@ -225,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountEditAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/deleteAccount': {
+      id: '/account/deleteAccount'
+      path: '/account/deleteAccount'
+      fullPath: '/account/deleteAccount'
+      preLoaderRoute: typeof AccountDeleteAccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account/achievements': {
       id: '/account/achievements'
       path: '/account/achievements'
@@ -243,6 +263,7 @@ const rootRouteChildren: RootRouteChildren = {
   OnboardingRoute: OnboardingRoute,
   TodosRoute: TodosRoute,
   AccountAchievementsRoute: AccountAchievementsRoute,
+  AccountDeleteAccountRoute: AccountDeleteAccountRoute,
   AccountEditAccountRoute: AccountEditAccountRoute,
   AccountSettingsRoute: AccountSettingsRoute,
   AccountIndexRoute: AccountIndexRoute,

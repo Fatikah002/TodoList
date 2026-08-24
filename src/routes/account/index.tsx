@@ -1,5 +1,12 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { Award, ChevronRight, LogOut, Settings, User } from 'lucide-react'
+import {
+  Award,
+  ChevronRight,
+  LogOut,
+  Settings,
+  Trash2,
+  User,
+} from 'lucide-react'
 import { UserAvatar } from '@/components/ui/user-avatar'
 import { useProfile } from '@/hooks/useProfile'
 import { useTodos } from '@/hooks/useTodos'
@@ -38,36 +45,36 @@ function RouteComponent() {
       </div>
 
       {/* Account Menu */}
-      <div>
+      <div className="rounded-2xl bg-white ">
         <button
           onClick={() => navigate({ to: '/account/editAccount' })}
-          className="flex w-full items-center gap-4 rounded-lg px-3 py-4 text-left transition-colors hover:bg-green-50"
+          className="flex w-full items-center gap-4 rounded-t-2xl px-5 py-4 text-left transition-colors hover:bg-gray-50"
         >
           <User className="h-5 w-5 text-green-600" />
           <span className="flex-1 text-sm font-medium text-gray-900">
             Edit Profile
           </span>
-          <ChevronRight className="h-5 w-5 text-green-600" />
+          <ChevronRight className="h-5 w-5 text-gray-400" />
         </button>
 
-        <hr className="border-gray-200" />
+        <hr className="border-gray-100" />
 
         <button
           onClick={() => navigate({ to: '/account/settings' })}
-          className="flex w-full items-center gap-4 rounded-lg px-3 py-4 text-left transition-colors hover:bg-green-50"
+          className="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-gray-50"
         >
           <Settings className="h-5 w-5 text-green-600" />
           <span className="flex-1 text-sm font-medium text-gray-900">
             Settings
           </span>
-          <ChevronRight className="h-5 w-5 text-green-600" />
+          <ChevronRight className="h-5 w-5 text-gray-400" />
         </button>
 
-        <hr className="border-gray-200" />
+        <hr className="border-gray-100" />
 
         <button
           onClick={() => navigate({ to: '/account/achievements' })}
-          className="flex w-full items-center gap-4 rounded-lg px-3 py-4 text-left transition-colors hover:bg-green-50"
+          className="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-gray-50"
         >
           <Award className="h-5 w-5 text-green-600" />
           <span className="flex-1 text-sm font-medium text-gray-900">
@@ -76,10 +83,10 @@ function RouteComponent() {
           <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-bold text-green-700">
             {unlockedCount}/{totalCount}
           </span>
-          <ChevronRight className="h-5 w-5 text-green-600" />
+          <ChevronRight className="h-5 w-5 text-gray-400" />
         </button>
 
-        <hr className="border-gray-200" />
+        <hr className="border-gray-100" />
 
         <button
           onClick={() => {
@@ -87,7 +94,7 @@ function RouteComponent() {
             localStorage.removeItem(STORAGE_KEYS.USER_EMAIL)
             navigate({ to: '/login', replace: true })
           }}
-          className="flex w-full items-center gap-4 rounded-lg px-3 py-4 text-left transition-colors hover:bg-red-50"
+          className="flex w-full items-center gap-4 rounded-b-2xl px-5 py-4 text-left transition-colors hover:bg-red-50"
         >
           <LogOut className="h-5 w-5 text-red-500" />
           <span className="flex-1 text-sm font-medium text-red-500">
@@ -95,6 +102,16 @@ function RouteComponent() {
           </span>
         </button>
       </div>
+
+      {/* Delete Account Button */}
+      <button
+        type="button"
+        onClick={() => navigate({ to: '/account/deleteAccount' })}
+        className="flex  w-full items-center justify-center gap-2 rounded-2xl border border-red-300 bg-white px-5 py-3.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-100"
+      >
+        <Trash2 className="h-4 w-4" />
+        Delete Account
+      </button>
     </div>
   )
 }
