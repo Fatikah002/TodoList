@@ -32,8 +32,7 @@ const SLIDES: OnboardingSlide[] = [
   {
     id: 2,
     title: 'Stay Productive',
-    description:
-      'Track your progress and stay focused on what matters most.',
+    description: 'Track your progress and stay focused on what matters most.',
     illustration: <Slide2Illustration />,
     buttonText: 'Next',
   },
@@ -72,10 +71,7 @@ export function OnboardingFlow() {
       colors: ['#16a34a', '#22c55e', '#4ade80'],
     })
 
-    localStorage.setItem(
-      STORAGE_KEYS.ONBOARDING_COMPLETED,
-      'true',
-    )
+    localStorage.setItem(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true')
 
     window.setTimeout(() => {
       navigate({
@@ -123,9 +119,7 @@ export function OnboardingFlow() {
   return (
     <main
       className={`relative min-h-dvh w-full overflow-hidden bg-[#f6fbf7] text-slate-900 transition-all duration-500 ease-out ${
-        isCompleting
-          ? 'pointer-events-none scale-[0.98] opacity-0'
-          : ''
+        isCompleting ? 'pointer-events-none scale-[0.98] opacity-0' : ''
       }`}
     >
       {/* Background decorations */}
@@ -258,7 +252,7 @@ export function OnboardingFlow() {
             onClick={handleNext}
             disabled={isCompleting}
             size="lg"
-            className="h-12 w-full rounded-xl bg-green-600 text-sm font-bold text-white shadow-lg shadow-green-600/25 transition-all hover:-translate-y-0.5 hover:bg-green-700 active:translate-y-0 active:scale-[0.98] sm:h-13 sm:rounded-2xl sm:text-base"
+            className="h-12 w-full rounded-xl bg-green-600 text-sm font-bold text-white shadow-lg shadow-green-600/25 transition-all hover:bg-green-700  sm:h-13 sm:rounded-2xl sm:text-base"
           >
             <span>{currentSlide.buttonText}</span>
 
@@ -268,18 +262,20 @@ export function OnboardingFlow() {
           </Button>
 
           {/* Back */}
-          {currentSlideIndex > 0 && (
-            <Button
-              type="button"
-              onClick={handlePrev}
-              disabled={isCompleting}
-              variant="ghost"
-              size="sm"
-              className="mt-1 min-h-10 text-xs font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-700 sm:mt-2 sm:text-sm"
-            >
-              Back
-            </Button>
-          )}
+          <Button
+            type="button"
+            onClick={handlePrev}
+            disabled={isCompleting || currentSlideIndex === 0}
+            variant="ghost"
+            size="sm"
+            className={`mt-1 h-12 w-full text-xs font-semibold sm:mt-2 sm:text-sm ${
+              currentSlideIndex === 0
+                ? 'invisible'
+                : 'text-slate-500 hover:bg-slate-200 hover:text-slate-700'
+            }`}
+          >
+            Back
+          </Button>
         </footer>
       </section>
     </main>
