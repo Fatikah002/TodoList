@@ -292,7 +292,7 @@ export function TodoForm({
 
       <Button
         type="submit"
-        className="h-11 w-full gap-2 bg-green-600 text-white hover:bg-green-700"
+        className="h-12 w-full gap-2 bg-green-600 text-white hover:bg-green-700"
       >
         {submitLabel ?? 'Add Todo'}
       </Button>
@@ -301,7 +301,7 @@ export function TodoForm({
         <Button
           type="button"
           variant="outline"
-          className="h-11 w-full"
+          className="h-12 w-full"
           onClick={onCancel}
         >
           Cancel

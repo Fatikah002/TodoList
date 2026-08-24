@@ -183,7 +183,7 @@ function EditProfilePage() {
               id="username"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="h-11 rounded-xl border-gray-200 focus:border-green-600 focus:ring-green-600/20"
+              className="h-12 rounded-xl border-gray-200 focus:border-green-600 focus:ring-green-600/20"
             />
           </div>
           <div className="space-y-2">
@@ -198,7 +198,7 @@ function EditProfilePage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-11 rounded-xl border-gray-200 focus:border-green-600 focus:ring-green-600/20"
+              className="h-12 rounded-xl border-gray-200 focus:border-green-600 focus:ring-green-600/20"
             />
           </div>
         </section>
@@ -234,7 +234,7 @@ function EditProfilePage() {
                       type={showCurrent ? 'text' : 'password'}
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
-                      className="h-11 rounded-xl border-gray-200 pr-10 focus:border-green-600 focus:ring-green-600/20"
+                      className="h-12 rounded-xl border-gray-200 pr-10 focus:border-green-600 focus:ring-green-600/20"
                     />
                     <button
                       type="button"
@@ -260,7 +260,7 @@ function EditProfilePage() {
                     type={showNew ? 'text' : 'password'}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="h-11 rounded-xl border-gray-200 pr-10 focus:border-green-600 focus:ring-green-600/20"
+                    className="h-12 rounded-xl border-gray-200 pr-10 focus:border-green-600 focus:ring-green-600/20"
                   />
                   <button
                     type="button"
@@ -285,7 +285,7 @@ function EditProfilePage() {
                     type={showConfirm ? 'text' : 'password'}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="h-11 rounded-xl border-gray-200 pr-10 focus:border-green-600 focus:ring-green-600/20"
+                    className="h-12 rounded-xl border-gray-200 pr-10 focus:border-green-600 focus:ring-green-600/20"
                   />
                   <button
                     type="button"
@@ -316,13 +316,13 @@ function EditProfilePage() {
           <Button
             variant="ghost"
             onClick={() => navigate({ to: '/account' })}
-            className="h-11 rounded-xl border border-green-300 bg-white px-5 text-green-600 hover:bg-green-50"
+            className="h-12 rounded-xl border border-green-300 bg-white px-5 text-green-600 hover:bg-green-50"
           >
             Cancel
           </Button>
           <Button
             onClick={handleSave}
-            className="h-11 rounded-xl bg-green-600 px-6 text-white shadow-sm transition-colors hover:bg-green-600/90"
+            className="h-12 rounded-xl bg-green-600 px-6 text-white shadow-sm transition-colors hover:bg-green-600/90"
           >
             Save changes
           </Button>

@@ -20,7 +20,7 @@ export function WelcomeView({ onLogin, onSignup }: WelcomeViewProps) {
       </p>
       <Button
         onClick={onLogin}
-        className="mt-6 h-10 w-full rounded-xl bg-green-600 font-semibold text-white shadow-md shadow-green-600/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-lg hover:shadow-green-600/25 active:translate-y-0 sm:h-11"
+        className="mt-6 h-10 w-full rounded-xl bg-green-600 font-semibold text-white shadow-md shadow-green-600/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-lg hover:shadow-green-600/25 active:translate-y-0 sm:h-12"
       >
         Login
         <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -28,7 +28,7 @@ export function WelcomeView({ onLogin, onSignup }: WelcomeViewProps) {
       <Button
         variant="outline"
         onClick={onSignup}
-        className="mt-2 h-10 w-full rounded-xl border-slate-200 font-semibold text-slate-700 hover:border-green-200 hover:bg-green-50 hover:text-green-700 sm:h-11"
+        className="mt-2 h-10 w-full rounded-xl border-slate-200 font-semibold text-slate-700 hover:border-green-200 hover:bg-green-50 hover:text-green-700 sm:h-12"
       >
         Create Account
       </Button>

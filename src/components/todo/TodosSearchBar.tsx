@@ -76,7 +76,7 @@ export function TodosSearchBar({
           placeholder="Search todo..."
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="h-11 rounded-xl pl-10 pr-10"
+          className="h-12 rounded-xl pl-10 pr-10"
         />
 
         {search && (
@@ -104,7 +104,7 @@ export function TodosSearchBar({
       <Button
         variant="outline"
         onClick={onEnterSelectMode}
-        className="h-11 gap-1.5 rounded-xl px-3"
+        className="h-12 gap-1.5 rounded-xl px-3"
       >
         <SquareCheckBig size={16} />
       </Button>

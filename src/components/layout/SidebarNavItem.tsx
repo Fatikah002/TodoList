@@ -21,7 +21,7 @@ export function SidebarNavItem({
         isActive={active}
         onClick={onClick}
         className={`
-          h-11
+          h-12
           rounded-xl
           justify-start
           gap-3
