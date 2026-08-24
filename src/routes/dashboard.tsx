@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
 import { useTodos } from '@/hooks/useTodos'
 import { useProfile } from '@/hooks/useProfile'
 import { isSameDay, formatLocalDate } from '@/lib/date'
@@ -13,9 +12,7 @@ import { DailyGoalCard } from '@/components/dashboard/DailyGoalCard'
 import { TodayTasksSection } from '@/components/dashboard/TodayTasksSection'
 import { WeeklyProgressSection } from '@/components/dashboard/WeeklyProgressSection'
 import { UpcomingTasksSection } from '@/components/dashboard/UpcomingTasksSection'
-import { TodoDialog } from '@/components/todo/TodoDialog'
 import { createTodoFromForm } from '@/lib/todos'
-import type { TodoFormData } from '@/lib/schemas'
 import { toast } from 'sonner'
 
 export const Route = createFileRoute('/dashboard')({
@@ -41,7 +38,6 @@ function DashboardPage() {
   const { profile } = useProfile()
   const activeTodos = todos.filter((todo) => !todo.archived)
   const today = formatLocalDate(new Date())
-  const [showAddTodo, setShowAddTodo] = useState(false)
 
   const todayTodos = activeTodos.filter(
     (todo) => isSameDay(todo.deadline, today) && !todo.completed,
@@ -63,8 +59,18 @@ function DashboardPage() {
 
   const upcomingTodos = getUpcomingTodos(todos)
 
-  function handleAddTodo(data: TodoFormData) {
-    addTodo(createTodoFromForm(data))
+  function handleAddTodo(title: string) {
+    addTodo(
+      createTodoFromForm({
+        title,
+        detail: '',
+        category: 'Other',
+        priority: 'None',
+        deadline: formatLocalDate(new Date()),
+        dueTime: '',
+        repeat: 'none',
+      }),
+    )
     toast.success('Todo added successfully!')
   }
 
@@ -97,25 +103,13 @@ function DashboardPage() {
         <TodayTasksSection
           todos={todayTodos}
           onToggleTodo={toggleTodo}
-          onAddTodo={() => setShowAddTodo(true)}
+          onAddTodo={handleAddTodo}
         />
       </div>
 
-      {showAddTodo && (
-        <TodoDialog
-          isOpen={showAddTodo}
-          onClose={() => setShowAddTodo(false)}
-          title="Add Todo"
-          submitLabel="Add Todo"
-          showPriority={true}
-          showRepeat={true}
-          onSubmit={handleAddTodo}
-        />
-      )}
-
       {/* Streak */}
       <div className="mt-3 ">
-        <StreakCard/>
+        <StreakCard />
       </div>
 
       {/* Sections */}
