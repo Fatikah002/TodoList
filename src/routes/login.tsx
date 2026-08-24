@@ -4,6 +4,7 @@ import { STORAGE_KEYS } from '@/lib/constants'
 import { LoginFormView } from '@/components/login/LoginFormView'
 import { SignupFormView } from '@/components/login/SignupFormView'
 import { AuthStatusView } from '@/components/login/AuthStatusView'
+import { useProfile } from '@/hooks/useProfile'
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
@@ -13,7 +14,9 @@ type LoginView = 'form' | 'signup' | 'loading' | 'success'
 
 function LoginPage() {
   const navigate = useNavigate()
+  const { updateProfile } = useProfile()
   const [view, setView] = useState<LoginView>('form')
+  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -43,6 +46,10 @@ function LoginPage() {
 
   const handleAuth = useCallback(() => {
     setError('')
+    if (isSignUp && !username.trim()) {
+      setError('Username must not be empty.')
+      return
+    }
     if (!email.includes('@')) {
       setError('Please enter a valid email address.')
       return
@@ -55,6 +62,24 @@ function LoginPage() {
       setError('Passwords do not match.')
       return
     }
+
+    if (!isSignUp) {
+      const stored = localStorage.getItem(STORAGE_KEYS.REGISTERED_ACCOUNTS)
+      const accounts: { email: string; password: string; username: string }[] =
+        stored ? JSON.parse(stored) : []
+      const account = accounts.find(
+        (a) => a.email.toLowerCase() === email.toLowerCase(),
+      )
+      if (!account) {
+        setError('Account not found. Please sign up first.')
+        return
+      }
+      if (account.password !== password) {
+        setError('Incorrect password. Please try again.')
+        return
+      }
+    }
+
     setIsCreatingAccount(isSignUp)
     setView('loading')
 
@@ -62,6 +87,34 @@ function LoginPage() {
       setView('success')
       localStorage.setItem(STORAGE_KEYS.LOGGED_IN, 'true')
       localStorage.setItem(STORAGE_KEYS.USER_EMAIL, email)
+
+      if (isSignUp) {
+        const stored = localStorage.getItem(STORAGE_KEYS.REGISTERED_ACCOUNTS)
+        const accounts: {
+          email: string
+          password: string
+          username: string
+        }[] = stored ? JSON.parse(stored) : []
+        accounts.push({ email, password, username: username.trim() })
+        localStorage.setItem(
+          STORAGE_KEYS.REGISTERED_ACCOUNTS,
+          JSON.stringify(accounts),
+        )
+        updateProfile({ name: username.trim(), email, password })
+      } else {
+        const stored = localStorage.getItem(STORAGE_KEYS.REGISTERED_ACCOUNTS)
+        const accounts: {
+          email: string
+          password: string
+          username: string
+        }[] = stored ? JSON.parse(stored) : []
+        const account = accounts.find(
+          (a) => a.email.toLowerCase() === email.toLowerCase(),
+        )
+        if (account) {
+          updateProfile({ name: account.username, email: account.email })
+        }
+      }
 
       const t2 = window.setTimeout(() => {
         navigate({
@@ -73,7 +126,15 @@ function LoginPage() {
       timersRef.current.push(t2)
     }, 1500)
     timersRef.current.push(t1)
-  }, [confirmPassword, email, isSignUp, navigate, password])
+  }, [
+    confirmPassword,
+    email,
+    isSignUp,
+    navigate,
+    password,
+    updateProfile,
+    username,
+  ])
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -150,11 +211,13 @@ function LoginPage() {
 
             {view === 'signup' && (
               <SignupFormView
+                username={username}
                 email={email}
                 password={password}
                 confirmPassword={confirmPassword}
                 showPassword={showPassword}
                 error={error}
+                onUsernameChange={setUsername}
                 onEmailChange={setEmail}
                 onPasswordChange={setPassword}
                 onConfirmPasswordChange={setConfirmPassword}

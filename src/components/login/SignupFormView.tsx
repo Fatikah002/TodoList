@@ -1,14 +1,16 @@
-import { Eye, EyeOff, ArrowRight, Check } from 'lucide-react'
+import { Eye, EyeOff, User, Check } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 
 interface SignupFormViewProps {
+  username: string
   email: string
   password: string
   confirmPassword: string
   showPassword: boolean
   error: string
+  onUsernameChange: (value: string) => void
   onEmailChange: (value: string) => void
   onPasswordChange: (value: string) => void
   onConfirmPasswordChange: (value: string) => void
@@ -19,11 +21,13 @@ interface SignupFormViewProps {
 }
 
 export function SignupFormView({
+  username,
   email,
   password,
   confirmPassword,
   showPassword,
   error,
+  onUsernameChange,
   onEmailChange,
   onPasswordChange,
   onConfirmPasswordChange,
@@ -44,12 +48,25 @@ export function SignupFormView({
         <div className="space-y-1.5 sm:space-y-2">
           <div className="relative">
             <Input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => onUsernameChange(e.target.value)}
+              className="h-12 rounded-xl border-slate-200 bg-white pr-10 pl-4 text-sm focus-visible:ring-green-500 sm:pl-11 sm:text-sm"
+              autoFocus
+            />
+            <User className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          </div>
+        </div>
+
+        <div className="space-y-1.5 sm:space-y-2">
+          <div className="relative">
+            <Input
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
               className={`h-12 rounded-xl border-slate-200 bg-white pr-10 pl-4 text-sm focus-visible:ring-green-500 sm:pl-11 sm:text-sm ${isEmailValid ? 'border-green-500' : ''}`}
-              autoFocus
             />
             {isEmailValid && (
               <Check className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-green-500" />
@@ -106,7 +123,9 @@ export function SignupFormView({
             <div className="w-full border-t border-slate-200" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-white px-3 text-slate-400">or sign up with</span>
+            <span className="bg-white px-3 text-slate-400">
+              or sign up with
+            </span>
           </div>
         </div>
 

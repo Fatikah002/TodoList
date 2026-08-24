@@ -16,8 +16,8 @@ type ProfileContextType = {
 }
 
 const defaultProfile: Profile = {
-  name: 'User',
-  email: 'user@email.com',
+  name: '',
+  email: '',
   avatar: DEFAULT_AVATAR,
   password: '',
 }
