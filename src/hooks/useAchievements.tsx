@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
-import { X } from 'lucide-react'
 import { useTodos } from '@/hooks/useTodos'
 import { BadgeIcon } from '@/components/account/BadgeIcon'
 import { triggerFireworks } from '@/components/ui/confetti'
@@ -10,6 +9,7 @@ import {
   getUnlockedAchievementIds,
   saveUnlockedAchievementId,
 } from '@/lib/achievements'
+import { STORAGE_KEYS } from '@/lib/constants'
 import type { Achievement, AchievementFilter } from '@/lib/achievements'
 
 const toastThemeByColor = {
@@ -91,15 +91,42 @@ const toastThemeByColor = {
 
 export function useAchievements() {
   const { todos } = useTodos()
+  const emailRef = useRef<string>(
+    typeof window !== 'undefined'
+      ? localStorage.getItem(STORAGE_KEYS.USER_EMAIL) ?? ''
+      : '',
+  )
   const [unlockedIds, setUnlockedIds] = useState<string[]>(() =>
-    getUnlockedAchievementIds(),
+    getUnlockedAchievementIds(emailRef.current),
   )
   const [filter, setFilter] = useState<AchievementFilter>('All')
 
   const isInitialMount = useRef(true)
+  const skipCheckRef = useRef(false)
+
+  // Re-load achievements when email changes (login/logout)
+  useEffect(() => {
+    const checkEmail = () => {
+      const currentEmail = localStorage.getItem(STORAGE_KEYS.USER_EMAIL) ?? ''
+      if (currentEmail !== emailRef.current) {
+        emailRef.current = currentEmail
+        skipCheckRef.current = true
+        setUnlockedIds(getUnlockedAchievementIds(currentEmail))
+      }
+    }
+    const interval = setInterval(checkEmail, 500)
+    return () => clearInterval(interval)
+  }, [])
+
+  const email = emailRef.current
 
   // Check achievements against current todos
   useEffect(() => {
+    if (skipCheckRef.current) {
+      skipCheckRef.current = false
+      return
+    }
+
     let newlyUnlocked: Achievement | null = null
     let updatedIds = [...unlockedIds]
 
@@ -108,7 +135,7 @@ export function useAchievements() {
 
       const progress = getAchievementProgress(achievement, todos)
       if (progress >= achievement.target) {
-        updatedIds = saveUnlockedAchievementId(achievement.id)
+        updatedIds = saveUnlockedAchievementId(achievement.id, email)
         if (!isInitialMount.current) {
           newlyUnlocked = achievement
         }
@@ -143,10 +170,10 @@ export function useAchievements() {
               <p className={`text-[11px] font-extrabold uppercase tracking-[0.18em] ${theme.accent}`}>
                 Achievement Unlocked!
               </p>
-              <h4 className="mt-1 truncate text-[15px] font-bold text-sea-ink">
+              <h4 className="mt-1 truncate text-[15px] font-bold text-green-ink">
                 {newlyUnlocked.title}
               </h4>
-              <p className="mt-1 truncate text-xs text-sea-ink-soft">
+              <p className="mt-1 truncate text-xs text-green-ink-soft">
                 {newlyUnlocked.description}
               </p>
             </div>
@@ -158,9 +185,8 @@ export function useAchievements() {
             <button
               type="button"
               aria-label="Dismiss achievement toast"
-              className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full text-sea-ink-soft transition hover:bg-black/5 hover:text-sea-ink"
+              className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full text-green-ink-soft transition hover:bg-black/5 hover:text-green-ink"
             >
-              <X size={14} />
             </button>
           </div>
         ),

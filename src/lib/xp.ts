@@ -1,5 +1,6 @@
 import type { Todo } from './types'
 import { getUnlockedAchievementIds, getAchievementsXp } from './achievements'
+import { STORAGE_KEYS } from './constants'
 
 const XP_PER_TASK: Record<string, number> = {
   High: 30,
@@ -23,7 +24,8 @@ export function calculateTotalXp(todos: Todo[], unlockedAchievementIds?: string[
     }
   }
 
-  const unlockedIds = unlockedAchievementIds ?? getUnlockedAchievementIds()
+  const email = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.USER_EMAIL) ?? undefined : undefined
+  const unlockedIds = unlockedAchievementIds ?? getUnlockedAchievementIds(email)
   total += getAchievementsXp(unlockedIds)
 
   return total

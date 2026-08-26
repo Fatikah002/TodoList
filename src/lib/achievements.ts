@@ -169,26 +169,35 @@ export function getAchievementProgress(
   }
 }
 
-const UNLOCKED_KEY = 'unlocked_achievements'
+const LEGACY_UNLOCKED_KEY = 'unlocked_achievements'
 
-export function getUnlockedAchievementIds(): string[] {
+function getUnlockedKey(email?: string): string {
+  const e = email ?? (typeof window !== 'undefined' ? localStorage.getItem('todospace_user_email') : '') ?? ''
+  return e ? `unlocked_achievements_${e}` : LEGACY_UNLOCKED_KEY
+}
+
+export function getUnlockedAchievementIds(email?: string): string[] {
   if (typeof window === 'undefined') return []
   try {
-    const raw = localStorage.getItem(UNLOCKED_KEY)
-    if (!raw) return []
-    const parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? parsed : []
+    const key = getUnlockedKey(email)
+    const raw = localStorage.getItem(key)
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      return Array.isArray(parsed) ? parsed : []
+    }
+    return []
   } catch {
     return []
   }
 }
 
-export function saveUnlockedAchievementId(id: string): string[] {
+export function saveUnlockedAchievementId(id: string, email?: string): string[] {
   if (typeof window === 'undefined') return []
-  const current = getUnlockedAchievementIds()
+  const current = getUnlockedAchievementIds(email)
   if (!current.includes(id)) {
     const updated = [...current, id]
-    localStorage.setItem(UNLOCKED_KEY, JSON.stringify(updated))
+    const key = getUnlockedKey(email)
+    localStorage.setItem(key, JSON.stringify(updated))
     return updated
   }
   return current

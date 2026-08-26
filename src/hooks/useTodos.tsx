@@ -1,9 +1,31 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
 import type { Todo } from '@/lib/types'
 import { getNextDeadline } from '@/lib/repeat'
 import { generateId } from '@/lib/utils'
 import { STORAGE_KEYS } from '@/lib/constants'
+
+const LEGACY_TODOS_KEY = 'todos'
+
+function getTodosKey(): string {
+  if (typeof window === 'undefined') return LEGACY_TODOS_KEY
+  const email = localStorage.getItem(STORAGE_KEYS.USER_EMAIL)
+  return email ? `todos_${email}` : LEGACY_TODOS_KEY
+}
+
+function loadTodos(): Todo[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const key = getTodosKey()
+    const raw = localStorage.getItem(key)
+    if (raw) {
+      return JSON.parse(raw)
+    }
+    return []
+  } catch {
+    return []
+  }
+}
 
 type TodosContextType = {
   todos: Todo[]
@@ -21,15 +43,31 @@ type TodosContextType = {
 const TodosContext = createContext<TodosContextType | null>(null)
 
 export function TodosProvider({ children }: { children: ReactNode }) {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    if (typeof window === 'undefined') return []
-    const storedTodos = localStorage.getItem(STORAGE_KEYS.TODOS)
-    return storedTodos ? JSON.parse(storedTodos) : []
-  })
+  const [todos, setTodos] = useState<Todo[]>(() => loadTodos())
+  const emailRef = useRef<string | null>(
+    typeof window !== 'undefined'
+      ? localStorage.getItem(STORAGE_KEYS.USER_EMAIL)
+      : null,
+  )
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.TODOS, JSON.stringify(todos))
+    const key = getTodosKey()
+    localStorage.setItem(key, JSON.stringify(todos))
   }, [todos])
+
+  // Re-load todos when email changes (login/logout)
+  useEffect(() => {
+    const checkEmail = () => {
+      const currentEmail = localStorage.getItem(STORAGE_KEYS.USER_EMAIL)
+      if (currentEmail !== emailRef.current) {
+        emailRef.current = currentEmail
+        setTodos(loadTodos())
+      }
+    }
+
+    const interval = setInterval(checkEmail, 500)
+    return () => clearInterval(interval)
+  }, [])
 
   function addTodo(todo: Todo) {
     setTodos((prev) => [...prev, todo])

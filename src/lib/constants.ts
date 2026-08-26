@@ -5,4 +5,5 @@ export const STORAGE_KEYS = {
   ONBOARDING_COMPLETED: 'todospace_onboarding_completed',
   CUSTOM_CATEGORIES: 'customCategories',
   REGISTERED_ACCOUNTS: 'todospace_registered_accounts',
+  NOTIFICATION_PREFS: 'notificationPreferences',
 } as const
