@@ -2,6 +2,7 @@ import { toast } from 'sonner'
 import { Trash2, CalendarDays, Flag, Archive, RotateCcw, Trash, EllipsisVertical } from 'lucide-react'
 import type { Todo } from '@/lib/types'
 import { format } from 'date-fns'
+import { formatTime12 } from '@/lib/date'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -143,7 +144,7 @@ export function TodoItemDropdown({
         <CalendarDays className="h-3.5 w-3.5" />
         <span>
           {format(new Date(todo.deadline), 'dd MMM yyyy')}
-          {todo.dueTime && ` ${todo.dueTime}`}
+          {todo.dueTime && ` ${formatTime12(todo.dueTime)}`}
         </span>
       </div>
     </div>

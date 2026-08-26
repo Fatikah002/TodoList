@@ -7,6 +7,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Edit } from 'lucide-react'
 import type { Todo } from '@/lib/types'
+import { formatTime12 } from '@/lib/date'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { TodoForm } from '@/components/todo/TodoForm'
@@ -85,7 +86,7 @@ export function TodoDetailDialog({
               <h4 className="font-medium">Deadline</h4>
               <p>
                 {todo.deadline}
-                {todo.dueTime && ` ${todo.dueTime}`}
+                {todo.dueTime && ` ${formatTime12(todo.dueTime)}`}
               </p>
             </div>
 
