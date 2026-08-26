@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { ChevronRight,  CalendarDays  } from 'lucide-react'
 import { format } from 'date-fns'
+import { formatTime12 } from '@/lib/date'
 import type { Todo } from '@/lib/types'
 
 type UpcomingTasksSectionProps = {
@@ -27,10 +28,10 @@ export function UpcomingTasksSection({ todos }: UpcomingTasksSectionProps) {
 
       <div className="space-y-2.5">
         {todos.length === 0 ? (
-          <div className="flex h-[100px] flex-col items-center justify-center ">
-            <CalendarDays className="h-6 w-6 text-gray-300" />
-            <p className="py-1 text-center text-xs text-gray-500">
-              No upcoming task
+          <div className="flex h-[120px] flex-col items-center justify-center">
+            <CalendarDays className="h-10 w-10 text-gray-300" />
+            <p className="mt-2 text-center text-sm text-gray-400">
+              No upcoming tasks
             </p>
           </div>
         ) : (
@@ -53,7 +54,7 @@ export function UpcomingTasksSection({ todos }: UpcomingTasksSectionProps) {
                 </div>
 
                 <p className="shrink-0 whitespace-nowrap text-xs text-gray-500">
-                  {todo.dueTime || 'No due time'}
+                  {todo.dueTime ? formatTime12(todo.dueTime) : 'No due time'}
                 </p>
               </div>
             )

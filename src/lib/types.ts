@@ -1,6 +1,12 @@
 export type priority = 'High' | 'Medium' | 'Low' | 'None'
 export type RepeatType = 'none' | 'daily' | 'weekly' | 'monthly'
 
+export type NotificationPreferences = {
+  taskDeadlineApproaching: boolean
+  taskOverdue: boolean
+  achievementUnlocked: boolean
+}
+
 export type Todo = {
   id: string
   title: string

@@ -20,6 +20,9 @@ import { Route as AccountSettingsRouteImport } from './routes/account/settings'
 import { Route as AccountEditAccountRouteImport } from './routes/account/editAccount'
 import { Route as AccountDeleteAccountRouteImport } from './routes/account/deleteAccount'
 import { Route as AccountAchievementsRouteImport } from './routes/account/achievements'
+import { Route as AccountSettingsQuickFiltersRouteImport } from './routes/account/settings/quick-filters'
+import { Route as AccountSettingsNotificationsRouteImport } from './routes/account/settings/notifications'
+import { Route as AccountSettingsAboutRouteImport } from './routes/account/settings/about'
 
 const TodosRoute = TodosRouteImport.update({
   id: '/todos',
@@ -76,6 +79,23 @@ const AccountAchievementsRoute = AccountAchievementsRouteImport.update({
   path: '/account/achievements',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountSettingsQuickFiltersRoute =
+  AccountSettingsQuickFiltersRouteImport.update({
+    id: '/quick-filters',
+    path: '/quick-filters',
+    getParentRoute: () => AccountSettingsRoute,
+  } as any)
+const AccountSettingsNotificationsRoute =
+  AccountSettingsNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AccountSettingsRoute,
+  } as any)
+const AccountSettingsAboutRoute = AccountSettingsAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => AccountSettingsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -87,8 +107,11 @@ export interface FileRoutesByFullPath {
   '/account/achievements': typeof AccountAchievementsRoute
   '/account/deleteAccount': typeof AccountDeleteAccountRoute
   '/account/editAccount': typeof AccountEditAccountRoute
-  '/account/settings': typeof AccountSettingsRoute
+  '/account/settings': typeof AccountSettingsRouteWithChildren
   '/account/': typeof AccountIndexRoute
+  '/account/settings/about': typeof AccountSettingsAboutRoute
+  '/account/settings/notifications': typeof AccountSettingsNotificationsRoute
+  '/account/settings/quick-filters': typeof AccountSettingsQuickFiltersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -100,8 +123,11 @@ export interface FileRoutesByTo {
   '/account/achievements': typeof AccountAchievementsRoute
   '/account/deleteAccount': typeof AccountDeleteAccountRoute
   '/account/editAccount': typeof AccountEditAccountRoute
-  '/account/settings': typeof AccountSettingsRoute
+  '/account/settings': typeof AccountSettingsRouteWithChildren
   '/account': typeof AccountIndexRoute
+  '/account/settings/about': typeof AccountSettingsAboutRoute
+  '/account/settings/notifications': typeof AccountSettingsNotificationsRoute
+  '/account/settings/quick-filters': typeof AccountSettingsQuickFiltersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -114,8 +140,11 @@ export interface FileRoutesById {
   '/account/achievements': typeof AccountAchievementsRoute
   '/account/deleteAccount': typeof AccountDeleteAccountRoute
   '/account/editAccount': typeof AccountEditAccountRoute
-  '/account/settings': typeof AccountSettingsRoute
+  '/account/settings': typeof AccountSettingsRouteWithChildren
   '/account/': typeof AccountIndexRoute
+  '/account/settings/about': typeof AccountSettingsAboutRoute
+  '/account/settings/notifications': typeof AccountSettingsNotificationsRoute
+  '/account/settings/quick-filters': typeof AccountSettingsQuickFiltersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -131,6 +160,9 @@ export interface FileRouteTypes {
     | '/account/editAccount'
     | '/account/settings'
     | '/account/'
+    | '/account/settings/about'
+    | '/account/settings/notifications'
+    | '/account/settings/quick-filters'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -144,6 +176,9 @@ export interface FileRouteTypes {
     | '/account/editAccount'
     | '/account/settings'
     | '/account'
+    | '/account/settings/about'
+    | '/account/settings/notifications'
+    | '/account/settings/quick-filters'
   id:
     | '__root__'
     | '/'
@@ -157,6 +192,9 @@ export interface FileRouteTypes {
     | '/account/editAccount'
     | '/account/settings'
     | '/account/'
+    | '/account/settings/about'
+    | '/account/settings/notifications'
+    | '/account/settings/quick-filters'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -169,7 +207,7 @@ export interface RootRouteChildren {
   AccountAchievementsRoute: typeof AccountAchievementsRoute
   AccountDeleteAccountRoute: typeof AccountDeleteAccountRoute
   AccountEditAccountRoute: typeof AccountEditAccountRoute
-  AccountSettingsRoute: typeof AccountSettingsRoute
+  AccountSettingsRoute: typeof AccountSettingsRouteWithChildren
   AccountIndexRoute: typeof AccountIndexRoute
 }
 
@@ -252,8 +290,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountAchievementsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/settings/quick-filters': {
+      id: '/account/settings/quick-filters'
+      path: '/quick-filters'
+      fullPath: '/account/settings/quick-filters'
+      preLoaderRoute: typeof AccountSettingsQuickFiltersRouteImport
+      parentRoute: typeof AccountSettingsRoute
+    }
+    '/account/settings/notifications': {
+      id: '/account/settings/notifications'
+      path: '/notifications'
+      fullPath: '/account/settings/notifications'
+      preLoaderRoute: typeof AccountSettingsNotificationsRouteImport
+      parentRoute: typeof AccountSettingsRoute
+    }
+    '/account/settings/about': {
+      id: '/account/settings/about'
+      path: '/about'
+      fullPath: '/account/settings/about'
+      preLoaderRoute: typeof AccountSettingsAboutRouteImport
+      parentRoute: typeof AccountSettingsRoute
+    }
   }
 }
+
+interface AccountSettingsRouteChildren {
+  AccountSettingsAboutRoute: typeof AccountSettingsAboutRoute
+  AccountSettingsNotificationsRoute: typeof AccountSettingsNotificationsRoute
+  AccountSettingsQuickFiltersRoute: typeof AccountSettingsQuickFiltersRoute
+}
+
+const AccountSettingsRouteChildren: AccountSettingsRouteChildren = {
+  AccountSettingsAboutRoute: AccountSettingsAboutRoute,
+  AccountSettingsNotificationsRoute: AccountSettingsNotificationsRoute,
+  AccountSettingsQuickFiltersRoute: AccountSettingsQuickFiltersRoute,
+}
+
+const AccountSettingsRouteWithChildren = AccountSettingsRoute._addFileChildren(
+  AccountSettingsRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -265,7 +340,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountAchievementsRoute: AccountAchievementsRoute,
   AccountDeleteAccountRoute: AccountDeleteAccountRoute,
   AccountEditAccountRoute: AccountEditAccountRoute,
-  AccountSettingsRoute: AccountSettingsRoute,
+  AccountSettingsRoute: AccountSettingsRouteWithChildren,
   AccountIndexRoute: AccountIndexRoute,
 }
 export const routeTree = rootRouteImport

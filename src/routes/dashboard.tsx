@@ -2,18 +2,18 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useTodos } from '@/hooks/useTodos'
 import { useProfile } from '@/hooks/useProfile'
 import { isSameDay, formatLocalDate } from '@/lib/date'
-import { calculateTodoStats } from '@/lib/todoStats'
 import { getUpcomingTodos } from '@/lib/upcomingTasks'
 import { CalendarDays } from 'lucide-react'
 import { startOfWeek, endOfWeek, isWithinInterval, format } from 'date-fns'
-import { StatsGrid } from '@/components/dashboard/StatsGrid'
-import { StreakCard } from '@/components/dashboard/StreakCard'
-import { DailyGoalCard } from '@/components/dashboard/DailyGoalCard'
 import { TodayTasksSection } from '@/components/dashboard/TodayTasksSection'
+import { DailyGoalCard } from '@/components/dashboard/DailyGoalCard'
 import { WeeklyProgressSection } from '@/components/dashboard/WeeklyProgressSection'
 import { UpcomingTasksSection } from '@/components/dashboard/UpcomingTasksSection'
+import { StatsGrid } from '@/components/dashboard/StatsGrid'
 import { createTodoFromForm } from '@/lib/todos'
 import { toast } from 'sonner'
+import { calculateStreak } from '@/lib/streak'
+import { calculateTodoStats } from '@/lib/todoStats'
 
 export const Route = createFileRoute('/dashboard')({
   component: DashboardPage,
@@ -38,12 +38,12 @@ function DashboardPage() {
   const { profile } = useProfile()
   const activeTodos = todos.filter((todo) => !todo.archived)
   const today = formatLocalDate(new Date())
+  const streak = calculateStreak(todos)
+  const stats = calculateTodoStats(todos, { showAllTasks: true })
 
   const todayTodos = activeTodos.filter(
     (todo) => isSameDay(todo.deadline, today) && !todo.completed,
   )
-
-  const stats = calculateTodoStats(todos, { showAllTasks: true })
 
   const now = new Date()
   const weekStart = startOfWeek(now, { weekStartsOn: 1 })
@@ -77,29 +77,37 @@ function DashboardPage() {
   return (
     <div className="rise-in mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6 lg:px-8 motion-reduce:animate-none">
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between">
         <div className="flex-1">
-          <h1 className="text-lg font-bold leading-tight text-gray-900 sm:text-2xl">
+          <h1 className="text-xl font-bold leading-tight text-gray-900 sm:text-2xl">
             {getGreeting()}, {profile.name}! {getGreetingEmoji()}
           </h1>
-
           <p className="mt-1 text-xs text-gray-500 sm:text-sm">
             Let's get your tasks done.
           </p>
         </div>
 
-        <div className="flex shrink-0 items-center gap-1.5 text-xs text-gray-500 sm:text-sm">
-          <CalendarDays className="h-4 w-4 text-gray-500" />
-          <span className="whitespace-nowrap">
-            {format(now, 'dd MMMM yyyy')}
-          </span>
+        {/* Streak Counter */}
+        <div className="flex shrink-0 items-center gap-1 rounded-xl border border-orange-100 bg-orange-50 px-3 py-1 ">
+          <span className="text-lg leading-none">🔥</span>
+          <span className="text-lg font-bold text-orange-500">{streak}</span>
         </div>
       </div>
 
-      {/* Overview */}
+      {/* Date */}
+      {/* <div className="mt-3 flex items-center gap-2.5">
+        <div>
+          <p className="text-sm font-semibold text-gray-900">
+            {format(now, 'dd MMMM yyyy')}
+          </p>
+        </div>
+      </div> */}
+
+      {/* Stats Overview */}
       <StatsGrid stats={stats} showTotal={true} />
 
-      <div className="mt-3">
+      {/* Today's Tasks */}
+      <div className="mt-4">
         <TodayTasksSection
           todos={todayTodos}
           onToggleTodo={toggleTodo}
@@ -107,20 +115,18 @@ function DashboardPage() {
         />
       </div>
 
-      {/* Streak */}
-      <div className="mt-3 ">
-        <StreakCard />
-      </div>
-
-      {/* Sections */}
-      <div className="mt-3 grid grid-cols-1 gap-3 pb-24 sm:grid-cols-3 sm:pb-0">
+      {/* Stats Row: Daily Goal + This Week */}
+      <div className="mt-4 grid grid-cols-2 gap-3">
         <DailyGoalCard />
         <WeeklyProgressSection
           completed={weeklyCompleted}
           total={weeklyTotal}
           percentage={weeklyPct}
         />
+      </div>
 
+      {/* Upcoming Tasks */}
+      <div className="mt-4 pb-24 sm:pb-0">
         <UpcomingTasksSection todos={upcomingTodos} />
       </div>
     </div>
