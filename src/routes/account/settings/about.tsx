@@ -1,11 +1,17 @@
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import {
+  ArrowLeft,
   Check,
   ChevronRight,
   HardDrive,
   Github,
   BookOpen,
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
+export const Route = createFileRoute('/account/settings/about')({
+  component: AboutPage,
+})
 
 const FEATURES = [
   'Calendar',
@@ -23,15 +29,27 @@ const BUILT_WITH = [
   'shadcn/ui',
 ]
 
-export function AboutContent() {
-  return (
-    <div className="space-y-4">
-      <div>
-        <h2 className="text-lg font-semibold text-gray-900">About</h2>
-      </div>
+function AboutPage() {
+  const navigate = useNavigate()
 
-      <div className="border-gray-200 overflow-hidden">
-        <div className="divide-y divide-gray-100 p-0">
+  return (
+    <div className="flex flex-1 flex-col">
+      <main className="mx-auto w-full max-w-6xl px-4 py-6 md:px-8">
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate({ to: '/account/settings' })}
+            className="h-9 w-9"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">About</h1>
+          </div>
+        </div>
+
+        <div className="rounded-2xl bg-white divide-y divide-gray-100">
           {/* App Info */}
           <div className="px-5 py-5">
             <h3 className="text-lg font-bold text-gray-900">TodoSpace</h3>
@@ -85,7 +103,7 @@ export function AboutContent() {
           </div>
 
           {/* Links */}
-          <div className="p-0">
+          <div>
             <a
               href="https://github.com"
               target="_blank"
@@ -102,7 +120,7 @@ export function AboutContent() {
               href="https://tanstack.com/start"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-3 border-t border-gray-100 px-5 py-4 transition-colors hover:bg-gray-50"
+              className="flex items-center gap-3 px-5 py-4 transition-colors hover:bg-gray-50"
             >
               <BookOpen className="h-5 w-5 text-gray-400" />
               <span className="flex-1 text-sm font-medium text-gray-900">
@@ -112,7 +130,7 @@ export function AboutContent() {
             </a>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   )
 }

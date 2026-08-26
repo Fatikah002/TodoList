@@ -12,6 +12,7 @@ import { MobileNavbar } from '@/components/layout/MobileNavbar'
 import { AppHeader } from '@/components/layout/AppHeader'
 import { TodosProvider } from '@/hooks/useTodos'
 import { ProfileProvider } from '@/hooks/useProfile'
+import { NotificationPreferencesProvider } from '@/hooks/useNotificationPreferences'
 import { Toaster } from '@/components/ui/sonner'
 import { GlobalAchievementNotifier } from '@/components/GlobalAchievementNotifier'
 
@@ -50,6 +51,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     : pathname === '/todos' ? 'Tasks'
     : pathname === '/archived' ? 'Archived'
     : pathname.startsWith('/account/achievements') ? 'Achievements'
+    : pathname.startsWith('/account/settings/quick-filters') ? 'Quick Filters'
+    : pathname.startsWith('/account/settings/notifications') ? 'Notifications'
+    : pathname.startsWith('/account/settings/about') ? 'About'
     : pathname.startsWith('/account/settings') ? 'Settings'
     : pathname.startsWith('/account/edit') ? 'Edit Profile'
     : pathname.startsWith('/account') ? 'Account'
@@ -62,8 +66,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ProfileProvider>
-          <TodosProvider>
-            <GlobalAchievementNotifier />
+          <NotificationPreferencesProvider>
+            <TodosProvider>
+              <GlobalAchievementNotifier />
             <TooltipProvider>
               {pathname === '/onboarding' || pathname === '/login' ? (
                 <main className="min-h-screen w-full transition-opacity duration-300 ease-in-out">{children}</main>
@@ -79,7 +84,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               )}
             </TooltipProvider>
           </TodosProvider>
-        </ProfileProvider>
+        </NotificationPreferencesProvider>
+      </ProfileProvider>
         <Toaster richColors position="top-center" />
         <Scripts />
       </body>
