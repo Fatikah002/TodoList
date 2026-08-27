@@ -51,6 +51,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     : pathname === '/todos' ? 'Tasks'
     : pathname === '/archived' ? 'Archived'
     : pathname.startsWith('/account/achievements') ? 'Achievements'
+    : pathname.startsWith('/account/streak') ? 'Streak'
     : pathname.startsWith('/account/settings/quick-filters') ? 'Quick Filters'
     : pathname.startsWith('/account/settings/notifications') ? 'Notifications'
     : pathname.startsWith('/account/settings/about') ? 'About'

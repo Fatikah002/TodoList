@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import {
   Award,
   ChevronRight,
+  Flame,
   LogOut,
   Settings,
   Trash2,
@@ -13,6 +14,7 @@ import { useTodos } from '@/hooks/useTodos'
 import { getProgressInfo } from '@/lib/xp'
 import { ProgressCard } from '@/components/account/LevelXP'
 import { useAchievements } from '@/hooks/useAchievements'
+import { calculateStreak } from '@/lib/streak'
 import { STORAGE_KEYS } from '@/lib/constants'
 
 export const Route = createFileRoute('/account/')({
@@ -24,6 +26,7 @@ function RouteComponent() {
   const { profile } = useProfile()
   const { todos } = useTodos()
   const { unlockedIds, unlockedCount, totalCount } = useAchievements()
+  const streak = calculateStreak(todos)
   const info = getProgressInfo(todos, unlockedIds)
 
   return (
@@ -82,6 +85,22 @@ function RouteComponent() {
           </span>
           <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-bold text-green-700">
             {unlockedCount}/{totalCount}
+          </span>
+          <ChevronRight className="h-5 w-5 text-gray-400" />
+        </button>
+
+        <hr className="border-gray-100" />
+
+        <button
+          onClick={() => navigate({ to: '/account/streak' })}
+          className="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-gray-50"
+        >
+          <Flame className="h-5 w-5 text-orange-500" />
+          <span className="flex-1 text-sm font-medium text-gray-900">
+            Streaks
+          </span>
+          <span className="rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-bold text-orange-600">
+            {streak} days
           </span>
           <ChevronRight className="h-5 w-5 text-gray-400" />
         </button>

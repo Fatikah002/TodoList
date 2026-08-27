@@ -49,6 +49,26 @@ export function calculateStreak(todos: Todo[]): number {
   return streak
 }
 
+export function calculateBestStreak(todos: Todo[]): number {
+  const uniqueDates = getUniqueCompletedDates(todos)
+  if (uniqueDates.length === 0) return 0
+
+  const sorted = [...uniqueDates].sort()
+  let best = 1
+  let current = 1
+
+  for (let i = 1; i < sorted.length; i++) {
+    if (sorted[i] === subtractDays(sorted[i - 1], -1)) {
+      current++
+      if (current > best) best = current
+    } else if (sorted[i] !== sorted[i - 1]) {
+      current = 1
+    }
+  }
+
+  return best
+}
+
 type DayActivity = {
   label: string
   shortLabel: string

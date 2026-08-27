@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useTodos } from '@/hooks/useTodos'
 import { useProfile } from '@/hooks/useProfile'
 import { isSameDay, formatLocalDate } from '@/lib/date'
@@ -88,23 +88,27 @@ function DashboardPage() {
         </div>
 
         {/* Streak Counter */}
-        <div className="flex shrink-0 items-center gap-1 rounded-xl border border-orange-100 bg-orange-50 px-3 py-1 ">
+        <Link
+          to="/account/streak"
+          className="flex shrink-0 items-center rounded-xl border border-orange-100 bg-orange-50 px-3 py-1 transition-colors hover:bg-orange-100"
+        >
           <span className="text-lg leading-none">🔥</span>
           <span className="text-lg font-bold text-orange-500">{streak}</span>
-        </div>
+        </Link>
       </div>
 
       {/* Date */}
-      {/* <div className="mt-3 flex items-center gap-2.5">
-        <div>
-          <p className="text-sm font-semibold text-gray-900">
-            {format(now, 'dd MMMM yyyy')}
-          </p>
-        </div>
-      </div> */}
+      <div className="mt-3 flex items-center gap-2.5">
+        <CalendarDays className="h-4 w-4 text-gray-400" />
+        <p className="text-sm font-semibold text-gray-900">
+          {format(now, 'dd MMMM yyyy')}
+        </p>
+      </div>
 
       {/* Stats Overview */}
-      <StatsGrid stats={stats} showTotal={true} />
+      <div className="-mt-4">
+        <StatsGrid stats={stats} showTotal={true}/>
+      </div>
 
       {/* Today's Tasks */}
       <div className="mt-4">

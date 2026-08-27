@@ -16,6 +16,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ArchivedRouteImport } from './routes/archived'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountIndexRouteImport } from './routes/account/index'
+import { Route as AccountStreakRouteImport } from './routes/account/streak'
 import { Route as AccountSettingsRouteImport } from './routes/account/settings'
 import { Route as AccountEditAccountRouteImport } from './routes/account/editAccount'
 import { Route as AccountDeleteAccountRouteImport } from './routes/account/deleteAccount'
@@ -57,6 +58,11 @@ const IndexRoute = IndexRouteImport.update({
 const AccountIndexRoute = AccountIndexRouteImport.update({
   id: '/account/',
   path: '/account/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountStreakRoute = AccountStreakRouteImport.update({
+  id: '/account/streak',
+  path: '/account/streak',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountSettingsRoute = AccountSettingsRouteImport.update({
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/account/deleteAccount': typeof AccountDeleteAccountRoute
   '/account/editAccount': typeof AccountEditAccountRoute
   '/account/settings': typeof AccountSettingsRouteWithChildren
+  '/account/streak': typeof AccountStreakRoute
   '/account/': typeof AccountIndexRoute
   '/account/settings/about': typeof AccountSettingsAboutRoute
   '/account/settings/notifications': typeof AccountSettingsNotificationsRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/account/deleteAccount': typeof AccountDeleteAccountRoute
   '/account/editAccount': typeof AccountEditAccountRoute
   '/account/settings': typeof AccountSettingsRouteWithChildren
+  '/account/streak': typeof AccountStreakRoute
   '/account': typeof AccountIndexRoute
   '/account/settings/about': typeof AccountSettingsAboutRoute
   '/account/settings/notifications': typeof AccountSettingsNotificationsRoute
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/account/deleteAccount': typeof AccountDeleteAccountRoute
   '/account/editAccount': typeof AccountEditAccountRoute
   '/account/settings': typeof AccountSettingsRouteWithChildren
+  '/account/streak': typeof AccountStreakRoute
   '/account/': typeof AccountIndexRoute
   '/account/settings/about': typeof AccountSettingsAboutRoute
   '/account/settings/notifications': typeof AccountSettingsNotificationsRoute
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/account/deleteAccount'
     | '/account/editAccount'
     | '/account/settings'
+    | '/account/streak'
     | '/account/'
     | '/account/settings/about'
     | '/account/settings/notifications'
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
     | '/account/deleteAccount'
     | '/account/editAccount'
     | '/account/settings'
+    | '/account/streak'
     | '/account'
     | '/account/settings/about'
     | '/account/settings/notifications'
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/account/deleteAccount'
     | '/account/editAccount'
     | '/account/settings'
+    | '/account/streak'
     | '/account/'
     | '/account/settings/about'
     | '/account/settings/notifications'
@@ -208,6 +220,7 @@ export interface RootRouteChildren {
   AccountDeleteAccountRoute: typeof AccountDeleteAccountRoute
   AccountEditAccountRoute: typeof AccountEditAccountRoute
   AccountSettingsRoute: typeof AccountSettingsRouteWithChildren
+  AccountStreakRoute: typeof AccountStreakRoute
   AccountIndexRoute: typeof AccountIndexRoute
 }
 
@@ -260,6 +273,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account/'
       preLoaderRoute: typeof AccountIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/streak': {
+      id: '/account/streak'
+      path: '/account/streak'
+      fullPath: '/account/streak'
+      preLoaderRoute: typeof AccountStreakRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account/settings': {
@@ -341,6 +361,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountDeleteAccountRoute: AccountDeleteAccountRoute,
   AccountEditAccountRoute: AccountEditAccountRoute,
   AccountSettingsRoute: AccountSettingsRouteWithChildren,
+  AccountStreakRoute: AccountStreakRoute,
   AccountIndexRoute: AccountIndexRoute,
 }
 export const routeTree = rootRouteImport
