@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useLocation } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { useTodos } from '@/hooks/useTodos'
 import { BadgeIcon } from '@/components/account/BadgeIcon'
@@ -91,6 +92,7 @@ const toastThemeByColor = {
 
 export function useAchievements() {
   const { todos } = useTodos()
+  const location = useLocation()
   const emailRef = useRef<string>(
     typeof window !== 'undefined'
       ? localStorage.getItem(STORAGE_KEYS.USER_EMAIL) ?? ''
@@ -124,6 +126,10 @@ export function useAchievements() {
   useEffect(() => {
     if (skipCheckRef.current) {
       skipCheckRef.current = false
+      return
+    }
+
+    if (location.pathname === '/login') {
       return
     }
 
