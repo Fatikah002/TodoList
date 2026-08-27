@@ -61,6 +61,11 @@ function TodosPage() {
     })
   }
 
+  const handleToday = () => {
+    setCurrentWeek(new Date())
+    setSelectedDate(formatLocalDate(new Date()))
+  }
+
   const {
     todos,
     addTodo,
@@ -131,6 +136,7 @@ function TodosPage() {
               currentWeek={currentWeek}
               onPreviousWeek={handlePreviousNav}
               onNextWeek={handleNextNav}
+              onToday={handleToday}
             />
 
             {calendarView === 'day' ? (

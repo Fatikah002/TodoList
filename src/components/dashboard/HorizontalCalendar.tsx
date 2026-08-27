@@ -17,7 +17,7 @@ export function HorizontalCalendar({
   todos,
   currentWeek: externalWeek,
 }: HorizontalCalendarProps) {
-  const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+  const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 
   const [internalWeek] = useState(new Date())
   const currentWeek = externalWeek || internalWeek
@@ -25,12 +25,10 @@ export function HorizontalCalendar({
   const calendarDays = useMemo(() => {
     const currentDay = currentWeek.getDay()
 
-    const mondayDiff = currentDay === 0 ? -6 : 1 - currentDay
-
     const startOfWeek = new Date(
       currentWeek.getFullYear(),
       currentWeek.getMonth(),
-      currentWeek.getDate() + mondayDiff,
+      currentWeek.getDate() - currentDay,
     )
 
     return Array.from({ length: 7 }, (_, index) => {
@@ -50,8 +48,6 @@ export function HorizontalCalendar({
 
   return (
     <div>
-      {/* Calendar Grid */}
-
       {/* Calendar */}
       <div className="overflow-x-hidden">
         <div className="mx-auto grid w-full grid-cols-7 gap-1 py-2 sm:gap-3">

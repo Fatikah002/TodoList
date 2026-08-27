@@ -2,16 +2,14 @@ import type { ComponentProps } from 'react'
 import { Calendar, CalendarDayButton } from '@/components/ui/calendar'
 import { formatLocalDate } from '@/lib/date'
 import type { Todo } from '@/lib/types'
-import { Button } from '@/components/ui/button'
-import { RotateCcw } from 'lucide-react'
 
 type MiniCalendarProps = {
   selectedDate: string
   onDateChange: (date: string) => void
   todos: Todo[]
   showAllTasks: boolean
-  month?: Date
-  onMonthChange?: (month: Date) => void
+  month: Date
+  onMonthChange: (month: Date) => void
 }
 
 export function MiniCalendar({
@@ -42,21 +40,6 @@ export function MiniCalendar({
 
   return (
     <section className="w-full py-1">
-      {/* Action header */}
-      {selectedDate !== todayStr && (
-        <div className="mb-2 flex items-center justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onDateChange(todayStr)}
-            className="h-7 gap-1 rounded-full border-green-200 px-2.5 text-xs text-green-700 hover:bg-green-50 hover:text-green-800"
-          >
-            <RotateCcw className="h-3 w-3" />
-            <span>Today</span>
-          </Button>
-        </div>
-      )}
-
       {/* Calendar Grid */}
       <div className="flex justify-center overflow-x-auto py-1">
         <Calendar
@@ -68,7 +51,11 @@ export function MiniCalendar({
             if (date) onDateChange(formatLocalDate(date))
           }}
           showOutsideDays
-          weekStartsOn={1}
+          weekStartsOn={0}
+          formatters={{
+            formatWeekdayName: (date) =>
+              date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase(),
+          }}
           className="w-full max-w-full text-sm [--cell-size:36px] sm:[--cell-size:40px]"
           classNames={{
             root: 'w-full flex flex-col items-center',

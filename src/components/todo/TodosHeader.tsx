@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CalendarDays,
+  RotateCcw,
 } from 'lucide-react'
 import {
   DropdownMenu,
@@ -27,6 +28,7 @@ type TodosHeaderProps = {
   currentWeek?: Date
   onPreviousWeek?: () => void
   onNextWeek?: () => void
+  onToday?: () => void
 }
 
 export function TodosHeader({
@@ -38,6 +40,7 @@ export function TodosHeader({
   currentWeek,
   onPreviousWeek,
   onNextWeek,
+  onToday,
 }: TodosHeaderProps) {
   const navigate = useNavigate()
 
@@ -95,53 +98,67 @@ export function TodosHeader({
         </Button>
       </div>
 
-      {/* Row 2: Month  (Left)  |  Aug 2026 (Right) */}
-      <div className="flex items-center justify-between  pt-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger className="focus:outline-none">
+      {/* Row 2: Month + Today (Left)  |  ◀ Aug 2026 ▶ (Right) */}
+      <div className="flex items-center justify-between pt-2">
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="focus:outline-none">
+              <Button
+                variant="outline"
+                className="h-9 rounded-full border-gray-200 px-3 text-sm font-medium text-gray-700 gap-1.5"
+              >
+                <CalendarDays size={16} />
+                <span className="capitalize">{calendarView}</span>
+                <ChevronDown size={14} />
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent
+              align="start"
+              className="w-36 rounded-2xl p-1.5 shadow-md"
+            >
+              <DropdownMenuItem
+                onClick={() => onCalendarViewChange('day')}
+                className={`flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium cursor-pointer ${
+                  calendarView === 'day'
+                    ? 'bg-green-50 text-green-700 font-semibold'
+                    : ''
+                }`}
+              >
+                <span>Day</span>
+                {calendarView === 'day' && (
+                  <Check className="h-4 w-4 text-green-600" />
+                )}
+              </DropdownMenuItem>
+
+              <DropdownMenuItem
+                onClick={() => onCalendarViewChange('month')}
+                className={`flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium cursor-pointer ${
+                  calendarView === 'month'
+                    ? 'bg-green-50 text-green-700 font-semibold'
+                    : ''
+                }`}
+              >
+                <span>Month</span>
+                {calendarView === 'month' && (
+                  <Check className="h-4 w-4 text-green-600" />
+                )}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {onToday && currentWeek && currentWeek.getMonth() !== new Date().getMonth() && (
             <Button
-              variant="outline"
-              className="h-9 rounded-full border-gray-200 px-3 text-sm font-medium text-gray-700 gap-1.5"
+              variant="ghost"
+              size="sm"
+              onClick={onToday}
+              className="h-9 gap-1 rounded-full px-3 text-xs text-green-600 border border-green-200 hover:bg-green-50 hover:text-green-700"
             >
-              <CalendarDays size={16} />
-              <span className="capitalize">{calendarView}</span>
-              <ChevronDown size={14} />
+              <RotateCcw className="h-3.5 w-3.5" />
+              <span>Today</span>
             </Button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent
-            align="start"
-            className="w-36 rounded-2xl p-1.5 shadow-md"
-          >
-            <DropdownMenuItem
-              onClick={() => onCalendarViewChange('day')}
-              className={`flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium cursor-pointer ${
-                calendarView === 'day'
-                  ? 'bg-green-50 text-green-700 font-semibold'
-                  : ''
-              }`}
-            >
-              <span>Day</span>
-              {calendarView === 'day' && (
-                <Check className="h-4 w-4 text-green-600" />
-              )}
-            </DropdownMenuItem>
-
-            <DropdownMenuItem
-              onClick={() => onCalendarViewChange('month')}
-              className={`flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium cursor-pointer ${
-                calendarView === 'month'
-                  ? 'bg-green-50 text-green-700 font-semibold'
-                  : ''
-              }`}
-            >
-              <span>Month</span>
-              {calendarView === 'month' && (
-                <Check className="h-4 w-4 text-green-600" />
-              )}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          )}
+        </div>
 
         {/* ◀ Aug 2026 ▶ (Month & Year navigation) */}
         {currentWeek && (
