@@ -55,10 +55,10 @@ export function TodayTasksSection({
     .slice(0, 5)
 
   return (
-    <section className="flex h-[250px] shrink-0 flex-col overflow-hidden rounded-2xl border border-green-200 bg-white p-4 shadow-sm">
+    <section className="flex h-[260px] shrink-0 flex-col overflow-hidden rounded-2xl border border-green-200 bg-gradient-to-br from-green-100 to-white p-4 shadow-sm">
       {/* Header */}
       <div className="mb-3 flex shrink-0 items-center justify-between">
-        <h2 className="text-sm font-semibold text-gray-900 sm:text-base">
+        <h2 className="text-sm font-bold text-green-900 sm:text-base">
           Today's Tasks
         </h2>
 
@@ -73,70 +73,112 @@ export function TodayTasksSection({
               sort: 'none',
             } as const
           }
-          className="flex shrink-0 items-center gap-1 text-xs font-medium text-green-600 transition-colors hover:text-green-600"
+          className="flex shrink-0 items-center gap-1 text-xs font-medium !text-green-600 transition-colors hover:text-green-700"
         >
           View All
           <ChevronRight className="h-3 w-3" />
         </Link>
       </div>
 
-      {/* Tasks */}
-      <div className="min-h-0 flex-1 overflow-hidden ">
-        <div className=" pl-1">
-          {visibleTodos.map((todo) => (
-            <div
-              key={todo.id}
-              className="flex min-h-8 w-full  items-center gap-2"
-            >
-              <Checkbox
-                checked={todo.completed}
-                onCheckedChange={() => onToggleTodo(todo.id)}
-                className="h-4 w-4 shrink-0"
-              />
+      {/* Content */}
+      <div className="flex min-h-0 flex-1 flex-col pl-1">
+        {visibleTodos.length === 0 ? (
+          <>
+            {/* Add Task */}
+            {isAdding ? (
+              <div className="flex items-center gap-2">
+                <Plus className="h-4 w-4 shrink-0 text-green-500" />
 
-              <p
-                className={`min-w-0 flex-1 truncate text-sm font-medium ${
-                  todo.completed
-                    ? 'text-gray-500 line-through'
-                    : 'text-gray-900'
-                }`}
+                <Input
+                  ref={inputRef}
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  onBlur={handleSubmit}
+                  placeholder="Type a task title..."
+                  className="h-8 border-0 bg-transparent p-0 text-sm font-medium shadow-none focus-visible:ring-0"
+                />
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsAdding(true)}
+                className="flex items-center gap-2 text-sm font-medium text-green-500 transition-colors hover:text-green-600"
               >
-                {todo.title}
-              </p>
+                <Plus className="h-4 w-4 shrink-0" />
+                <span>Add a Task</span>
+              </button>
+            )}
 
-              <p className="shrink-0 whitespace-nowrap text-[11px] text-gray-500">
-                {format(new Date(todo.deadline), 'dd MMM yyyy')}
-                {todo.dueTime && ` ${formatTime12(todo.dueTime)}`}
+            {/* Empty State */}
+            <div className="flex flex-1 flex-col items-center justify-center">
+              <p className="text-sm font-medium text-gray-700">No tasks yet</p>
+              <p className=" text-xs text-gray-400">
+                Add a task to get started
               </p>
             </div>
-          ))}
+          </>
+        ) : (
+          <>
+            {/* Task List */}
+            <div className="space-y-1">
+              {visibleTodos.map((todo) => (
+                <div
+                  key={todo.id}
+                  className="flex min-h-8 w-full items-center gap-2"
+                >
+                  <Checkbox
+                    checked={todo.completed}
+                    onCheckedChange={() => onToggleTodo(todo.id)}
+                    className="h-4 w-4 shrink-0"
+                  />
 
-          {/* Add Task */}
-          {isAdding ? (
-            <div className="flex items-center gap-2">
-              <Plus className="h-4 w-4 shrink-0 text-green-500" />
+                  <p
+                    className={`min-w-0 flex-1 truncate text-sm font-medium ${
+                      todo.completed
+                        ? 'text-gray-500 line-through'
+                        : 'text-gray-900'
+                    }`}
+                  >
+                    {todo.title}
+                  </p>
 
-              <Input
-                ref={inputRef}
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-                onKeyDown={handleKeyDown}
-                onBlur={handleSubmit}
-                placeholder="Type a task title..."
-                className="h-8 border-0 bg-transparent p-0 text-sm font-medium shadow-none focus-visible:ring-0"
-              />
+                  <p className="shrink-0 whitespace-nowrap text-[11px] text-gray-500">
+                    {format(new Date(todo.deadline), 'dd MMM yyyy')}
+                    {todo.dueTime && ` ${formatTime12(todo.dueTime)}`}
+                  </p>
+                </div>
+              ))}
             </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setIsAdding(true)}
-              className="flex items-center gap-2 text-sm font-medium text-green-500 transition-colors hover:text-green-600"
-            >
-              <Plus className="h-4 w-4 shrink-0" />
-              <span>Add a Task</span>
-            </button>
-          )}
-        </div>
+
+            {/* Add Task - di bawah task */}
+            <div className="mt-2">
+              {isAdding ? (
+                <div className="flex items-center gap-2">
+                  <Plus className="h-4 w-4 shrink-0 text-green-500" />
+                  <Input
+                    ref={inputRef}
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    onBlur={handleSubmit}
+                    placeholder="Type a task title..."
+                    className="h-8 border-0 bg-transparent p-0 text-sm font-medium shadow-none focus-visible:ring-0"
+                  />
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsAdding(true)}
+                  className="flex items-center gap-2 text-sm font-medium text-green-500 transition-colors hover:text-green-600"
+                >
+                  <Plus className="h-4 w-4 shrink-0" />
+                  <span>Add a Task</span>
+                </button>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </section>
   )

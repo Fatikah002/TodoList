@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import {  MoreVertical } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTodos } from '@/hooks/useTodos'
 import { getDailyGoalInfo } from '@/lib/dailyGoal'

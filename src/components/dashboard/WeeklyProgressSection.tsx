@@ -1,5 +1,4 @@
-﻿import {  MoreVertical } from 'lucide-react'
-import { CircularProgress } from '@/components/dashboard/CircularProgress'
+﻿import { CircularProgress } from '@/components/dashboard/CircularProgress'
 
 type WeeklyProgressSectionProps = {
   completed: number
@@ -31,7 +30,7 @@ export function WeeklyProgressSection({
         />
 
         <div>
-          <p className="text-xl font-bold text-gray-900">
+          <p className="text-lg font-bold text-gray-900">
             {completed} / {total}
           </p>
         </div>

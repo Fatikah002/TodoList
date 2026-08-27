@@ -19,7 +19,7 @@ export function UpcomingTasksSection({ todos }: UpcomingTasksSectionProps) {
         <Link
           to="/todos"
           search={() => ({ view: 'all' as const, upcoming: true, status: 'all' as const, priority: 'all' as const, category: 'All', sort: 'none' as const })}
-          className="flex items-center gap-1 text-xs font-medium text-green-600 transition-colors hover:text-green-600"
+          className="flex items-center gap-1 text-xs font-medium !text-green-600 transition-colors hover:text-green-600"
         >
           View All
           <ChevronRight className="h-3 w-3" />

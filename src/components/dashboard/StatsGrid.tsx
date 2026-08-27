@@ -82,10 +82,6 @@ export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
 
   return (
     <section className="mt-6">
-      {/* <h2 className="mb-3 text-sm font-semibold text-gray-900 sm:text-base">
-        Overview
-      </h2> */}
-
       <div className="flex h-10 w-full items-center overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
         {statItems.map((stat, index) => {
           const Icon = stat.icon
