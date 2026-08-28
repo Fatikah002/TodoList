@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useRef } from 'react'
+import { createContext, useContext, useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import type { ReactNode } from 'react'
 import type { Todo } from '@/lib/types'
 import { getNextDeadline } from '@/lib/repeat'
@@ -73,19 +73,19 @@ export function TodosProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  function addTodo(todo: Todo) {
+  const addTodo = useCallback((todo: Todo) => {
     setTodos((prev) => [...prev, todo])
-  }
+  }, [])
 
-  function deleteTodo(id: string) {
+  const deleteTodo = useCallback((id: string) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id))
-  }
+  }, [])
 
-  function deleteMany(ids: string[]) {
+  const deleteMany = useCallback((ids: string[]) => {
     setTodos((prev) => prev.filter((todo) => !ids.includes(todo.id)))
-  }
+  }, [])
 
-  function toggleTodo(id: string) {
+  const toggleTodo = useCallback((id: string) => {
     setTodos((prev) => {
       const todo = prev.find((t) => t.id === id)
       if (!todo) return prev
@@ -126,51 +126,51 @@ export function TodosProvider({ children }: { children: ReactNode }) {
 
       return updated
     })
-  }
+  }, [])
 
-  function updateTodo(updatedTodo: Todo) {
+  const updateTodo = useCallback((updatedTodo: Todo) => {
     setTodos((prev) =>
       prev.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo)),
     )
-  }
+  }, [])
 
-  function archiveTodo(id: string) {
+  const archiveTodo = useCallback((id: string) => {
     setTodos((prev) =>
       prev.map((todo) => (todo.id === id ? { ...todo, archived: true } : todo)),
     )
-  }
+  }, [])
 
-  function restoreTodo(id: string) {
+  const restoreTodo = useCallback((id: string) => {
     setTodos((prev) =>
       prev.map((todo) =>
         todo.id === id ? { ...todo, archived: false, completed: false } : todo,
       ),
     )
-  }
+  }, [])
 
-  function deletePermanently(id: string) {
+  const deletePermanently = useCallback((id: string) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id))
-  }
+  }, [])
 
-  function deleteManyArchived(ids: string[]) {
+  const deleteManyArchived = useCallback((ids: string[]) => {
     setTodos((prev) => prev.filter((todo) => !ids.includes(todo.id)))
-  }
+  }, [])
+
+  const value = useMemo(() => ({
+    todos,
+    addTodo,
+    deleteTodo,
+    deleteMany,
+    toggleTodo,
+    updateTodo,
+    archiveTodo,
+    restoreTodo,
+    deletePermanently,
+    deleteManyArchived,
+  }), [todos, addTodo, deleteTodo, deleteMany, toggleTodo, updateTodo, archiveTodo, restoreTodo, deletePermanently, deleteManyArchived])
 
   return (
-    <TodosContext.Provider
-      value={{
-        todos,
-        addTodo,
-        deleteTodo,
-        deleteMany,
-        toggleTodo,
-        updateTodo,
-        archiveTodo,
-        restoreTodo,
-        deletePermanently,
-        deleteManyArchived,
-      }}
-    >
+    <TodosContext.Provider value={value}>
       {children}
     </TodosContext.Provider>
   )
