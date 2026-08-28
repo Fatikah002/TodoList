@@ -7,6 +7,12 @@ export function subtractDays(dateStr: string, days: number): string {
   return formatLocalDate(date)
 }
 
+export function addDays(dateStr: string, days: number): string {
+  const date = new Date(dateStr + 'T00:00:00')
+  date.setDate(date.getDate() + days)
+  return formatLocalDate(date)
+}
+
 export function getUniqueCompletedDates(todos: Todo[]): string[] {
   const dates = new Set<string>()
   for (const todo of todos) {
@@ -58,7 +64,7 @@ export function calculateBestStreak(todos: Todo[]): number {
   let current = 1
 
   for (let i = 1; i < sorted.length; i++) {
-    if (sorted[i] === subtractDays(sorted[i - 1], -1)) {
+    if (sorted[i] === addDays(sorted[i - 1], 1)) {
       current++
       if (current > best) best = current
     } else if (sorted[i] !== sorted[i - 1]) {
@@ -69,7 +75,7 @@ export function calculateBestStreak(todos: Todo[]): number {
   return best
 }
 
-type DayActivity = {
+export type DayActivity = {
   label: string
   shortLabel: string
   completed: boolean
