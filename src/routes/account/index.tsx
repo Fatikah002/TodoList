@@ -111,6 +111,7 @@ function RouteComponent() {
           onClick={() => {
             localStorage.removeItem(STORAGE_KEYS.LOGGED_IN)
             localStorage.removeItem(STORAGE_KEYS.USER_EMAIL)
+            window.dispatchEvent(new Event('email-changed'))
             navigate({ to: '/login', replace: true })
           }}
           className="flex w-full items-center gap-4 rounded-b-2xl px-5 py-4 text-left transition-colors hover:bg-red-50"

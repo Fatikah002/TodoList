@@ -87,6 +87,7 @@ function LoginPage() {
       setView('success')
       localStorage.setItem(STORAGE_KEYS.LOGGED_IN, 'true')
       localStorage.setItem(STORAGE_KEYS.USER_EMAIL, email)
+      window.dispatchEvent(new Event('email-changed'))
 
       if (isSignUp) {
         const stored = localStorage.getItem(STORAGE_KEYS.REGISTERED_ACCOUNTS)

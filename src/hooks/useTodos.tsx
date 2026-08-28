@@ -57,7 +57,7 @@ export function TodosProvider({ children }: { children: ReactNode }) {
 
   // Re-load todos when email changes (login/logout)
   useEffect(() => {
-    const checkEmail = () => {
+    function handleEmailChange() {
       const currentEmail = localStorage.getItem(STORAGE_KEYS.USER_EMAIL)
       if (currentEmail !== emailRef.current) {
         emailRef.current = currentEmail
@@ -65,8 +65,12 @@ export function TodosProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    const interval = setInterval(checkEmail, 500)
-    return () => clearInterval(interval)
+    window.addEventListener('storage', handleEmailChange)
+    window.addEventListener('email-changed', handleEmailChange)
+    return () => {
+      window.removeEventListener('storage', handleEmailChange)
+      window.removeEventListener('email-changed', handleEmailChange)
+    }
   }, [])
 
   function addTodo(todo: Todo) {
