@@ -12,9 +12,9 @@ import { getDeadlineStatus } from '@/lib/deadline'
 
 type TodoItemProps = {
   todo: Todo
-  onDelete: (id: string) => void
-  onToggle: (id: string) => void
-  onUpdate: (updatedTodo: Todo) => void
+  onDelete?: (id: string) => void
+  onToggle?: (id: string) => void
+  onUpdate?: (updatedTodo: Todo) => void
   onArchive?: (id: string) => void
   onUndoArchive?: (todo: Todo) => void
   onRestore?: (id: string) => void
@@ -72,7 +72,7 @@ export function TodoItem({
             >
               <Checkbox
                 checked={todo.completed}
-                onCheckedChange={() => onToggle(todo.id)}
+                onCheckedChange={() => onToggle?.(todo.id)}
                 disabled={selectMode || archivedView}
                 className="mt-1 h-5 w-5"
               />
@@ -95,7 +95,7 @@ export function TodoItem({
                 )}
               </div>
 
-              <p className="text-gray-500">{todo.detail}</p>
+              <p className="line-clamp-2 text-gray-500">{todo.detail}</p>
 
               <TodoItemBadges todo={todo} archivedView={archivedView} />
             </div>
@@ -129,7 +129,7 @@ export function TodoItem({
           if (archivedView) {
             onDeletePermanent?.(todo.id)
           } else {
-            onDelete(todo.id)
+            onDelete?.(todo.id)
           }
         }}
       />

@@ -88,9 +88,6 @@ function ArchivedPage() {
             <TodoItem
               key={todo.id}
               todo={todo}
-              onDelete={() => {}}
-              onToggle={() => {}}
-              onUpdate={() => {}}
               onRestore={restoreTodo}
               onDeletePermanent={deletePermanently}
               selectMode={selectMode}

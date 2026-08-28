@@ -16,7 +16,7 @@ type TodoDetailDialogProps = {
   open: boolean
   onClose: () => void
   todo: Todo
-  onUpdate: (updatedTodo: Todo) => void
+  onUpdate?: (updatedTodo: Todo) => void
 }
 
 export function TodoDetailDialog({
@@ -56,7 +56,7 @@ export function TodoDetailDialog({
             showCancel={true}
             onCancel={() => setIsEditing(false)}
             onSubmit={(data) => {
-              onUpdate({
+              onUpdate?.({
                 ...todo,
                 ...data,
               })

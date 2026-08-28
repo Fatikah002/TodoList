@@ -19,7 +19,7 @@ import {
 type TodoItemDropdownProps = {
   todo: Todo
   archivedView?: boolean
-  onUpdate: (todo: Todo) => void
+  onUpdate?: (todo: Todo) => void
   onRestore?: (id: string) => void
   onArchive?: (id: string) => void
   onDelete: () => void
@@ -85,7 +85,7 @@ export function TodoItemDropdown({
                 <DropdownMenuRadioGroup
                   value={todo.priority}
                   onValueChange={(value) => {
-                    onUpdate({
+                    onUpdate?.({
                       ...todo,
                       priority: value as Todo['priority'],
                     })
