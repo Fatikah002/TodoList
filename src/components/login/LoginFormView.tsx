@@ -12,7 +12,6 @@ interface LoginFormViewProps {
   onPasswordChange: (value: string) => void
   onTogglePassword: () => void
   onSubmit: () => void
-  onKeyDown: (e: React.KeyboardEvent) => void
   onSwitchToSignup: () => void
 }
 
@@ -25,7 +24,6 @@ export function LoginFormView({
   onPasswordChange,
   onTogglePassword,
   onSubmit,
-  onKeyDown,
   onSwitchToSignup,
 }: LoginFormViewProps) {
   return (
@@ -34,7 +32,13 @@ export function LoginFormView({
         Login to your Account
       </h2>
 
-      <div className="mt-7 space-y-4 sm:space-y-5" onKeyDown={onKeyDown}>
+      <form
+        className="mt-7 space-y-4 sm:space-y-5"
+        onSubmit={(e) => {
+          e.preventDefault()
+          onSubmit()
+        }}
+      >
         <div className="space-y-1.5 sm:space-y-2">
           <Input
             type="email"
@@ -59,6 +63,7 @@ export function LoginFormView({
               type="button"
               onClick={onTogglePassword}
               className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? (
                 <EyeOff className="h-4 w-4" />
@@ -78,7 +83,7 @@ export function LoginFormView({
         </div>
 
         <Button
-          onClick={onSubmit}
+          type="submit"
           className="mt-2 h-12 w-full rounded-xl bg-green-600 text-sm font-semibold text-white shadow-md shadow-green-600/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-lg hover:shadow-green-600/25 active:translate-y-0"
         >
           Sign in
@@ -122,7 +127,7 @@ export function LoginFormView({
             Sign Up
           </button>
         </p>
-      </div>
+      </form>
     </>
   )
 }

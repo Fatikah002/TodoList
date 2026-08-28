@@ -16,7 +16,6 @@ interface SignupFormViewProps {
   onConfirmPasswordChange: (value: string) => void
   onTogglePassword: () => void
   onSubmit: () => void
-  onKeyDown: (e: React.KeyboardEvent) => void
   onSwitchToLogin: () => void
 }
 
@@ -33,7 +32,6 @@ export function SignupFormView({
   onConfirmPasswordChange,
   onTogglePassword,
   onSubmit,
-  onKeyDown,
   onSwitchToLogin,
 }: SignupFormViewProps) {
   const isEmailValid = email.includes('@')
@@ -44,7 +42,13 @@ export function SignupFormView({
         Create your Account
       </h2>
 
-      <div className="mt-7 space-y-4 sm:space-y-5" onKeyDown={onKeyDown}>
+      <form
+        className="mt-7 space-y-4 sm:space-y-5"
+        onSubmit={(e) => {
+          e.preventDefault()
+          onSubmit()
+        }}
+      >
         <div className="space-y-1.5 sm:space-y-2">
           <div className="relative">
             <Input
@@ -112,7 +116,7 @@ export function SignupFormView({
         </div>
 
         <Button
-          onClick={onSubmit}
+          type="submit"
           className="mt-2 h-12 w-full rounded-xl bg-green-600 text-sm font-semibold text-white shadow-md shadow-green-600/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-lg hover:shadow-green-600/25 active:translate-y-0"
         >
           Sign Up
@@ -158,7 +162,7 @@ export function SignupFormView({
             Sign In
           </button>
         </p>
-      </div>
+      </form>
     </>
   )
 }
