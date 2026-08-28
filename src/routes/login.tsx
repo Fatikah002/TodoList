@@ -101,7 +101,7 @@ function LoginPage() {
           STORAGE_KEYS.REGISTERED_ACCOUNTS,
           JSON.stringify(accounts),
         )
-        updateProfile({ name: username.trim(), email, password })
+        updateProfile({ name: username.trim(), email })
       } else {
         const stored = localStorage.getItem(STORAGE_KEYS.REGISTERED_ACCOUNTS)
         const accounts: {
@@ -136,15 +136,6 @@ function LoginPage() {
     updateProfile,
     username,
   ])
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter' && (view === 'form' || view === 'signup')) {
-        handleAuth()
-      }
-    },
-    [view, handleAuth],
-  )
 
   return (
     <div className="relative flex min-h-dvh w-full items-center justify-center bg-[#f8fbf9] px-5 py-8 overflow-hidden sm:h-dvh sm:overflow-hidden">
@@ -202,7 +193,6 @@ function LoginPage() {
                 onPasswordChange={setPassword}
                 onTogglePassword={() => setShowPassword(!showPassword)}
                 onSubmit={handleAuth}
-                onKeyDown={handleKeyDown}
                 onSwitchToSignup={() => {
                   setError('')
                   setView('signup')
@@ -224,7 +214,6 @@ function LoginPage() {
                 onConfirmPasswordChange={setConfirmPassword}
                 onTogglePassword={() => setShowPassword(!showPassword)}
                 onSubmit={handleAuth}
-                onKeyDown={handleKeyDown}
                 onSwitchToLogin={() => {
                   setError('')
                   setView('form')

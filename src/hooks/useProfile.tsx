@@ -7,7 +7,6 @@ type Profile = {
   name: string
   email: string
   avatar: string
-  password: string
 }
 
 type ProfileContextType = {
@@ -19,7 +18,6 @@ const defaultProfile: Profile = {
   name: '',
   email: '',
   avatar: DEFAULT_AVATAR,
-  password: '',
 }
 
 const ProfileContext = createContext<ProfileContextType | null>(null)

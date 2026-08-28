@@ -13,6 +13,32 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { STORAGE_KEYS } from '@/lib/constants'
+
+function getStoredPassword(): string {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.REGISTERED_ACCOUNTS)
+    const accounts: { email: string; password: string }[] = raw ? JSON.parse(raw) : []
+    const email = localStorage.getItem(STORAGE_KEYS.USER_EMAIL)
+    return accounts.find((a) => a.email === email)?.password ?? ''
+  } catch {
+    return ''
+  }
+}
+
+function setStoredPassword(newPassword: string) {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.REGISTERED_ACCOUNTS)
+    const accounts: { email: string; password: string; username: string }[] = raw ? JSON.parse(raw) : []
+    const email = localStorage.getItem(STORAGE_KEYS.USER_EMAIL)
+    const updated = accounts.map((a) =>
+      a.email === email ? { ...a, password: newPassword } : a,
+    )
+    localStorage.setItem(STORAGE_KEYS.REGISTERED_ACCOUNTS, JSON.stringify(updated))
+  } catch {
+    // silently fail
+  }
+}
 
 export const Route = createFileRoute('/account/editAccount')({
   component: EditProfilePage,
@@ -28,7 +54,7 @@ function EditProfilePage() {
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPasswordForm, setShowPasswordForm] = useState(false)
-  const storedPassword = profile.password
+  const storedPassword = getStoredPassword()
   const [currentPassword, setCurrentPassword] = useState('')
   const [showCurrent, setShowCurrent] = useState(false)
   const [showNew, setShowNew] = useState(false)
@@ -88,10 +114,12 @@ function EditProfilePage() {
     }
 
     const promise = new Promise<void>((resolve) => {
+      if (showPasswordForm) {
+        setStoredPassword(finalPassword)
+      }
       updateProfile({
         name,
         email,
-        password: finalPassword,
         avatar: avatar ?? DEFAULT_AVATAR,
       })
       setTimeout(resolve, 300)
