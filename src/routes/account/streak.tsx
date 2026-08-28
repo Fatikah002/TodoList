@@ -2,18 +2,21 @@ import { useState } from 'react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import {
   ArrowLeft,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Trophy,
+  Flame,
   RotateCcw,
+  Trophy,
 } from 'lucide-react'
 import { useTodos } from '@/hooks/useTodos'
 import {
   calculateStreak,
   calculateBestStreak,
   getUniqueCompletedDates,
+  getWeeklyActivity,
 } from '@/lib/streak'
-import { Button } from '#/components/ui/button'
+import { Button } from '@/components/ui/button'
 
 export const Route = createFileRoute('/account/streak')({
   component: RouteComponent,
@@ -26,18 +29,12 @@ function RouteComponent() {
   const bestStreak = calculateBestStreak(todos)
   const uniqueDates = getUniqueCompletedDates(todos)
   const completedSet = new Set(uniqueDates)
+  const weeklyActivity = getWeeklyActivity(todos)
 
   const [currentMonth, setCurrentMonth] = useState(() => new Date())
+  const [showExplanation, setShowExplanation] = useState(false)
 
-  const streakLabel = streak === 1 ? 'day' : 'days'
-  const bestLabel = bestStreak === 1 ? 'day' : 'days'
-
-  const description =
-    streak === 0
-      ? 'Complete a task today to start your streak!'
-      : streak === 1
-        ? 'Complete a task today to keep your streak!'
-        : 'Keep completing tasks to maintain your streak!'
+  const totalActiveDays = uniqueDates.length
 
   const monthLabel = currentMonth.toLocaleString('en-US', {
     month: 'long',
@@ -83,7 +80,7 @@ function RouteComponent() {
     currentMonth.getMonth() === new Date().getMonth()
 
   return (
-    <div className="mx-auto max-w-2xl space-y-5 p-4 sm:p-6">
+    <div className="mx-auto max-w-2xl space-y-3 p-4 sm:space-y-4 sm:p-6">
       {/* Header */}
       <div className="flex items-center gap-3">
         <Button
@@ -95,65 +92,147 @@ function RouteComponent() {
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">
+        <h1 className="flex-1 text-xl font-bold tracking-tight text-gray-900">
           Streak
         </h1>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setCurrentMonth(new Date())}
+          aria-label="Refresh"
+          className="rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+        >
+          <RotateCcw className="h-4 w-4" />
+        </Button>
       </div>
 
-      {/* Current Streak Hero Card */}
-      <div className="rounded-2xl border border-orange-200 bg-orange-50/50 p-5 shadow-sm">
-        {/* Streak Summary */}
-        <div className="flex items-center gap-4">
+      {/* Streak Summary Card */}
+      <div className="rounded-2xl border border-orange-200/60 bg-orange-50/40 p-4 shadow-sm">
+        <div className="flex items-center gap-3">
           {/* Current Streak */}
-          <div className="flex min-w-0 flex-1 items-center gap-3">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center">
-              <span className="text-6xl">🔥</span>
+          <div className="flex min-w-0 flex-1 items-center gap-2.5">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-100">
+              <Flame className="h-5 w-5 text-orange-500" />
             </div>
-
             <div className="min-w-0">
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-3xl font-bold text-orange-500">
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-bold tabular-nums text-orange-500">
                   {streak}
                 </span>
-
-                <span className="text-xs font-bold uppercase tracking-wide text-orange-500">
-                  {streakLabel}
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-orange-400">
+                  {streak === 1 ? 'day' : 'days'}
                 </span>
               </div>
-              <p className="mt-0.5 text-xs font-medium text-gray-600">
+              <p className="text-[11px] font-medium text-gray-500">
                 Current Streak
               </p>
             </div>
           </div>
 
           {/* Divider */}
-          <div className="h-12 w-px bg-orange-200" />
+          <div className="h-10 w-px bg-orange-200/60" />
 
           {/* Best Streak */}
-          <div className="flex min-w-0 flex-1 items-center gap-3">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-green-50">
-              <Trophy className="h-8 w-8 text-green-600" />
+          <div className="flex min-w-0 flex-1 items-center gap-2.5">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-50">
+              <Trophy className="h-5 w-5 text-green-600" />
             </div>
-
             <div className="min-w-0">
-              <p className="text-2xl font-bold text-green-600">
-                {bestStreak}{' '}
-                <span className="text-xs font-bold uppercase tracking-wide text-green-500">
-                  {bestLabel}
-                </span> 
-                <p className="mt-0.5 text-xs font-medium text-gray-600">Best Streak</p>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-bold tabular-nums text-green-600">
+                  {bestStreak}
+                </span>
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-green-400">
+                  {bestStreak === 1 ? 'day' : 'days'}
+                </span>
+              </div>
+              <p className="text-[11px] font-medium text-gray-500">
+                Best Streak
               </p>
             </div>
           </div>
         </div>
 
-        {/* Description */}
-        <p className="mt-4 text-xs text-gray-500">{description}</p>
+        <p className="mt-3 text-center text-xs font-medium text-gray-400">
+          Keep it going!
+        </p>
       </div>
 
-      {/* Calendar */}
-      <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-        <div className="mb-4 flex items-center justify-between">
+      {/* Streak Progress — Weekly */}
+      <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+        <h2 className="mb-3 text-sm font-semibold text-gray-900">
+          Streak Progress
+        </h2>
+
+        <div className="flex items-center justify-between">
+          {weeklyActivity.map((day) => (
+            <div key={day.label} className="flex flex-1 flex-col items-center gap-1.5">
+              <div
+                className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold ${
+                  day.completed
+                    ? 'bg-orange-500 text-white'
+                    : 'bg-gray-100 text-gray-400'
+                }`}
+              >
+                {day.completed ? '✓' : '○'}
+              </div>
+              <span className="text-[10px] font-medium text-gray-400">
+                {day.shortLabel}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-3">
+          <span className="text-xs font-medium text-gray-500">
+            Total Active Days
+          </span>
+          <span className="text-sm font-bold tabular-nums text-gray-900">
+            {totalActiveDays}
+          </span>
+        </div>
+      </div>
+
+      {/* How Streaks Work — Collapsible */}
+      <div className="rounded-2xl border border-gray-100 bg-white shadow-sm">
+        <button
+          type="button"
+          onClick={() => setShowExplanation(!showExplanation)}
+          className="flex w-full items-center justify-between p-4 text-left"
+        >
+          <span className="text-sm font-semibold text-gray-900">
+            How do streaks work?
+          </span>
+          <ChevronDown
+            className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${
+              showExplanation ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+
+        {showExplanation && (
+          <div className="border-t border-gray-100 px-4 pb-4 pt-3">
+            <ul className="space-y-2">
+              <li className="flex items-start gap-2 text-xs text-gray-500">
+                <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-400" />
+                Complete at least one activity each day to build your streak.
+              </li>
+              <li className="flex items-start gap-2 text-xs text-gray-500">
+                <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-400" />
+                Each day you do an activity, your streak increases.
+              </li>
+              <li className="flex items-start gap-2 text-xs text-gray-500">
+                <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-400" />
+                Missing a day will reset your streak to 0.
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* Monthly Calendar */}
+      <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+        <div className="mb-3 flex items-center justify-between">
           <Button
             type="button"
             variant="ghost"
@@ -161,19 +240,19 @@ function RouteComponent() {
             onClick={prevMonth}
             className="h-8 w-8 rounded-full text-orange-600 hover:bg-orange-50"
           >
-            <ChevronLeft className="h-5 w-5" />
+            <ChevronLeft className="h-4 w-4" />
           </Button>
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-bold text-gray-900">{monthLabel}</h2>
+            <h2 className="text-sm font-semibold text-gray-900">{monthLabel}</h2>
             {!isCurrentMonth && (
               <Button
                 type="button"
                 variant="secondary"
                 size="sm"
                 onClick={() => setCurrentMonth(new Date())}
-                className="h-6 rounded-full bg-orange-100 px-2.5 text-[10px] font-bold text-orange-700 hover:bg-orange-200"
+                className="h-6 rounded-full bg-orange-100 px-2 text-[10px] font-bold text-orange-700 hover:bg-orange-200"
               >
-                <RotateCcw className="h-4 w-4" />
+                <RotateCcw className="h-3 w-3" />
               </Button>
             )}
           </div>
@@ -184,15 +263,15 @@ function RouteComponent() {
             onClick={nextMonth}
             className="h-8 w-8 rounded-full text-orange-600 hover:bg-orange-50"
           >
-            <ChevronRight className="h-5 w-5" />
+            <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
 
-        <div className="grid grid-cols-7 gap-y-1">
+        <div className="grid grid-cols-7">
           {dayHeaders.map((d) => (
             <div
               key={d}
-              className="py-1 text-center text-[11px] font-bold text-gray-400"
+              className="py-1 text-center text-[10px] font-semibold uppercase tracking-wider text-gray-400"
             >
               {d}
             </div>
@@ -209,14 +288,12 @@ function RouteComponent() {
             const isToday = dateStr === todayStr
 
             return (
-              <div key={day} className="flex justify-center py-1">
+              <div key={day} className="flex justify-center py-0.5">
                 <div
-                  className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-medium ${
-                    isCompleted
+                  className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium ${
+                    isCompleted || isToday
                       ? 'bg-orange-500 text-white'
-                      : isToday
-                        ? 'border-2 border-orange-300 text-orange-600'
-                        : 'text-gray-700'
+                      : 'text-gray-600'
                   }`}
                 >
                   {day}
