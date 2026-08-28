@@ -257,7 +257,7 @@ export function TodoForm({
           {(field) => (
             <div className="flex flex-col gap-1.5">
               <Label className="text-sm font-medium">
-                Due Time <span className="text-muted-foreground"></span>
+                Due Time
               </Label>
               <TimePicker
                 value={field.state.value}

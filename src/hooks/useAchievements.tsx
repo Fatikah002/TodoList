@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useLocation } from '@tanstack/react-router'
 import { toast } from 'sonner'
+import { X } from 'lucide-react'
 import { useTodos } from '@/hooks/useTodos'
 import { BadgeIcon } from '@/components/account/BadgeIcon'
 import { triggerFireworks } from '@/components/ui/confetti'
@@ -198,6 +199,7 @@ export function useAchievements() {
               aria-label="Dismiss achievement toast"
               className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full text-green-ink-soft transition hover:bg-black/5 hover:text-green-ink"
             >
+              <X className="h-3.5 w-3.5" />
             </button>
           </div>
         ),

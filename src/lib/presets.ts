@@ -1,4 +1,5 @@
 import type { PriorityFilter, SortBy, StatusFilter } from '@/components/todo/TodoFilter'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 export type QuickFilter = {
   id: string
@@ -14,8 +15,6 @@ export type QuickFilter = {
 }
 
 export type QuickFilterPreset = Omit<QuickFilter, 'enabled'>
-
-const STORAGE_KEY = 'quickFilters'
 
 export const QUICK_FILTER_PRESETS: QuickFilterPreset[] = [
   {
@@ -61,10 +60,10 @@ export function getQuickFilters(): QuickFilter[] {
   if (typeof window === 'undefined') return getDefaultFilters()
 
   try {
-    const stored = localStorage.getItem(STORAGE_KEY)
+    const stored = localStorage.getItem(STORAGE_KEYS.QUICK_FILTERS)
     if (!stored) {
       const defaults = getDefaultFilters()
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaults))
+      localStorage.setItem(STORAGE_KEYS.QUICK_FILTERS, JSON.stringify(defaults))
       return defaults
     }
     return JSON.parse(stored) as QuickFilter[]
@@ -74,7 +73,7 @@ export function getQuickFilters(): QuickFilter[] {
 }
 
 export function saveQuickFilters(filters: QuickFilter[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(filters))
+  localStorage.setItem(STORAGE_KEYS.QUICK_FILTERS, JSON.stringify(filters))
 }
 
 export function toggleQuickFilter(id: string): QuickFilter[] {

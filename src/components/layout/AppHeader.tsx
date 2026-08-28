@@ -24,9 +24,6 @@ export function AppHeader({ title, className }: AppHeaderProps) {
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="icon" className="relative rounded-full">
           <Bell className="h-5 w-5" />
-
-          {/* Badge */}
-          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500" />
         </Button>
 
         <UserAvatar className="h-8 w-8 md:h-9 md:w-9" />

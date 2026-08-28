@@ -49,9 +49,9 @@ function RouteComponent() {
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
+              <span className="text-xl font-bold text-gray-900 sm:text-2xl">
                 Achievements
-              </h1>
+              </span>
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700">
                 <Award size={16} />
               </span>

@@ -6,4 +6,6 @@ export const STORAGE_KEYS = {
   CUSTOM_CATEGORIES: 'customCategories',
   REGISTERED_ACCOUNTS: 'todospace_registered_accounts',
   NOTIFICATION_PREFS: 'notificationPreferences',
+  QUICK_FILTERS: 'quickFilters',
+  DAILY_GOAL_CELEBRATED: 'daily-goal-celebrated',
 } as const

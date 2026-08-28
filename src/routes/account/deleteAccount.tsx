@@ -118,16 +118,15 @@ function DeleteAccountPage() {
             </li>
             <li className="flex items-start gap-2">
               <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
-              Your posts on this application will be deleted.
+              All your tasks and task history will be permanently deleted.
             </li>
             <li className="flex items-start gap-2">
               <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
-              Comments, likes, and collections will be removed.
+              Your achievements and streak data will be removed.
             </li>
             <li className="flex items-start gap-2">
               <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
-              Your account will be permanently deleted in 14 days. You may
-              reactivate it at anytime within this period.
+              This action cannot be undone.
             </li>
           </ul>
         </div>
@@ -178,7 +177,7 @@ function DeleteAccountPage() {
               Success!
             </span>
             <AlertDialogTitle className="text-center text-lg">
-              Successfully!
+              Deleted!
             </AlertDialogTitle>
             <AlertDialogDescription className="text-center">
               Your account has been successfully deleted. We're sorry to see you

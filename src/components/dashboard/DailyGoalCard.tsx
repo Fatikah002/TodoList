@@ -2,11 +2,11 @@ import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { useTodos } from '@/hooks/useTodos'
 import { getDailyGoalInfo } from '@/lib/dailyGoal'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 export function DailyGoalCard() {
   const { todos } = useTodos()
   const goal = getDailyGoalInfo(todos)
-  const DAILY_GOAL_CELEBRATED_KEY = 'daily-goal-celebrated'
 
   useEffect(() => {
     if (!goal.isComplete) return
@@ -14,7 +14,7 @@ export function DailyGoalCard() {
     const today = new Date().toISOString().split('T')[0]
 
     const saved = JSON.parse(
-      localStorage.getItem(DAILY_GOAL_CELEBRATED_KEY) ?? '{}',
+      localStorage.getItem(STORAGE_KEYS.DAILY_GOAL_CELEBRATED) ?? '{}',
     )
 
     if (saved.date === today && saved.progress >= goal.progress) {
@@ -26,7 +26,7 @@ export function DailyGoalCard() {
     })
 
     localStorage.setItem(
-      DAILY_GOAL_CELEBRATED_KEY,
+      STORAGE_KEYS.DAILY_GOAL_CELEBRATED,
       JSON.stringify({
         date: today,
         progress: goal.progress,
