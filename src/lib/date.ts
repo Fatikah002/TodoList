@@ -1,3 +1,8 @@
+export function parseLocalDate(dateStr: string): Date {
+  const [year, month, day] = dateStr.split('-').map(Number)
+  return new Date(year, month - 1, day)
+}
+
 export function formatLocalDate(date: Date) {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -15,7 +20,7 @@ export function formatTime12(time24: string): string {
 }
 
 export function isSameDay(deadline: string, selectedDate: string) {
-  return formatLocalDate(new Date(deadline)) === selectedDate
+  return formatLocalDate(parseLocalDate(deadline)) === selectedDate
 }
 
 export function isOverdue(

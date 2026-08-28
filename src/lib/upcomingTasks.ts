@@ -1,4 +1,5 @@
 import type { Todo } from '@/lib/types'
+import { parseLocalDate } from '@/lib/date'
 
 export function getUpcomingTodos(todos: Todo[]): Todo[] {
   const activeTodos = todos.filter((todo) => !todo.archived)
@@ -7,7 +8,7 @@ export function getUpcomingTodos(todos: Todo[]): Todo[] {
   return activeTodos
     .filter((todo) => {
       if (todo.completed) return false
-      const d = new Date(todo.deadline)
+      const d = parseLocalDate(todo.deadline)
       const tomorrow = new Date(now)
       tomorrow.setDate(tomorrow.getDate() + 1)
       tomorrow.setHours(0, 0, 0, 0)
@@ -17,7 +18,7 @@ export function getUpcomingTodos(todos: Todo[]): Todo[] {
       return d >= tomorrow && d < nextWeek
     })
     .sort(
-      (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
+      (a, b) => parseLocalDate(a.deadline).getTime() - parseLocalDate(b.deadline).getTime(),
     )
     .slice(0, 5)
 }

@@ -1,6 +1,6 @@
 ﻿import { useCallback, useMemo, useState } from 'react'
 import { useTodos } from '@/hooks/useTodos'
-import { formatLocalDate, isOverdue, isSameDay } from '@/lib/date'
+import { formatLocalDate, isOverdue, isSameDay, parseLocalDate } from '@/lib/date'
 import type { Todo } from '@/lib/types'
 import type {
   PriorityFilter,
@@ -128,7 +128,7 @@ export function useFilteredTodos(
       // compute week match based on selectedDate (start of week)
       let matchesDateWeek = false
       try {
-        const ref = new Date(selectedDate)
+        const ref = parseLocalDate(selectedDate)
         const start = new Date(ref)
         // assume week starts on Sunday
         const day = start.getDay()
@@ -136,7 +136,7 @@ export function useFilteredTodos(
         start.setHours(0, 0, 0, 0)
         const end = new Date(start)
         end.setDate(start.getDate() + 7)
-        const td = new Date(todo.deadline)
+        const td = parseLocalDate(todo.deadline)
         matchesDateWeek = td >= start && td < end
       } catch {
         matchesDateWeek = false
@@ -144,8 +144,8 @@ export function useFilteredTodos(
 
       const matchesUpcoming = !showUpcoming || (
         !todo.completed &&
-        new Date(todo.deadline) >= tomorrow &&
-        new Date(todo.deadline) < nextWeek
+        parseLocalDate(todo.deadline) >= tomorrow &&
+        parseLocalDate(todo.deadline) < nextWeek
       )
 
       const finalMatchesDate =
@@ -171,7 +171,7 @@ export function useFilteredTodos(
       case 'deadline':
         result.sort(
           (a, b) =>
-            new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
+            parseLocalDate(a.deadline).getTime() - parseLocalDate(b.deadline).getTime(),
         )
         break
 
