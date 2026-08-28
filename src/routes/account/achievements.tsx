@@ -3,7 +3,7 @@ import { Award, ArrowLeft } from 'lucide-react'
 import { useAchievements } from '@/hooks/useAchievements'
 import { AchievementCard } from '@/components/account/AchievementCard'
 import type { AchievementFilter } from '@/lib/achievements'
-import { Button } from '#/components/ui/button'
+import { Button } from '@/components/ui/button'
 
 export const Route = createFileRoute('/account/achievements')({
   component: RouteComponent,
