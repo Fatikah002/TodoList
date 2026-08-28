@@ -1,11 +1,7 @@
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { navigationItems } from '@/lib/navigation'
 
-interface MobileNavbarProps {
-  onAddTodo?: () => void
-}
-
-export function MobileNavbar({ onAddTodo = () => {} }: MobileNavbarProps) {
+export function MobileNavbar() {
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -19,18 +15,12 @@ export function MobileNavbar({ onAddTodo = () => {} }: MobileNavbarProps) {
     <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t bg-white px-3 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] backdrop-blur-md md:hidden">
       {navigationItems.map((item) => {
         const Icon = item.icon
-        const isAddTodo = item.label === 'Add Todo'
 
         return (
           <button
             key={item.label}
             type="button"
             onClick={() => {
-              if (isAddTodo) {
-                onAddTodo()
-                return
-              }
-
               navigate({
                 to: item.to,
                 ...(item.search ? { search: item.search } : {}),

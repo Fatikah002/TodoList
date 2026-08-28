@@ -79,7 +79,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                   <SidebarInset className="flex min-h-screen flex-col transition-all duration-300 ease-in-out animate-in fade-in-50">
                     <AppHeader title={pageTitle} className="hidden md:flex" />
                     <main className="flex-1 pb-24 md:pb-0">{children}</main>
-                    <MobileNavbar onAddTodo={() => {}} />
+                    <MobileNavbar />
                   </SidebarInset>
                 </SidebarProvider>
               )}
