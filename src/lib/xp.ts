@@ -14,6 +14,8 @@ const LEVEL_THRESHOLDS = [
   9100, 10500,
 ]
 
+const XP_PER_LEVEL_BEYOND_DEFINED = 1500
+
 
 
 export function calculateTotalXp(todos: Todo[], unlockedAchievementIds?: string[]): number {
@@ -47,7 +49,7 @@ export function getXpForLevel(level: number): number {
   if (level <= 1) return 0
   if (level > LEVEL_THRESHOLDS.length) {
     const last = LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1]
-    return last + (level - LEVEL_THRESHOLDS.length) * 1500
+    return last + (level - LEVEL_THRESHOLDS.length) * XP_PER_LEVEL_BEYOND_DEFINED
   }
   return LEVEL_THRESHOLDS[level - 1]
 }

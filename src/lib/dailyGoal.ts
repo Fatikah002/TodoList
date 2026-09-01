@@ -1,6 +1,8 @@
 import type { Todo } from './types'
 import { formatLocalDate } from './date'
 
+const MAX_DAILY_GOAL = 5
+
 function getTodayTodos(todos: Todo[]): Todo[] {
   const today = formatLocalDate(new Date())
   return todos.filter(
@@ -12,7 +14,7 @@ export function getDailyGoalTarget(todos: Todo[]): number {
   const todayTodos = getTodayTodos(todos)
   const count = todayTodos.length
   if (count === 0) return 0
-  if (count >= 5) return 5
+  if (count >= MAX_DAILY_GOAL) return MAX_DAILY_GOAL
   return count
 }
 

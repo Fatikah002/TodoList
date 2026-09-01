@@ -49,7 +49,7 @@ export function TodosHeader({
       {/* Row 1: Today (Left)  |  + Add (Right) */}
       <div className="flex items-center justify-between">
         <DropdownMenu>
-          <DropdownMenuTrigger className="focus:outline-none">
+          <DropdownMenuTrigger>
             <div className="flex items-center gap-1.5 cursor-pointer text-xl font-bold text-gray-900 transition-colors">
               <h2>{showAllTasks ? 'All Tasks' : 'Today'}</h2>
               <ChevronDown className="h-5 w-5 text-gray-900 mt-1" />
@@ -86,6 +86,7 @@ export function TodosHeader({
 
         <Button
           onClick={onToggleForm}
+          aria-label={showForm ? 'Close form' : 'Add task'}
           className="h-9 rounded-full bg-green-600 px-4 hover:bg-green-700 font-medium"
         >
           {showForm ? (
@@ -102,7 +103,7 @@ export function TodosHeader({
       <div className="flex items-center justify-between pt-2">
         <div className="flex items-center gap-2">
           <DropdownMenu>
-            <DropdownMenuTrigger className="focus:outline-none">
+            <DropdownMenuTrigger>
               <Button
                 variant="outline"
                 className="h-9 rounded-full border-gray-200 px-3 text-sm font-medium text-gray-700 gap-1.5"
@@ -166,12 +167,12 @@ export function TodosHeader({
             {onPreviousWeek && (
               <button
                 onClick={onPreviousWeek}
-                className="rounded-full p-1 hover:bg-gray-100 text-gray-700 transition-colors"
-                title={
+                aria-label={
                   calendarView === 'day'
                     ? 'Previous Week'
                     : 'Previous Month'
                 }
+                className="rounded-full p-1 hover:bg-gray-100 text-gray-700 transition-colors"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -185,12 +186,12 @@ export function TodosHeader({
             {onNextWeek && (
               <button
                 onClick={onNextWeek}
-                className="rounded-full p-1 hover:bg-gray-100 text-gray-700 transition-colors"
-                title={
+                aria-label={
                   calendarView === 'day'
                     ? 'Next Week'
                     : 'Next Month'
                 }
+                className="rounded-full p-1 hover:bg-gray-100 text-gray-700 transition-colors"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>

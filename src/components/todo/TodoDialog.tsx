@@ -34,12 +34,16 @@ export function TodoDialog({
   showRepeat,
   onSubmit,
 }: TodoDialogProps) {
+  const isEditing = !!initialData
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>Fill in the details to create a new todo</DialogDescription>
+          <DialogDescription>
+            {isEditing ? 'Edit the details of your todo' : 'Fill in the details to create a new todo'}
+          </DialogDescription>
         </DialogHeader>
 
         <TodoForm

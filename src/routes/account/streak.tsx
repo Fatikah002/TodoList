@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { ArrowLeft, RotateCcw } from 'lucide-react'
+import { ArrowLeft} from 'lucide-react'
 import { useTodos } from '@/hooks/useTodos'
 import {
   calculateStreak,
@@ -42,15 +42,6 @@ function RouteComponent() {
         <h1 className="flex-1 text-xl font-bold tracking-tight text-gray-900">
           Streak
         </h1>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate({ to: '/account/streak' })}
-          aria-label="Refresh"
-          className="rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-        >
-          <RotateCcw className="h-4 w-4" />
-        </Button>
       </div>
 
       <StreakSummaryCard streak={streak} bestStreak={bestStreak} />

@@ -1,5 +1,7 @@
 export type DeadlineStatus = 'late' | 'today' | 'tomorrow'
 
+const MS_PER_DAY = 86_400_000
+
 export function getDeadlineStatus(
   deadline: string,
   dueTime?: string,
@@ -23,7 +25,7 @@ export function getDeadlineStatus(
   const target = new Date(deadlineDate)
   target.setHours(0, 0, 0, 0)
 
-  const diffDays = (target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+  const diffDays = (target.getTime() - today.getTime()) / MS_PER_DAY
 
   if (diffDays === 0) return 'today'
   if (diffDays === 1) return 'tomorrow'

@@ -67,12 +67,13 @@ function NotificationsPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <main className="mx-auto w-full max-w-6xl px-4 py-6 md:px-8">
+      <div className="mx-auto w-full max-w-6xl px-4 py-6 md:px-8">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => navigate({ to: '/account/settings' })}
+            aria-label="Back to settings"
             className="h-9 w-9"
           >
             <ArrowLeft className="h-5 w-5" />
@@ -103,7 +104,7 @@ function NotificationsPage() {
             )
           })}
         </div>
-      </main>
+      </div>
     </div>
   )
 }

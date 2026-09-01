@@ -24,43 +24,6 @@ export function CategoryBreakdownSection({
   const totalTasks = activeTodos.length
 
   const categoryStats = useMemo(() => {
-    if (!isExpanded) {
-      // Collapsed mode: Work, Other, Personal
-      const map = new Map<string, number>()
-      map.set('Work', 0)
-      map.set('Other', 0)
-      map.set('Personal', 0)
-
-      activeTodos.forEach((todo) => {
-        const cat = (todo.category || 'Other').trim()
-        if (cat === 'Work' || cat === 'Personal') {
-          const current = map.get(cat) ?? 0
-          map.set(cat, current + 1)
-        } else {
-          const current = map.get('Other') ?? 0
-          map.set('Other', current + 1)
-        }
-      })
-
-      const order = ['Work', 'Other', 'Personal']
-      return order
-        .map((name) => {
-          const count = map.get(name) ?? 0
-          const progress =
-            totalTasks > 0 ? Math.round((count / totalTasks) * 100) : 0
-          const meta = getCategoryMeta(name)
-          return {
-            name,
-            count,
-            progress,
-            icon: meta.icon,
-            bgColor: meta.bgColor,
-          }
-        })
-        .filter((item) => item.count > 0 || item.name !== 'Other')
-    }
-
-    // Expanded mode: All actual individual categories (NO 'Other'!)
     const map = new Map<string, number>()
     activeTodos.forEach((todo) => {
       const cat = (todo.category || 'Uncategorized').trim()
@@ -68,7 +31,7 @@ export function CategoryBreakdownSection({
       map.set(cat, current + 1)
     })
 
-    return Array.from(map.entries())
+    const allCategories = Array.from(map.entries())
       .map(([name, count]) => {
         const progress =
           totalTasks > 0 ? Math.round((count / totalTasks) * 100) : 0
@@ -82,6 +45,12 @@ export function CategoryBreakdownSection({
         }
       })
       .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+
+    if (!isExpanded) {
+      return allCategories.slice(0, 3)
+    }
+
+    return allCategories
   }, [activeTodos, totalTasks, isExpanded])
 
   return (
@@ -128,6 +97,8 @@ export function CategoryBreakdownSection({
             return (
               <div
                 key={item.name}
+                role="button"
+                tabIndex={0}
                 onClick={() => {
                   if (onSelectCategory) {
                     onSelectCategory(isSelected ? 'All' : item.name)
@@ -144,6 +115,26 @@ export function CategoryBreakdownSection({
                     })
                   }
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    if (onSelectCategory) {
+                      onSelectCategory(isSelected ? 'All' : item.name)
+                    } else {
+                      navigate({
+                        to: '/todos',
+                        search: {
+                          view: 'all',
+                          category: item.name,
+                          status: 'all',
+                          priority: 'all',
+                          sort: 'none',
+                        },
+                      })
+                    }
+                  }
+                }}
+                aria-label={`${item.name}: ${item.count} tasks`}
                 className={`flex items-center justify-between gap-2.5 p-2 rounded-xl cursor-pointer transition-all duration-200 ${
                   isSelected
                     ? 'bg-green-50 border border-green-400/60'

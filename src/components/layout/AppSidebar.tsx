@@ -28,7 +28,7 @@ export function AppSidebar() {
 
   const mainNavItems = navigationItems.filter((item) => item.to !== '/account')
 
-  const accountItem = navigationItems.find((item) => item.to === '/account')!
+  const accountItem = navigationItems.find((item) => item.to === '/account')
 
   return (
     <Sidebar collapsible="offcanvas">
@@ -74,21 +74,23 @@ export function AppSidebar() {
       </SidebarContent>
 
       {/* Footer */}
-      <SidebarFooter className="mt-auto border-t p-4">
-        <SidebarMenu className="space-y-2">
-          <SidebarNavItem
-            icon={accountItem.icon}
-            label={accountItem.label}
-            active={isActive(accountItem)}
-            onClick={() =>
-              navigate({
-                to: accountItem.to,
-                ...(accountItem.search ? { search: accountItem.search } : {}),
-              })
-            }
-          />
-        </SidebarMenu>
-      </SidebarFooter>
+      {accountItem && (
+        <SidebarFooter className="mt-auto border-t p-4">
+          <SidebarMenu className="space-y-2">
+            <SidebarNavItem
+              icon={accountItem.icon}
+              label={accountItem.label}
+              active={isActive(accountItem)}
+              onClick={() =>
+                navigate({
+                  to: accountItem.to,
+                  ...(accountItem.search ? { search: accountItem.search } : {}),
+                })
+              }
+            />
+          </SidebarMenu>
+        </SidebarFooter>
+      )}
     </Sidebar>
   )
 }

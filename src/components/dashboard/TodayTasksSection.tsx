@@ -4,13 +4,55 @@ import { Checkbox } from '@/components/ui/checkbox'
 import type { Todo } from '@/lib/types'
 import { format } from 'date-fns'
 import { formatTime12 } from '@/lib/date'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { Input } from '@/components/ui/input'
 
 type TodayTasksSectionProps = {
   todos: Todo[]
   onToggleTodo: (id: string) => void
   onAddTodo: (title: string) => void
+}
+
+function AddTaskInput({
+  inputRef,
+  value,
+  onChange,
+  onKeyDown,
+  onBlur,
+}: {
+  inputRef: React.RefObject<HTMLInputElement | null>
+  value: string
+  onChange: (value: string) => void
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void
+  onBlur: () => void
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <Plus className="h-4 w-4 shrink-0 text-green-500" />
+      <Input
+        ref={inputRef}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={onKeyDown}
+        onBlur={onBlur}
+        placeholder="Type a task title..."
+        className="h-8 border-0 bg-transparent p-0 text-sm font-medium shadow-none focus-visible:ring-0"
+      />
+    </div>
+  )
+}
+
+function AddTaskButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex items-center gap-2 text-sm font-medium text-green-500 transition-colors hover:text-green-600"
+    >
+      <Plus className="h-4 w-4 shrink-0" />
+      <span>Add a Task</span>
+    </button>
+  )
 }
 
 export function TodayTasksSection({
@@ -50,12 +92,14 @@ export function TodayTasksSection({
     }
   }
 
-  const visibleTodos = [...todos]
-    .sort((a, b) => (a.dueTime || '').localeCompare(b.dueTime || ''))
-    .slice(0, 5)
+  const visibleTodos = useMemo(() => {
+    return [...todos]
+      .sort((a, b) => (a.dueTime || '').localeCompare(b.dueTime || ''))
+      .slice(0, 5)
+  }, [todos])
 
   return (
-    <section className="flex h-[260px] shrink-0 flex-col overflow-hidden rounded-2xl border border-green-200 bg-gradient-to-br from-green-100 to-white p-4 shadow-sm">
+    <section className="flex  min-h-[340px] shrink-0 flex-col overflow-hidden rounded-2xl border border-gray-300 bg-white p-4 shadow-md">
       {/* Header */}
       <div className="mb-3 flex shrink-0 items-center justify-between">
         <h2 className="text-sm font-bold text-green-900 sm:text-base">
@@ -86,28 +130,15 @@ export function TodayTasksSection({
           <>
             {/* Add Task */}
             {isAdding ? (
-              <div className="flex items-center gap-2">
-                <Plus className="h-4 w-4 shrink-0 text-green-500" />
-
-                <Input
-                  ref={inputRef}
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  onBlur={handleSubmit}
-                  placeholder="Type a task title..."
-                  className="h-8 border-0 bg-transparent p-0 text-sm font-medium shadow-none focus-visible:ring-0"
-                />
-              </div>
+              <AddTaskInput
+                inputRef={inputRef}
+                value={newTitle}
+                onChange={setNewTitle}
+                onKeyDown={handleKeyDown}
+                onBlur={handleSubmit}
+              />
             ) : (
-              <button
-                type="button"
-                onClick={() => setIsAdding(true)}
-                className="flex items-center gap-2 text-sm font-medium text-green-500 transition-colors hover:text-green-600"
-              >
-                <Plus className="h-4 w-4 shrink-0" />
-                <span>Add a Task</span>
-              </button>
+              <AddTaskButton onClick={() => setIsAdding(true)} />
             )}
 
             {/* Empty State */}
@@ -154,27 +185,15 @@ export function TodayTasksSection({
             {/* Add Task - di bawah task */}
             <div className="mt-2">
               {isAdding ? (
-                <div className="flex items-center gap-2">
-                  <Plus className="h-4 w-4 shrink-0 text-green-500" />
-                  <Input
-                    ref={inputRef}
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    onBlur={handleSubmit}
-                    placeholder="Type a task title..."
-                    className="h-8 border-0 bg-transparent p-0 text-sm font-medium shadow-none focus-visible:ring-0"
-                  />
-                </div>
+                <AddTaskInput
+                  inputRef={inputRef}
+                  value={newTitle}
+                  onChange={setNewTitle}
+                  onKeyDown={handleKeyDown}
+                  onBlur={handleSubmit}
+                />
               ) : (
-                <button
-                  type="button"
-                  onClick={() => setIsAdding(true)}
-                  className="flex items-center gap-2 text-sm font-medium text-green-500 transition-colors hover:text-green-600"
-                >
-                  <Plus className="h-4 w-4 shrink-0" />
-                  <span>Add a Task</span>
-                </button>
+                <AddTaskButton onClick={() => setIsAdding(true)} />
               )}
             </div>
           </>

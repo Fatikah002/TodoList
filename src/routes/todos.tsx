@@ -100,10 +100,10 @@ function TodosPage() {
     toggleSelect,
     cancelSelectMode,
   } = useFilteredTodos(showAllTasks, showUpcomingTasks, {
-    status: status as StatusFilter | undefined,
-    priority: priority as PriorityFilter | undefined,
+    status: status as StatusFilter,
+    priority: priority as PriorityFilter,
     category,
-    sort: sort as SortBy | undefined,
+    sort: sort as SortBy,
   })
 
   function handleAddTodo(data: TodoFormData) {
@@ -124,7 +124,7 @@ function TodosPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <main className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6 lg:px-8">
+      <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6 lg:px-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_340px]">
           <div className="order-2 w-full space-y-4 lg:space-y-6 lg:order-1">
             <TodosHeader
@@ -223,7 +223,7 @@ function TodosPage() {
               />
             )}
 
-            <div className="space-y-3">
+            <div className="space-y-3" aria-live="polite">
               {filteredTodos.length === 0 ? (
                 <p className="py-8 text-center text-muted-foreground">
                   {showUpcomingTasks ? 'No upcoming task' : 'No todos found'}
@@ -264,7 +264,7 @@ function TodosPage() {
             <UpcomingTasksSection todos={upcomingTodos} />
           </div>
         </div>
-      </main>
+      </div>
     </div>
   )
 }

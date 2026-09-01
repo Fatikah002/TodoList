@@ -2,7 +2,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { TriangleAlert } from 'lucide-react'
 import type { Todo } from '@/lib/types'
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { TodoDetailDialog } from '@/components/todo/TodoDetailDialog'
 import { TodoItemBadges } from '@/components/todo/TodoItemBadges'
 import { TodoItemDropdown } from '@/components/todo/TodoItemDropdown'
@@ -25,7 +25,7 @@ type TodoItemProps = {
   archivedView?: boolean
 }
 
-export function TodoItem({
+export const TodoItem = memo(function TodoItem({
   todo,
   onDelete,
   onToggle,
@@ -51,9 +51,22 @@ export function TodoItem({
   return (
     <>
       <Card
+        role="button"
+        tabIndex={0}
         onClick={() =>
           selectMode ? onToggleSelect?.(todo.id) : setShowDetail(true)
         }
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            if (selectMode) {
+              onToggleSelect?.(todo.id)
+            } else {
+              setShowDetail(true)
+            }
+          }
+        }}
+        aria-label={`${todo.title}${todo.completed ? ' (completed)' : ''}${status ? ' (overdue)' : ''}`}
         className={`relative cursor-pointer transition-all duration-200 ${
           todo.completed
             ? 'bg-muted/40 opacity-75'
@@ -145,4 +158,4 @@ export function TodoItem({
       )}
     </>
   )
-}
+})
