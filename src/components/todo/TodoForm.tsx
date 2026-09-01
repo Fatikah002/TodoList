@@ -4,12 +4,16 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { todoFieldValidators } from '@/lib/schemas'
 import type { TodoFormData } from '@/lib/schemas'
+import type { priority, RepeatType } from '@/lib/types'
 import { categories } from '@/lib/categories'
 import { Label } from '@/components/ui/label'
 import { DatePicker } from '@/components/ui/date-picker'
 import { TimePicker } from '@/components/ui/time-picker'
 import { Combobox } from '@/components/ui/combobox'
 import { STORAGE_KEYS } from '@/lib/constants'
+
+const VALID_PRIORITIES: priority[] = ['None', 'High', 'Medium', 'Low']
+const VALID_REPEATS: RepeatType[] = ['none', 'daily', 'weekly', 'monthly']
 
 function loadCustomCategories(): string[] {
   try {
@@ -169,7 +173,11 @@ export function TodoForm({
                 </Label>
                 <Combobox
                   value={field.state.value === 'None' ? '' : field.state.value}
-                  onChange={(val) => field.setValue(val as never)}
+                  onChange={(val) => {
+                    if (VALID_PRIORITIES.includes(val as priority)) {
+                      field.setValue(val as priority)
+                    }
+                  }}
                   options={['None', 'High', 'Medium', 'Low']}
                   placeholder="Select priority"
                   showAddOption={false}
@@ -275,7 +283,11 @@ export function TodoForm({
               <Label className="text-sm font-medium">Repeat</Label>
               <Combobox
                 value={field.state.value}
-                onChange={(val) => field.setValue(val as never)}
+                onChange={(val) => {
+                  if (VALID_REPEATS.includes(val as RepeatType)) {
+                    field.setValue(val as RepeatType)
+                  }
+                }}
                 options={[
                   { value: 'none', label: 'None' },
                   { value: 'daily', label: 'Daily' },

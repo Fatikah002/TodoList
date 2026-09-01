@@ -1,6 +1,7 @@
 import type { Todo } from './types'
 import { calculateStreak } from './streak'
 import { isOverdue } from './date'
+import { STORAGE_KEYS } from './constants'
 
 export type AccentColor =
   | 'green'
@@ -172,7 +173,7 @@ export function getAchievementProgress(
 const LEGACY_UNLOCKED_KEY = 'unlocked_achievements'
 
 function getUnlockedKey(email?: string): string {
-  const e = email ?? (typeof window !== 'undefined' ? localStorage.getItem('todospace_user_email') : '') ?? ''
+  const e = email ?? (typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.USER_EMAIL) : '') ?? ''
   return e ? `unlocked_achievements_${e}` : LEGACY_UNLOCKED_KEY
 }
 
@@ -197,7 +198,11 @@ export function saveUnlockedAchievementId(id: string, email?: string): string[] 
   if (!current.includes(id)) {
     const updated = [...current, id]
     const key = getUnlockedKey(email)
-    localStorage.setItem(key, JSON.stringify(updated))
+    try {
+      localStorage.setItem(key, JSON.stringify(updated))
+    } catch {
+      // ignore storage errors
+    }
     return updated
   }
   return current

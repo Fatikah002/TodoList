@@ -8,4 +8,5 @@ export const STORAGE_KEYS = {
   NOTIFICATION_PREFS: 'notificationPreferences',
   QUICK_FILTERS: 'quickFilters',
   DAILY_GOAL_CELEBRATED: 'daily-goal-celebrated',
+  PROFILE: 'todospace_profile',
 } as const

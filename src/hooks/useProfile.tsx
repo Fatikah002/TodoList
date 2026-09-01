@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 const DEFAULT_AVATAR = '/avatar.png'
 
@@ -22,23 +23,44 @@ const defaultProfile: Profile = {
 
 const ProfileContext = createContext<ProfileContextType | null>(null)
 
+function isValidProfile(data: unknown): data is Profile {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'name' in data &&
+    'email' in data &&
+    'avatar' in data &&
+    typeof (data as Profile).name === 'string' &&
+    typeof (data as Profile).email === 'string' &&
+    typeof (data as Profile).avatar === 'string'
+  )
+}
+
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile>(defaultProfile)
 
   useEffect(() => {
-    const stored = localStorage.getItem('profile')
+    const stored = localStorage.getItem(STORAGE_KEYS.PROFILE)
     if (stored) {
       try {
         const parsed = JSON.parse(stored)
-        setProfile((prev) => ({ ...prev, ...parsed }))
+        if (isValidProfile(parsed)) {
+          setProfile(parsed)
+        } else {
+          localStorage.removeItem(STORAGE_KEYS.PROFILE)
+        }
       } catch {
-        localStorage.removeItem('profile')
+        localStorage.removeItem(STORAGE_KEYS.PROFILE)
       }
     }
   }, [])
 
   useEffect(() => {
-    localStorage.setItem('profile', JSON.stringify(profile))
+    try {
+      localStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(profile))
+    } catch {
+      // ignore storage errors
+    }
   }, [profile])
 
   function updateProfile(updates: Partial<Profile>) {

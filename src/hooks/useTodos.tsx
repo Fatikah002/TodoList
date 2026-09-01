@@ -13,13 +13,30 @@ function getTodosKey(): string {
   return email ? `todos_${email}` : LEGACY_TODOS_KEY
 }
 
+function isValidTodo(data: unknown): data is Todo {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'id' in data &&
+    'title' in data &&
+    'deadline' in data &&
+    'completed' in data &&
+    'archived' in data &&
+    typeof (data as Todo).id === 'string' &&
+    typeof (data as Todo).title === 'string'
+  )
+}
+
 function loadTodos(): Todo[] {
   if (typeof window === 'undefined') return []
   try {
     const key = getTodosKey()
     const raw = localStorage.getItem(key)
     if (raw) {
-      return JSON.parse(raw)
+      const parsed = JSON.parse(raw)
+      if (Array.isArray(parsed)) {
+        return parsed.filter(isValidTodo)
+      }
     }
     return []
   } catch {
@@ -51,8 +68,12 @@ export function TodosProvider({ children }: { children: ReactNode }) {
   )
 
   useEffect(() => {
-    const key = getTodosKey()
-    localStorage.setItem(key, JSON.stringify(todos))
+    try {
+      const key = getTodosKey()
+      localStorage.setItem(key, JSON.stringify(todos))
+    } catch {
+      // ignore storage errors (e.g. quota exceeded)
+    }
   }, [todos])
 
   // Re-load todos when email changes (login/logout)
