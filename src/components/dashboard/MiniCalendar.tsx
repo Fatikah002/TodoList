@@ -1,4 +1,5 @@
-import type { ComponentProps } from 'react'
+import { useMemo } from 'react'
+import type{ ComponentProps } from 'react'
 import { Calendar, CalendarDayButton } from '@/components/ui/calendar'
 import { formatLocalDate } from '@/lib/date'
 import type { Todo } from '@/lib/types'
@@ -22,20 +23,32 @@ export function MiniCalendar({
 }: MiniCalendarProps) {
   const todayStr = formatLocalDate(new Date())
 
+  const taskStatusMap = useMemo(() => {
+    const map = new Map<string, { hasTasks: boolean; hasPending: boolean }>()
+    for (const todo of todos) {
+      if (todo.archived) continue
+      if (!showAllTasks && todo.completed) continue
+
+      const dateStr = todo.deadline
+      const existing = map.get(dateStr)
+      if (existing) {
+        existing.hasTasks = true
+        if (!todo.completed) {
+          existing.hasPending = true
+        }
+      } else {
+        map.set(dateStr, {
+          hasTasks: true,
+          hasPending: !todo.completed,
+        })
+      }
+    }
+    return map
+  }, [todos, showAllTasks])
+
   const getTaskStatusOnDate = (date: Date) => {
     const dateStr = formatLocalDate(date)
-    const dateTodos = todos.filter(
-      (todo) =>
-        todo.deadline === dateStr &&
-        !todo.archived &&
-        (showAllTasks || !todo.completed),
-    )
-    const hasPending = dateTodos.some((t) => !t.completed)
-
-    return {
-      hasTasks: dateTodos.length > 0,
-      hasPending,
-    }
+    return taskStatusMap.get(dateStr) ?? { hasTasks: false, hasPending: false }
   }
 
   return (

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useLocation } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { X } from 'lucide-react'
@@ -210,25 +210,29 @@ export function useAchievements() {
     isInitialMount.current = false
   }, [todos, unlockedIds])
 
-  const achievementsWithStatus = ACHIEVEMENTS.map((achievement) => {
-    const isUnlocked = unlockedIds.includes(achievement.id)
-    const progress = getAchievementProgress(achievement, todos)
-    return {
-      ...achievement,
-      isUnlocked,
-      progress,
-    }
-  })
+  const achievementsWithStatus = useMemo(() => {
+    return ACHIEVEMENTS.map((achievement) => {
+      const isUnlocked = unlockedIds.includes(achievement.id)
+      const progress = getAchievementProgress(achievement, todos)
+      return {
+        ...achievement,
+        isUnlocked,
+        progress,
+      }
+    })
+  }, [todos, unlockedIds])
 
-  const filteredAchievements = achievementsWithStatus.filter((item) => {
-    if (filter === 'Completed') return item.isUnlocked
-    if (filter === 'Locked') return !item.isUnlocked
-    if (filter === 'In Progress')
-      return !item.isUnlocked && item.progress > 0
-    return true
-  })
+  const filteredAchievements = useMemo(() => {
+    return achievementsWithStatus.filter((item) => {
+      if (filter === 'Completed') return item.isUnlocked
+      if (filter === 'Locked') return !item.isUnlocked
+      if (filter === 'In Progress')
+        return !item.isUnlocked && item.progress > 0
+      return true
+    })
+  }, [achievementsWithStatus, filter])
 
-  const unlockedCount = achievementsWithStatus.filter((a) => a.isUnlocked).length
+  const unlockedCount = useMemo(() => achievementsWithStatus.filter((a) => a.isUnlocked).length, [achievementsWithStatus])
   const totalCount = ACHIEVEMENTS.length
   const overallPercentage = Math.round((unlockedCount / totalCount) * 100)
 

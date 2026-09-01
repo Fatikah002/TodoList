@@ -5,6 +5,7 @@ import { isSameDay, formatLocalDate } from '@/lib/date'
 import { getUpcomingTodos } from '@/lib/upcomingTasks'
 import { CalendarDays } from 'lucide-react'
 import { startOfWeek, endOfWeek, isWithinInterval, format } from 'date-fns'
+import { useMemo } from 'react'
 import { TodayTasksSection } from '@/components/dashboard/TodayTasksSection'
 import { DailyGoalCard } from '@/components/dashboard/DailyGoalCard'
 import { WeeklyProgressSection } from '@/components/dashboard/WeeklyProgressSection'
@@ -36,24 +37,30 @@ function getGreetingEmoji() {
 function DashboardPage() {
   const { todos, toggleTodo, addTodo } = useTodos()
   const { profile } = useProfile()
-  const activeTodos = todos.filter((todo) => !todo.archived)
+  const activeTodos = useMemo(() => todos.filter((todo) => !todo.archived), [todos])
   const today = formatLocalDate(new Date())
   const streak = calculateStreak(todos)
   const stats = calculateTodoStats(todos, { showAllTasks: true })
 
-  const todayTodos = activeTodos.filter(
-    (todo) => isSameDay(todo.deadline, today) && !todo.completed,
+  const todayTodos = useMemo(
+    () => activeTodos.filter((todo) => isSameDay(todo.deadline, today) && !todo.completed),
+    [activeTodos, today],
   )
 
   const now = new Date()
   const weekStart = startOfWeek(now, { weekStartsOn: 1 })
   const weekEnd = endOfWeek(now, { weekStartsOn: 1 })
-  const weeklyTodos = activeTodos.filter((todo) => {
-    const d = new Date(todo.deadline)
-    return isWithinInterval(d, { start: weekStart, end: weekEnd })
-  })
+
+  const weeklyTodos = useMemo(
+    () => activeTodos.filter((todo) => {
+      const d = new Date(todo.deadline)
+      return isWithinInterval(d, { start: weekStart, end: weekEnd })
+    }),
+    [activeTodos, weekStart, weekEnd],
+  )
+
   const weeklyTotal = weeklyTodos.length
-  const weeklyCompleted = weeklyTodos.filter((t) => t.completed).length
+  const weeklyCompleted = useMemo(() => weeklyTodos.filter((t) => t.completed).length, [weeklyTodos])
   const weeklyPct =
     weeklyTotal === 0 ? 0 : Math.round((weeklyCompleted / weeklyTotal) * 100)
 
