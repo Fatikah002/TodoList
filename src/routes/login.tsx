@@ -12,6 +12,25 @@ export const Route = createFileRoute('/login')({
 
 type LoginView = 'form' | 'signup' | 'loading' | 'success'
 
+type Account = { email: string; password: string; username: string }
+
+function loadAccounts(): Account[] {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.REGISTERED_ACCOUNTS)
+    return stored ? JSON.parse(stored) : []
+  } catch {
+    return []
+  }
+}
+
+function saveAccounts(accounts: Account[]) {
+  try {
+    localStorage.setItem(STORAGE_KEYS.REGISTERED_ACCOUNTS, JSON.stringify(accounts))
+  } catch {
+    // ignore storage errors
+  }
+}
+
 function LoginPage() {
   const navigate = useNavigate()
   const { updateProfile } = useProfile()
@@ -64,9 +83,7 @@ function LoginPage() {
     }
 
     if (!isSignUp) {
-      const stored = localStorage.getItem(STORAGE_KEYS.REGISTERED_ACCOUNTS)
-      const accounts: { email: string; password: string; username: string }[] =
-        stored ? JSON.parse(stored) : []
+      const accounts = loadAccounts()
       const account = accounts.find(
         (a) => a.email.toLowerCase() === email.toLowerCase(),
       )
@@ -90,25 +107,12 @@ function LoginPage() {
       window.dispatchEvent(new Event('email-changed'))
 
       if (isSignUp) {
-        const stored = localStorage.getItem(STORAGE_KEYS.REGISTERED_ACCOUNTS)
-        const accounts: {
-          email: string
-          password: string
-          username: string
-        }[] = stored ? JSON.parse(stored) : []
+        const accounts = loadAccounts()
         accounts.push({ email, password, username: username.trim() })
-        localStorage.setItem(
-          STORAGE_KEYS.REGISTERED_ACCOUNTS,
-          JSON.stringify(accounts),
-        )
+        saveAccounts(accounts)
         updateProfile({ name: username.trim(), email })
       } else {
-        const stored = localStorage.getItem(STORAGE_KEYS.REGISTERED_ACCOUNTS)
-        const accounts: {
-          email: string
-          password: string
-          username: string
-        }[] = stored ? JSON.parse(stored) : []
+        const accounts = loadAccounts()
         const account = accounts.find(
           (a) => a.email.toLowerCase() === email.toLowerCase(),
         )
