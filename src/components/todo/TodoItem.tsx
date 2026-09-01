@@ -120,7 +120,7 @@ export const TodoItem = memo(function TodoItem({
               archivedView={archivedView}
               onUpdate={onUpdate}
               onRestore={onRestore}
-              onArchive={onArchive}
+              onArchive={() => setShowArchive(true)}
               onDelete={() => setShowDelete(true)}
             />
           )}

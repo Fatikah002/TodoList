@@ -32,14 +32,15 @@ export function TodoItemArchiveDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Archive Todo</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to archive this todo? You can restore it
-            later from the archived section.
+            Are you sure you want to archive this todo? You can restore it later
+            from the archived section.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
+            variant="default"
             className="bg-amber-400 text-amber-900 hover:bg-amber-500 focus:ring-amber-500"
             onClick={() => {
               onArchive(todo.id)
