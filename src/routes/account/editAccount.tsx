@@ -136,7 +136,7 @@ function EditProfilePage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-6 md:px-6 md:py-8">
+    <div className="mx-auto w-full max-w-2xl  px-8 py-8 sm:px-8 sm:py-8 lg:px-8 md:py-8">
       <div className="mb-6 flex items-center gap-3 md:mb-8">
         <Button
           variant="ghost"

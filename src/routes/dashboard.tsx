@@ -82,7 +82,7 @@ function DashboardPage() {
   }
 
   return (
-    <div className="rise-in mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6 lg:px-8 motion-reduce:animate-none">
+    <div className="rise-in mx-auto w-full max-w-7xl px-8 py-8 sm:px-8 sm:py-8 lg:px-8 motion-reduce:animate-none">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex-1">

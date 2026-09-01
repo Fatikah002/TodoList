@@ -122,7 +122,7 @@ export function OnboardingFlow() {
 
   return (
     <main
-      className={`relative min-h-dvh w-full overflow-hidden bg-[#f6fbf7] text-slate-900 transition-all duration-500 ease-out ${
+      className={`relative min-h-dvh w-full overflow-hidden bg-[#f6fbf7]  px-8 py-8 text-slate-900 transition-all duration-500 ease-out ${
         isCompleting ? 'pointer-events-none scale-[0.98] opacity-0' : ''
       }`}
     >

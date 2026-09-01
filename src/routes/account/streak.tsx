@@ -28,7 +28,7 @@ function RouteComponent() {
   const totalActiveDays = uniqueDates.length
 
   return (
-    <div className="mx-auto max-w-2xl space-y-3 p-4 sm:space-y-4 sm:p-6">
+    <div className="mx-auto max-w-2xl space-y-3 px-8 py-8 sm:px-8 sm:py-8 lg:px-8 ">
       <div className="flex items-center gap-3">
         <Button
           variant="ghost"

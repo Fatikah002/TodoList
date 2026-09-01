@@ -29,7 +29,7 @@ function ArchivedPage() {
   const [showBulkDelete, setShowBulkDelete] = useState(false)
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-6">
+    <div className="mx-auto w-full max-w-5xl px-8 py-8 sm:px-8 sm:py-8 lg:px-8">
       {/* Toolbar */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 pb-4">
         {selectMode ? (

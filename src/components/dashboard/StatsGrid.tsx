@@ -89,7 +89,7 @@ export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
           return (
             <div
               key={stat.label}
-              className={`flex h-full flex-1 items-center justify-center gap-1.5 px-2 sm:gap-2 sm:px-4 ${
+              className={`flex h-full flex-1 items-center justify-center gap-1 px-2 sm:gap-2 sm:px-4 ${
                 index !== 0 ? 'border-l border-gray-200' : ''
               }`}
             >
@@ -101,11 +101,11 @@ export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
                 {stat.value}
               </span>
 
-              <span className="hidden text-xs text-gray-500 sm:inline">
+              <span className="hidden text-xs text-gray-500  sm:inline">
                 {stat.label}
               </span>
 
-              <span className="text-[10px] text-gray-500 sm:hidden">
+              <span className="text-[10px] text-gray-500  sm:hidden">
                 {stat.label.replace(' Tasks', '')}
               </span>
             </div>

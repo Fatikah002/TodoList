@@ -124,7 +124,7 @@ function TodosPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 sm:py-6 lg:px-8">
+      <div className="mx-auto w-full max-w-7xl px-8 py-8 sm:px-8 sm:py-8 lg:px-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_340px]">
           <div className="order-2 w-full space-y-4 lg:space-y-6 lg:order-1">
             <TodosHeader

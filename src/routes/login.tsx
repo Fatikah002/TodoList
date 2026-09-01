@@ -142,7 +142,7 @@ function LoginPage() {
   ])
 
   return (
-    <div className="relative flex min-h-dvh w-full items-center justify-center bg-[#f8fbf9] px-5 py-8 overflow-hidden sm:h-dvh sm:overflow-hidden">
+    <div className="relative flex min-h-dvh w-full items-center justify-center bg-[#f8fbf9]  px-8 py-8  overflow-hidden sm:h-dvh sm:overflow-hidden">
       {/* Background decorations */}
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <div className="absolute -left-24 top-8 h-72 w-72 rounded-full bg-green-200/40 blur-3xl" />

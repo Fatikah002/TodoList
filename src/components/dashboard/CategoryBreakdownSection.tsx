@@ -166,7 +166,7 @@ export function CategoryBreakdownSection({
                   <span className="text-xs font-medium text-gray-600">
                     {item.count}
                   </span>
-                  <ChevronRight className="h-3.5 w-3.5 text-gray-400" />
+                  {/* <ChevronRight className="h-3.5 w-3.5 text-gray-400" /> */}
                 </div>
               </div>
             )
