@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import { ChevronRight, ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { Todo } from '@/lib/types'
 import { getCategoryMeta } from '@/lib/categories'
 

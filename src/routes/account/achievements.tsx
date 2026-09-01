@@ -28,7 +28,8 @@ function RouteComponent() {
   } = useAchievements()
 
   return (
-    <div className="mx-auto max-w-2xl space-y-5 px-8 py-8 sm:px-8 sm:py-8 lg:px-8">
+    <div className="flex flex-1 flex-col">
+    <div className="mx-auto w-full max-w-6xl space-y-5 px-8 py-8 sm:px-8 sm:py-8 lg:px-8">
        <div className="mb-6 flex items-center gap-3 md:mb-8">
         <Button
           variant="ghost"
@@ -118,6 +119,7 @@ function RouteComponent() {
         )}
       </div>
 
+    </div>
     </div>
   )
 }

@@ -28,7 +28,8 @@ function RouteComponent() {
   const totalActiveDays = uniqueDates.length
 
   return (
-    <div className="mx-auto max-w-2xl space-y-3 px-8 py-8 sm:px-8 sm:py-8 lg:px-8 ">
+    <div className="flex flex-1 flex-col">
+    <div className="mx-auto w-full max-w-6xl space-y-3 px-8 py-8 sm:px-8 sm:py-8 lg:px-8">
       <div className="flex items-center gap-3">
         <Button
           variant="ghost"
@@ -48,6 +49,7 @@ function RouteComponent() {
       <WeeklyProgress weeklyActivity={weeklyActivity} totalActiveDays={totalActiveDays} />
       <StreakExplanation />
       <StreakCalendar completedSet={completedSet} />
+    </div>
     </div>
   )
 }
