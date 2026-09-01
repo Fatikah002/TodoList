@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 export const Route = createFileRoute('/account/deleteAccount')({
   component: DeleteAccountPage,
@@ -46,7 +47,24 @@ function DeleteAccountPage() {
   }
 
   function handleCloseSuccess() {
-    localStorage.clear()
+    try {
+      localStorage.removeItem(STORAGE_KEYS.LOGGED_IN)
+      localStorage.removeItem(STORAGE_KEYS.USER_EMAIL)
+      localStorage.removeItem(STORAGE_KEYS.PROFILE)
+      localStorage.removeItem(STORAGE_KEYS.ONBOARDING_COMPLETED)
+      localStorage.removeItem(STORAGE_KEYS.NOTIFICATION_PREFS)
+      localStorage.removeItem(STORAGE_KEYS.QUICK_FILTERS)
+      localStorage.removeItem(STORAGE_KEYS.DAILY_GOAL_CELEBRATED)
+      localStorage.removeItem(STORAGE_KEYS.REGISTERED_ACCOUNTS)
+      localStorage.removeItem(STORAGE_KEYS.CUSTOM_CATEGORIES)
+      const email = localStorage.getItem(STORAGE_KEYS.USER_EMAIL)
+      if (email) {
+        localStorage.removeItem(`todos_${email}`)
+        localStorage.removeItem(`unlocked_achievements_${email}`)
+      }
+    } catch {
+      // ignore storage errors
+    }
     navigate({ to: '/login', replace: true })
   }
 
