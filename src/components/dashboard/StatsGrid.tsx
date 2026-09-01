@@ -25,7 +25,7 @@ export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
     ...(showTotal
       ? [
           {
-            label: 'Total Tasks',
+            label: 'Total',
             value: stats.total,
             icon: ListChecks,
             iconBackground: 'bg-blue-50',
@@ -82,31 +82,27 @@ export function StatsGrid({ stats, showTotal = true }: StatsGridProps) {
 
   return (
     <section className="mt-6">
-      <div className="flex h-10 w-full items-center overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="flex w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
         {statItems.map((stat, index) => {
           const Icon = stat.icon
 
           return (
             <div
               key={stat.label}
-              className={`flex h-full flex-1 items-center justify-center gap-1 px-2 sm:gap-2 sm:px-4 ${
-                index !== 0 ? 'border-l border-gray-200' : ''
+              className={`flex flex-1 flex-col items-center  gap-0.5 px-3 py-3 sm:px-4 ${
+                index !== 0 ? 'border-l border-gray-100' : ''
               }`}
             >
-              <Icon
-                className={`h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4 ${stat.iconColor}`}
-              />
-
-              <span className="text-sm font-semibold text-gray-900">
-                {stat.value}
-              </span>
-
-              <span className="hidden text-xs text-gray-500  sm:inline">
+              <div className="flex items-center gap-1.5">
+                <Icon
+                  className={`h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4 ${stat.iconColor}`}
+                />
+                <span className="text-lg font-bold text-gray-900 sm:text-xl">
+                  {stat.value}
+                </span>
+              </div>
+              <span className="text-[10px] text-gray-500 sm:text-xs">
                 {stat.label}
-              </span>
-
-              <span className="text-[10px] text-gray-500  sm:hidden">
-                {stat.label.replace(' Tasks', '')}
               </span>
             </div>
           )
