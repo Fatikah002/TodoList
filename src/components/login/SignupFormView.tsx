@@ -56,7 +56,7 @@ export function SignupFormView({
               placeholder="Username"
               value={username}
               onChange={(e) => onUsernameChange(e.target.value)}
-              className="h-12 rounded-xl border-slate-200 bg-white pr-10 pl-4 text-sm focus-visible:ring-green-500 sm:pl-11 sm:text-sm"
+              className="h-12 rounded-xl border-slate-200 bg-white pr-10 pl-4 focus-visible:ring-green-500 sm:pl-11 md:text-sm"
               autoFocus
             />
             <User className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
@@ -70,7 +70,7 @@ export function SignupFormView({
               placeholder="Email"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
-              className={`h-12 rounded-xl border-slate-200 bg-white pr-10 pl-4 text-sm focus-visible:ring-green-500 sm:pl-11 sm:text-sm ${isEmailValid ? 'border-green-500' : ''}`}
+              className={`h-12 rounded-xl border-slate-200 bg-white pr-10 pl-4 focus-visible:ring-green-500 sm:pl-11 md:text-sm ${isEmailValid ? 'border-green-500' : ''}`}
             />
             {isEmailValid && (
               <Check className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-green-500" />
@@ -85,7 +85,7 @@ export function SignupFormView({
               placeholder="Password"
               value={password}
               onChange={(e) => onPasswordChange(e.target.value)}
-              className={`h-12 rounded-xl border-slate-200 bg-white pr-11 pl-4 text-sm focus-visible:ring-green-500 sm:pl-11 sm:text-sm ${error ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+              className={`h-12 rounded-xl border-slate-200 bg-white pr-11 pl-4 focus-visible:ring-green-500 sm:pl-11 md:text-sm ${error ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
             />
             <button
               type="button"
@@ -109,7 +109,7 @@ export function SignupFormView({
               placeholder="Confirm Password"
               value={confirmPassword}
               onChange={(e) => onConfirmPasswordChange(e.target.value)}
-              className={`h-12 rounded-xl border-slate-200 bg-white pr-11 pl-4 text-sm focus-visible:ring-green-500 sm:pl-11 sm:text-sm ${error ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+              className={`h-12 rounded-xl border-slate-200 bg-white pr-11 pl-4 focus-visible:ring-green-500 sm:pl-11 md:text-sm ${error ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
             />
           </div>
           {error && <p className="text-xs text-red-500">{error}</p>}

@@ -36,7 +36,7 @@ function AddTaskInput({
         onKeyDown={onKeyDown}
         onBlur={onBlur}
         placeholder="Type a task title..."
-        className="h-8 border-0 bg-transparent p-0 text-sm font-medium shadow-none focus-visible:ring-0"
+        className="h-10 border-0 bg-transparent  md:text-sm font-medium focus-visible:ring-0"
       />
     </div>
   )
@@ -102,7 +102,7 @@ export function TodayTasksSection({
     <section className="flex  min-h-[340px] shrink-0 flex-col overflow-hidden rounded-2xl border border-gray-300 bg-white p-4 shadow-md">
       {/* Header */}
       <div className="mb-3 flex shrink-0 items-center justify-between">
-        <h2 className="text-sm font-bold text-green-900 sm:text-base">
+        <h2 className="text-sm font-bold text-slate-900 sm:text-base">
           Today's Tasks
         </h2>
 

@@ -45,7 +45,7 @@ export function LoginFormView({
             placeholder="Email"
             value={email}
             onChange={(e) => onEmailChange(e.target.value)}
-            className="h-12 rounded-xl border-slate-200 bg-white pl-4 text-sm focus-visible:ring-green-500 sm:pl-11 sm:text-sm"
+            className="h-12 rounded-xl border-slate-200 bg-white pl-4 focus-visible:ring-green-500 sm:pl-11 md:text-sm"
             autoFocus
           />
         </div>
@@ -57,7 +57,7 @@ export function LoginFormView({
               placeholder="Password"
               value={password}
               onChange={(e) => onPasswordChange(e.target.value)}
-              className={`h-12 rounded-xl border-slate-200 bg-white pr-11 text-sm focus-visible:ring-green-500 sm:pl-11 sm:text-sm ${error ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+              className={`h-12 rounded-xl border-slate-200 bg-white pr-11 focus-visible:ring-green-500 sm:pl-11 md:text-sm ${error ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
             />
             <button
               type="button"
