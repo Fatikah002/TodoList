@@ -63,7 +63,11 @@ export function getQuickFilters(): QuickFilter[] {
     const stored = localStorage.getItem(STORAGE_KEYS.QUICK_FILTERS)
     if (!stored) {
       const defaults = getDefaultFilters()
-      localStorage.setItem(STORAGE_KEYS.QUICK_FILTERS, JSON.stringify(defaults))
+      try {
+        localStorage.setItem(STORAGE_KEYS.QUICK_FILTERS, JSON.stringify(defaults))
+      } catch {
+        // ignore storage errors
+      }
       return defaults
     }
     return JSON.parse(stored) as QuickFilter[]
@@ -73,7 +77,11 @@ export function getQuickFilters(): QuickFilter[] {
 }
 
 export function saveQuickFilters(filters: QuickFilter[]): void {
-  localStorage.setItem(STORAGE_KEYS.QUICK_FILTERS, JSON.stringify(filters))
+  try {
+    localStorage.setItem(STORAGE_KEYS.QUICK_FILTERS, JSON.stringify(filters))
+  } catch {
+    // ignore storage errors
+  }
 }
 
 export function toggleQuickFilter(id: string): QuickFilter[] {

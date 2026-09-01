@@ -109,8 +109,12 @@ function RouteComponent() {
 
         <button
           onClick={() => {
-            localStorage.removeItem(STORAGE_KEYS.LOGGED_IN)
-            localStorage.removeItem(STORAGE_KEYS.USER_EMAIL)
+            try {
+              localStorage.removeItem(STORAGE_KEYS.LOGGED_IN)
+              localStorage.removeItem(STORAGE_KEYS.USER_EMAIL)
+            } catch {
+              // ignore storage errors
+            }
             window.dispatchEvent(new Event('email-changed'))
             navigate({ to: '/login', replace: true })
           }}

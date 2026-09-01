@@ -38,7 +38,11 @@ export function NotificationPreferencesProvider({
   }, [])
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.NOTIFICATION_PREFS, JSON.stringify(preferences))
+    try {
+      localStorage.setItem(STORAGE_KEYS.NOTIFICATION_PREFS, JSON.stringify(preferences))
+    } catch {
+      // ignore storage errors
+    }
   }, [preferences])
 
   function updatePreference(key: keyof NotificationPreferences, value: boolean) {

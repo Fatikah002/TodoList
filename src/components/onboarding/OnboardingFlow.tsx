@@ -71,7 +71,11 @@ export function OnboardingFlow() {
       colors: ['#16a34a', '#22c55e', '#4ade80'],
     })
 
-    localStorage.setItem(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true')
+    try {
+      localStorage.setItem(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true')
+    } catch {
+      // ignore storage errors
+    }
 
     window.setTimeout(() => {
       navigate({

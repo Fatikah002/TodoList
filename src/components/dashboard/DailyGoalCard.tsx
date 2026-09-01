@@ -13,11 +13,20 @@ export function DailyGoalCard() {
 
     const today = new Date().toISOString().split('T')[0]
 
-    const saved = JSON.parse(
-      localStorage.getItem(STORAGE_KEYS.DAILY_GOAL_CELEBRATED) ?? '{}',
-    )
+    let saved: { date?: string; progress?: number } = {}
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.DAILY_GOAL_CELEBRATED)
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        if (typeof parsed === 'object' && parsed !== null) {
+          saved = parsed
+        }
+      }
+    } catch {
+      // ignore corrupted data
+    }
 
-    if (saved.date === today && saved.progress >= goal.progress) {
+    if (saved.date === today && saved.progress && saved.progress >= goal.progress) {
       return
     }
 
@@ -25,13 +34,17 @@ export function DailyGoalCard() {
       description: 'Amazing! You finished all your tasks for today.',
     })
 
-    localStorage.setItem(
-      STORAGE_KEYS.DAILY_GOAL_CELEBRATED,
-      JSON.stringify({
-        date: today,
-        progress: goal.progress,
-      }),
-    )
+    try {
+      localStorage.setItem(
+        STORAGE_KEYS.DAILY_GOAL_CELEBRATED,
+        JSON.stringify({
+          date: today,
+          progress: goal.progress,
+        }),
+      )
+    } catch {
+      // ignore storage errors
+    }
   }, [goal.isComplete, goal.progress])
 
   const target = goal.target || 3
