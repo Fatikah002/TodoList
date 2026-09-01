@@ -247,6 +247,7 @@ function EditProfilePage() {
                   variant="ghost"
                   size="sm"
                   onClick={handleCancelPasswordChange}
+                  aria-label="Cancel password change"
                   className="h-8 gap-1.5 px-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900"
                 >
                   <X className="h-4 w-4" />
@@ -267,6 +268,7 @@ function EditProfilePage() {
                     <button
                       type="button"
                       onClick={() => setShowCurrent(!showCurrent)}
+                      aria-label={showCurrent ? 'Hide current password' : 'Show current password'}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600"
                     >
                       {showCurrent ? (
@@ -293,6 +295,7 @@ function EditProfilePage() {
                   <button
                     type="button"
                     onClick={() => setShowNew(!showNew)}
+                    aria-label={showNew ? 'Hide new password' : 'Show new password'}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600"
                   >
                     {showNew ? (
@@ -318,6 +321,7 @@ function EditProfilePage() {
                   <button
                     type="button"
                     onClick={() => setShowConfirm(!showConfirm)}
+                    aria-label={showConfirm ? 'Hide confirm password' : 'Show confirm password'}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600"
                   >
                     {showConfirm ? (

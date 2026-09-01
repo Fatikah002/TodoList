@@ -40,6 +40,7 @@ export function TodoItemDropdown({
           <Button
             variant="ghost"
             size="icon"
+            aria-label="More options"
             onClick={(e) => e.stopPropagation()}
             onPointerDown={(e) => e.stopPropagation()}
           >

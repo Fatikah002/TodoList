@@ -128,6 +128,7 @@ export function TodoFilter({
         render={
           <Button
             variant={hasActiveFilter ? 'default' : 'outline'}
+            aria-label="Filter todos"
             className={cn(
               'gap-2',
               hasActiveFilter && 'bg-green-600 hover:bg-green-700',

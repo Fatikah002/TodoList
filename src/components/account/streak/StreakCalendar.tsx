@@ -62,6 +62,7 @@ export function StreakCalendar({ completedSet }: StreakCalendarProps) {
           variant="ghost"
           size="icon"
           onClick={prevMonth}
+          aria-label="Previous month"
           className="h-8 w-8 rounded-full text-orange-600 hover:bg-orange-50"
         >
           <ChevronLeft className="h-4 w-4" />
@@ -74,6 +75,7 @@ export function StreakCalendar({ completedSet }: StreakCalendarProps) {
               variant="secondary"
               size="sm"
               onClick={() => setCurrentMonth(new Date())}
+              aria-label="Go to current month"
               className="h-6 rounded-full bg-orange-100 px-2 text-[10px] font-bold text-orange-700 hover:bg-orange-200"
             >
               <RotateCcw className="h-3 w-3" />
@@ -85,6 +87,7 @@ export function StreakCalendar({ completedSet }: StreakCalendarProps) {
           variant="ghost"
           size="icon"
           onClick={nextMonth}
+          aria-label="Next month"
           className="h-8 w-8 rounded-full text-orange-600 hover:bg-orange-50"
         >
           <ChevronRight className="h-4 w-4" />

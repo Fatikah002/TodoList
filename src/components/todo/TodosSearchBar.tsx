@@ -76,12 +76,14 @@ export function TodosSearchBar({
           placeholder="Search todo..."
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
+          aria-label="Search todos"
           className="h-12 rounded-xl pl-10 pr-10"
         />
 
         {search && (
           <button
             onClick={() => onSearchChange('')}
+            aria-label="Clear search"
             className="absolute right-3 top-1/2 -translate-y-1/2"
           >
             <X className="h-4 w-4 text-muted-foreground" />
@@ -104,6 +106,7 @@ export function TodosSearchBar({
       <Button
         variant="outline"
         onClick={onEnterSelectMode}
+        aria-label="Enter select mode"
         className="h-12 gap-1.5 rounded-xl px-3"
       >
         <SquareCheckBig size={16} />

@@ -63,6 +63,8 @@ export function HorizontalCalendar({
               <button
                 key={item.fullDate}
                 onClick={() => onDateChange(item.fullDate)}
+                aria-label={`${item.day} ${item.date}${isSelected ? ' (selected)' : ''}${hasTodo ? ' (has tasks)' : ''}`}
+                aria-selected={isSelected}
                 className={`flex w-fit justify-self-center  flex-col items-center gap-1 rounded-full px-1 py-2 transition-all duration-200 sm:gap-3 sm:px-2 sm:py-3 ${
                   isSelected
                     ? 'outline outline-1 outline-green-600/40'

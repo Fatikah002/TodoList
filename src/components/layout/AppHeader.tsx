@@ -22,7 +22,7 @@ export function AppHeader({ title, className }: AppHeaderProps) {
 
       {/* Right */}
       <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" className="relative rounded-full">
+        <Button variant="ghost" size="icon" aria-label="Notifications" className="relative rounded-full">
           <Bell className="h-5 w-5" />
         </Button>
 
