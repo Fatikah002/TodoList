@@ -103,10 +103,10 @@ export function MiniCalendar({
                   'bg-green-600 text-white font-bold shadow-sm shadow-green-600/30 hover:bg-green-700 hover:text-white scale-105'
               } else if (status.hasPending) {
                 customStyle =
-                  'bg-green-100 text-green-800 font-semibold hover:bg-green-200'
+                  'bg-green-100 text-green-800 font-semibold'
               } else if (status.hasTasks) {
                 customStyle =
-                  'bg-gray-100 text-gray-700 font-medium hover:bg-gray-200'
+                  'bg-gray-100 text-gray-700 font-medium'
               }
 
               if (isToday && !isSelected) {

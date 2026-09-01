@@ -100,7 +100,7 @@ function Calendar({
           defaultClassNames.week_number,
         ),
         day: cn('group/day p-0.5 text-center', defaultClassNames.day),
-       
+
         today: cn(defaultClassNames.today),
         outside: cn(
           'text-muted-foreground aria-selected:text-muted-foreground',
@@ -145,10 +145,7 @@ function Calendar({
           )
         },
         DayButton: ({ ...props }) => (
-          <CalendarDayButton
-            locale={locale}
-            {...props}
-          />
+          <CalendarDayButton locale={locale} {...props} />
         ),
         WeekNumber: ({ children, ...props }) => {
           return (
@@ -211,16 +208,15 @@ function CalendarDayButton({
         font-medium
         transition-colors
 
-        hover:bg-gray-100
+        hover:bg-gray-300
 
         data-[today=true]:border
         data-[today=true]:border-green-600
 
-        data-[has-todos=true]:bg-green-600
-        data-[has-todos=true]:text-white
-
         data-[selected-single=true]:bg-green-600
         data-[selected-single=true]:text-white
+        data-[selected-single=true]:hover:bg-green-700
+        data-[selected-single=true]:hover:text-white
 
         aria-disabled:cursor-not-allowed
         aria-disabled:opacity-30
