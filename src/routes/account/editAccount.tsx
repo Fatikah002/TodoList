@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { STORAGE_KEYS } from '@/lib/constants'
+import { hashPassword } from '@/lib/utils'
 
 function getStoredPassword(): string {
   try {
@@ -65,6 +66,12 @@ function EditProfilePage() {
     const file = e.target.files?.[0]
     if (!file) return
 
+    const MAX_SIZE = 1 * 1024 * 1024 // 1MB
+    if (file.size > MAX_SIZE) {
+      toast.error('Image must be less than 1MB')
+      return
+    }
+
     const reader = new FileReader()
     reader.onload = () => setAvatar(reader.result as string)
     reader.readAsDataURL(file)
@@ -91,7 +98,7 @@ function EditProfilePage() {
     setShowConfirm(false)
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     let finalPassword = storedPassword
 
     if (showPasswordForm) {
@@ -105,12 +112,13 @@ function EditProfilePage() {
         return
       }
 
-      if (storedPassword && currentPassword !== storedPassword) {
+      const hashedCurrentPassword = await hashPassword(currentPassword)
+      if (storedPassword && hashedCurrentPassword !== storedPassword) {
         toast.error('Current password is incorrect')
         return
       }
 
-      finalPassword = newPassword
+      finalPassword = await hashPassword(newPassword)
     }
 
     const promise = new Promise<void>((resolve) => {

@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { STORAGE_KEYS } from '@/lib/constants'
+import { hashPassword } from '@/lib/utils'
 import { LoginFormView } from '@/components/login/LoginFormView'
 import { SignupFormView } from '@/components/login/SignupFormView'
 import { AuthStatusView } from '@/components/login/AuthStatusView'
@@ -63,7 +64,7 @@ function LoginPage() {
 
   const isSignUp = view === 'signup'
 
-  const handleAuth = useCallback(() => {
+  const handleAuth = useCallback(async () => {
     setError('')
     if (isSignUp && !username.trim()) {
       setError('Username must not be empty.')
@@ -82,6 +83,8 @@ function LoginPage() {
       return
     }
 
+    const hashedPassword = await hashPassword(password)
+
     if (!isSignUp) {
       const accounts = loadAccounts()
       const account = accounts.find(
@@ -91,7 +94,7 @@ function LoginPage() {
         setError('Account not found. Please sign up first.')
         return
       }
-      if (account.password !== password) {
+      if (account.password !== hashedPassword) {
         setError('Incorrect password. Please try again.')
         return
       }
@@ -108,7 +111,7 @@ function LoginPage() {
 
       if (isSignUp) {
         const accounts = loadAccounts()
-        accounts.push({ email, password, username: username.trim() })
+        accounts.push({ email, password: hashedPassword, username: username.trim() })
         saveAccounts(accounts)
         updateProfile({ name: username.trim(), email })
       } else {
